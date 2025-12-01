@@ -1,0 +1,410 @@
+% !TEX TS-program = xelatex
+
+
+\documentclass[a4paper,14pt]{extarticle}
+
+% Include settings from setting.tex
+\input{setting.tex}
+
+\geometry{a4paper, margin=1in}
+\graphicspath{{img/}}
+
+\newcommand{\assignNum}{2} %change the number of the assignment here
+\author{مرتضی ملکی‌نژاد شوشتری} %change your name here
+\newcommand{\SNum}{810104256} %change your SID here
+\date{\today}
+\title{تمرین \assignNum}
+
+\begin{document}
+\pagenumbering{gobble}
+\maketitle
+\newpage
+\tableofcontents
+
+\newpage
+\listoffigures
+
+\newpage
+\listoftables
+
+\newpage
+\pagenumbering{arabic}
+
+
+\section{سوال ۱}
+\subsection{بخش ۱}
+چون از 
+$R_{si}$
+به 
+$R_{sf}$
+رفتیم داریم:
+\\
+\begin{latin}
+	$
+	R_{sf} = QR_{si} \Rightarrow Q = R_{sf} R_{si}^{-1}  = \begin{pmatrix}
+		0 & -1 & 0 \\
+		1 & 0 & 0 \\
+		0 & 0 & 1
+	\end{pmatrix}
+	\begin{pmatrix}
+		1 & 0 & 0 \\
+		0 & 0 & -1 \\
+		0 & 1 & 0
+	\end{pmatrix}
+	 = 
+	 	\begin{pmatrix}
+	 	0 & 0 & 1 \\
+	 	1 & 0 & 0 \\
+	 	0 & 1 & 0
+	 \end{pmatrix}
+	$
+\end{latin}
+\subsection{بخش ۲}
+سوال درواقع پارامترهای $e$ و $\phi$ را می‌خواهد:
+\\
+\begin{latin}
+
+$
+\phi = acos(\cfrac{trace(Q) - 1}{2}) = acos(\cfrac{-1}{2}) = acos(-0.5) = \cfrac{2\pi}{3}
+$
+\\
+$
+e = \cfrac{vect(Q)}{sin \phi} = \cfrac{vect(Q)}{\cfrac{\sqrt{3}}{2}} = \cfrac{2}{\sqrt{3}} * \cfrac{1}{2} * \begin{pmatrix}
+	1 - 0 \\
+	1 - 0 \\
+	1 - 0 \\
+\end{pmatrix} = 
+ \begin{pmatrix}
+	\cfrac{\sqrt{3}}{3} \\
+	\cfrac{\sqrt{3}}{3} \\
+	\cfrac{\sqrt{3}}{3} \\
+\end{pmatrix} 
+$
+\end{latin}
+\subsection{بخش ۳}
+چون مرجع 
+\lr{(s)}
+ثابت است،‌دستگاه مختصات جهانی است و باید از آخر به اول ضرب انجام شود.
+\\
+\begin{latin}
+	$
+	Q = Q_x(\gamma) Q_y(\beta) Q_z(\alpha) =
+	$
+	\\
+	$
+	=
+	\begin{pmatrix}
+		1 & 0 & 0 \\
+		0 & cos \gamma & -sin \gamma \\
+		0 & sin \gamma & cos \gamma
+	\end{pmatrix}
+		\begin{pmatrix}
+		cos \beta & 0 & sin \beta \\
+		0 & 1 & 0 \\
+		- sin \beta & 0 & cos \beta
+	\end{pmatrix}
+		\begin{pmatrix}
+		cos \alpha & -sin \alpha & 0 \\
+		sin \alpha & cos \alpha & 0 \\
+		0 & 0& 1
+	\end{pmatrix}
+	$
+	\\
+	$
+	= 
+	\begin{pmatrix}
+		cos \beta & 0 & sin \beta \\
+		 sin \gamma  sin \beta & cos \gamma & -sin \gamma cos \beta \\
+		 -cos \gamma sin \beta & sin \gamma & cos \gamma cos \beta
+	\end{pmatrix}
+			\begin{pmatrix}
+		cos \alpha & -sin \alpha & 0 \\
+		sin \alpha & cos \alpha & 0 \\
+		0 & 0& 1
+	\end{pmatrix} = 	 	\begin{pmatrix}
+	0 & 0 & 1 \\
+	1 & 0 & 0 \\
+	0 & 1 & 0
+	\end{pmatrix}
+	$
+\end{latin}
+~\\
+نیازی به محاسبه دقیق این مورد نیست بلکه می‌توان صرفا خانه‌های خاصی از آن را حساب کرد:
+\begin{latin}
+	$
+	Q_{13} = sin \beta  = 1 \Rightarrow \beta = \cfrac{\pi}{2} 
+	$
+	\\
+	$\Rightarrow Q = 	\begin{pmatrix}
+		0& 0 & 1 \\
+		sin \gamma   & cos \gamma & 0 \\
+		-cos \gamma & sin \gamma & 0
+	\end{pmatrix}
+	\begin{pmatrix}
+		cos \alpha & -sin \alpha & 0 \\
+		sin \alpha & cos \alpha & 0 \\
+		0 & 0& 1
+	\end{pmatrix} 
+	\Rightarrow 
+	\left\{
+	\begin{array}{ll}
+		sin \gamma cos \alpha + cos \gamma sin \alpha = 1 \\
+		-cos \gamma cos \alpha + sin \gamma sin \alpha = 0
+	\end{array}
+	\right.
+	$
+	\\
+	$
+\Rightarrow 
+\left\{
+\begin{array}{ll}
+	sin (\alpha + \gamma) = 1 \\
+	cos(\alpha - \gamma) = 0
+\end{array}
+\right.
+\Rightarrow
+\alpha= \cfrac{\pi}{2} , \gamma = 0
+	$
+\end{latin}
+~\\
+یعنی درنهایت داریم:
+\begin{latin}
+	$
+	\begin{array}{ll}
+		\alpha = \cfrac{\pi}{2} \\ 
+		\beta = \cfrac{\pi}{2} \\
+		\gamma = 0
+	\end{array}
+	$
+\end{latin}
+که البته این یک جواب است (برای مثال در همین جا $\alpha$ می‌تواند برابر با 
+$
+\cfrac{-\pi}{2}
+$
+باشد و معادله‌ها صدق کنند.)
+\newpage
+\section{سوال ۲}
+محورها با استفاده از توزیع مفاصل ربات با استفاده از 
+\lr{Figure 4.1}
+رسم شدند. 
+{
+\centering
+\includegraphics[width=0.5\textwidth]{pics/2_dh_axis.jpg}
+\captionof{figure}{محورهای ربات نوا}
+}
+\newpage
+{
+	\begin{center}
+
+			\captionof{table}{پارامترهای \lr{DH} ربات نوا}
+					\begin{latin}
+			\begin{tabular}{cccccc}
+				\toprule
+				$i$ & $a$ & $b$ & $\alpha$ & $\theta$ \\
+				\midrule
+				1 & 0  & 0    & $\cfrac{\pi}{2}$ & $\theta_1 + \cfrac{\pi}{2}$ \\
+				2 & 280 & 0   & 0 & $\theta_2$ \\
+				3 & 225 &  0  & 0 & $\theta_3$ \\
+				4 & 0 &  120  & $\cfrac{\pi}{2}$ & $\cfrac{\pi}{2} - \theta_4$ \\ 
+				5 & 0 & 0  & $\cfrac{\pi}{2}$ &  $\cfrac{\pi}{2} + \theta_5$ \\
+				6 & 0 &  0  & 0 &  $\cfrac{\pi}{2} - \theta_6$ \\
+				\bottomrule
+			\end{tabular}
+		\end{latin}
+	\end{center}
+}
+در سه مفصل آخر تعدادی از راستاها اشتباه انتخاب شدند (برای مثال $x_6$) ولی سعی شد پارامترها مطابق چیزی که رسم شده نوشته شوند. همچنین در اینجا برخلاف رسم درس و کتاب گونزالس که 
+$X_i$
+را بین 
+$Z_i$
+و
+$Z_{i - 1}$
+درنظر می‌گیرند، اینجا مشابه کتاب \lr{Craig}
+بین 
+$
+Z_i
+$
+و 
+$_Z{i + 1}$
+درنظر گرفته شده که البته تاثیری درپارامترها ندارد.
+
+\newpage
+\section{سوال ۳}
+اینجا نیز راستاها طبق تعریف کتاب \lr{Craig} تعریف شده‌اند.
+{
+\centering
+\includegraphics{pics/3_dh.png}
+\captionof{figure}{بردارهای ربات}
+}
+
+
+{
+	\begin{center}
+		\begin{latin}
+	\captionof{table}{DH parameters of robot}
+	\begin{tabular}{cccccc}
+		\toprule
+		$i$ & $a$ & $b$ & $\alpha$ & $\theta$ \\
+		\midrule
+		1 & 0 & 333 & $\cfrac{\pi}{2}$ & $\theta_1$ \\ 
+		2 & $\sim 316$ & $\sim 316$ & $\cfrac{\pi}{2}$ &  $\theta_2 + \pi$ \\
+		3 & 82 & 82 & $\cfrac{\pi}{2}$ &   $\theta_3$\\
+		4 & 82 & 0 & $\cfrac{\pi}{2}$ &  $\cfrac{\pi}{2} - \theta_4$ \\
+		5 & 0  & 384 & $\cfrac{\pi}{2}$ &   $\cfrac{\pi}{2} - \theta_5$\\
+		6 & 88 &  107 &  $\cfrac{\pi}{2}$ &  $\cfrac{\pi}{2} + \theta_6$ \\ 
+		7 & 0 & 0 &  0 & $\pi - \theta_6$  \\
+		\bottomrule
+	\end{tabular}
+			\end{latin}
+\end{center}
+}
+
+\newpage
+\section{سوال ۴}
+{
+\centering
+\includegraphics[width=0.8\textwidth]{pics/4_question.png}
+\captionof{figure}{تصویر ربات سوال}
+}
+\subsection{بخش ۱}
+{
+	\begin{center}
+		\begin{latin}
+			\captionof{table}{DH parameters of robot}
+			\begin{tabular}{cccccc}
+				\toprule
+				$i$ & $a$ & $b$ & $\alpha$ & $\theta$ \\
+				\midrule
+				1 & 0 & A & $\cfrac{\pi}{2}$ & $\pi - q_1$\\
+				2 & 0 & d & $\cfrac{\pi}{2}$ & $\cfrac{\pi}{2}$ \\
+				3 & B & 0& 0 & $q_2$ \\
+				
+				\bottomrule
+			\end{tabular}
+		\end{latin}
+	\end{center}
+}
+\subsection{بخش ۲}
+
+
+\begin{latin}
+	$
+Q_i = \begin{pmatrix}
+	cos \theta_i & -cos \alpha_i sin \theta_i & sin \alpha_i sin \theta_i \\
+	sin \theta_i & cos \alpha_i cos \theta_i & - sin \alpha_i cos \theta_i \\
+	0 & sin \alpha_i &cos \alpha_i 
+\end{pmatrix}
+\vec{a_i} = \begin{pmatrix}
+	a_i cos \theta_i \\
+	a_i sin \theta_i \\
+	b_i
+\end{pmatrix}
+	$
+	\\\\
+	$
+	Q_1 = \begin{pmatrix}
+		-cos q_1 & 0 & sin q_1 \\ 
+		sin q_1 & 0 & cos q_1 \\
+		0 & 1 & 0
+	\end{pmatrix}
+	\vec{a_1} = \begin{pmatrix}
+		0 \\
+		0 \\
+		A
+	\end{pmatrix}
+	$
+	\\\\
+	$
+	Q_2 = \begin{pmatrix}
+		0 & 0 & 1 \\ 
+		1 & 0 & 0 \\
+		0 & 1 & 0
+	\end{pmatrix}
+	\vec{a_2} = \begin{pmatrix}
+		0 \\
+		0 \\
+		d
+	\end{pmatrix}
+	$
+	\\\\
+		$
+	Q_3 = \begin{pmatrix}
+		cos q_2 & -sin q_2 & 0 \\ 
+		 sin q_2 &  cos q_2 &  0\\
+		0  & 0 & 1 
+	\end{pmatrix}
+	\vec{a_3} = \begin{pmatrix}
+		B cos q_2 \\
+		B sin q_2 \\
+		0
+	\end{pmatrix}
+	$
+\end{latin}
+\subsection{بخش ۳}
+\begin{latin}
+	$
+	Q = Q_1 Q_2 Q_3
+	$
+	\\
+	$ \vec{p} = \vec{a_1} + Q_1 \vec{a_2} + Q_1 Q_2 \vec{a_3}
+	$
+	\\\\
+	$
+	Q_1 Q_2 = \begin{pmatrix}
+		0 & sin q_1 & -cos q_1 \\
+		0 & cos q_1 & sin q_1 \\
+		1 & 0 & 0
+	\end{pmatrix}
+	$
+	\\
+	$
+	Q = Q_1Q_2Q_3 = \begin{pmatrix}
+		sin q_1 sin q_2 & cos q_1 cos q_2 & -cos q_1 \\
+		cos q_1 sin q_2 & cos q_1 cos q_2 & sin q_1 \\
+		cos q_2 & -sin q_2 & 0
+	\end{pmatrix}
+	$
+	\\
+	$
+	\vec{p} = \begin{pmatrix}
+		0 + d sin q_1 + B sin q_1 cos q_2 \\
+		0 + d cos q_1 + B cos q_1 sin q_2 \\
+		A + 0 + B cos q_2
+	\end{pmatrix} = \begin{pmatrix}
+	d sin q_1 + B sin q_1 cos q_2 \\
+	d cos q_1 + B cos q_1 sin q_2 \\
+	A + B cos q_2
+	\end{pmatrix}
+	$
+\end{latin}
+\subsection{بخش ۴}
+هدف یافتن مقادیر 
+$
+d, q_1
+$
+و
+$q_2$
+ با داشتن $\vec{p}$ می‌باشد. داریم:
+ \begin{latin}
+ 	$
+ 	p_3 = A + B cos q_2 \Rightarrow cos q_2 = \cfrac{p_3 - A}{B} \Rightarrow q_2 = acos(\cfrac{p_3 - A}{B})
+ 	$
+ \end{latin}
+که به دوجواب برای $q_2$ می‌رسد. با استفاده از معادله اول  داریم:
+\begin{latin}
+	$
+	sin q_1 = \cfrac{p_1}{d + B cos q_2}
+	$
+\end{latin}
+ار معادله دوم نیز داریم:
+\begin{latin}
+	$
+	cos q_1 = \cfrac{p_2}{d + B sin q_2}
+	$
+\end{latin}
+با جمع مربع طرفین می‌توان $q_1$ را حذف کرد و به یک معادله درجه ۴ برحسب \lr{d} رسید. همچنین با معلوم شدن \lr{d} چون سینوس و کسینوس $q_1$ برحسب $d$ ثابت هستند، می‌توان با استفاده از 
+\lr{atan2}
+مقدار $q_1$ را بطور یکتا بدست آورد. 
+
+تعداد جواب‌ها درنهایت برابر می‌شود با دو مورد برای $q_2$ و چهار مورد برای $d$ که یعنی در بیشترین حالت، معادله معکوس این ربات هشت جواب دارد.
+\end{document}

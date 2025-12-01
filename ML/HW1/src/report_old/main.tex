@@ -1,0 +1,978 @@
+\documentclass[12pt]{article}
+
+\usepackage[a4paper, margin=0.5in]{geometry}
+\usepackage{anyfontsize}
+\usepackage{xcolor}
+\usepackage{caption}
+\usepackage{graphicx}
+\usepackage{setspace}
+\usepackage{hyperref}
+\usepackage[backend=biber]{biblatex}
+\usepackage{float}
+\usepackage{svg}
+\usepackage{xepersian}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{enumitem}
+\usepackage{bigints}
+\hypersetup{colorlinks,urlcolor=blue}
+%\settextfont[Scale=1.1]{Far.Mitra}
+
+\settextfont[Scale=1.0, Size=14pt]{B Nazanin}
+\defpersianfont\persiantitlefont[Scale=1.0, Size=18pt]{B Titr}
+\setlatintextfont[Scale=1.0, Size=12pt]{Times New Roman}
+\deflatinfont\englishtitlefont[Scale=1.0, Size=16pt]{Times New Roman Bold}
+
+\usepackage[backend=biber]{biblatex}
+\addbibresource{references.bib}
+
+
+\def\labelitemi{$\diamond$}
+\def\labelitemii{$\ast$}
+
+
+\begin{document}
+	\linespread{3}
+	\setstretch{1.5}
+	
+	% --- HEADER ROW ---
+	\begin{minipage}[t]{0.7\textwidth}
+		
+		{\huge\textcolor[HTML]{cc6098}{\title\textbf{{یادگیری ماشین }}}}\\
+		
+	\end{minipage}
+	\hfil
+	\begin{minipage}[t]{0.15\textwidth}
+		\centering
+		\includegraphics[width=0.9\linewidth]{pics/logo.png}\\[6pt]
+		{\small پاییز ۱۴۰۴}
+	\end{minipage}
+	
+	
+	
+	{
+		
+		\Large{تمرین اول}
+		
+		\large مرتضی ملکی‌نژاد شوشتری - ۸۱۰۱۰۴۲۵۶ 
+		
+		
+	}
+	
+	\vspace{1.2cm}
+	
+	
+	
+	\vspace{0.3cm}
+	\hrule 
+	\vspace{0.6cm}
+	
+	\section*{سوال ۱}
+	در 
+	\lr{Minimum Risk Classification}
+	تابع ریسک بصورت زیر تعریف می‌شود:
+	\begin{latin}
+		$
+		R(\alpha_i|x) = \sum_{j = 1}^{c} \lambda({\alpha_i|\omega_j}) P(\omega_j | x)
+		$
+	\end{latin}
+	در این‌جا حالت رد 
+	\LTRfootnote{Reject}
+	عملا یک کلاس دیگر در کلاس‌بندی حساب می‌شود؛ با این تفاوت که احتمال تعلق به این کلاس برای هر برداری برابر صفر می‌باشد. ریسک رد برابر است با:
+	\begin{latin}
+		$
+		R(\alpha_{c + 1} | x) = \lambda_r \sum_{j = 1}^c P(\omega_j|x) = \lambda_r
+		$
+	\end{latin}
+	ریسک انتخاب، برای مثال انتخاب کلاس $i$ برابر است با:
+	\begin{latin}
+		$
+		R(\alpha_{i} | x) = \lambda_s (1 - P(\omega_i | x))
+		$
+	\end{latin}
+	واضح است که بین کلاس‌ها درصورتی که 
+	$
+	P(\omega_i | x)
+	$
+	بیشینه باشد کمترین ریسک حاصل می‌شود، پس اگر ورودی رد نشود، باید کلاس با بالاترین احتمال را انتخاب کرد (
+	$
+\forall j \ P(\omega_i | x) \geq P(\omega_j | x) 
+	$
+	)
+		برای کلاس رد نیز،‌با مقایسه ریسک انتخاب با ریسک رد داریم:
+		\begin{latin}
+		$
+		R(\alpha_{c + 1} | x) \geq R(\alpha_{i} | x) \Rightarrow \lambda_r \geq \lambda_s (1 - P(\omega_i | x)) \Rightarrow -P(\omega_i | x)  \leq \cfrac{\lambda_r}{\lambda_s} - 1 \Rightarrow P(\omega_i | x) \geq 1 - \cfrac{\lambda_r}{\lambda_s} 
+		$
+		\end{latin}
+همه مراحل برگشت‌پذیر هستند و می‌توان به این رسید که ریسک انتخاب از ریسک رد کمتر است اگر و تنها اگر 
+$
+P(\omega_i | x) \geq 1 - \cfrac{\lambda_r}{\lambda_s} 
+$
+باشد. 
+\newpage
+\section*{سوال ۲}
+\subsection*{بخش \lr{a}}
+با استفاده از قانون بیز داریم:
+	\begin{latin}
+		$
+		P(Y = c | X_1 = 0, X_2 = 0) = \cfrac{P(X_1 = 0, X_2 = 0 | Y = c) P(Y = c)}{\sum_{i = 0}^2 P(X_1 = 0, X_2 = 0 | Y = i)) P(Y = i)}
+		$
+	\end{latin}
+	~\\
+	 
+	\lr{Naive Bayes}
+	می‌باشد، فرض شده است که فیچر‌ها از هم مستقل هستند. پس می‌توان گفت:
+	\begin{latin}
+		$
+		P(X_1 = 0, X_2 = 0 | Y = c) = P(X_2 = 0 | Y = c) P(X_1 = 0 | Y = c)
+		$
+	\end{latin} 
+	پس داریم (چون اعداد ثابت در صورت و مخرج ساده می‌شوند از نوشتن آن‌ها صرف نظر شده است):
+	\begin{latin}
+				$
+		P(X_1 = 0, X_2 = 0 | Y = 0)P(Y = 0) = P(X_2 = 0 | Y = 0) P(X_1 = 0 | Y = 0)  P(Y = 0)
+		$
+		\\
+		$ = e^{\frac{-\mu_c^2}{2}} * (1 - \theta_c) * prior_c = e^{-0.5} * 0.5 * 0.5 \approx 0.1516
+		$
+		\\
+		$
+		P(X_1 = 0, X_2 = 0 | Y = 1)P(Y = 1 ) = 1 * 0.25 * 0.25  = 0.0625
+		$
+		\\
+		$
+		P(X_1 = 0, X_2 = 0 | Y = 2)P(Y = 2) = e^{-0.5} * 0.5 * 0.25 \approx 0.0758
+		$
+		\\
+		$
+	\Rightarrow	\sum_{i = 0}^2 P(X_1 = 0, X_2 = 0 | Y = i)P(Y = i) \approx 0.2899
+		$
+		\\
+		$
+		\Rightarrow
+		\left\{
+		\begin{array}{ll}
+			P(Y = 0 | X_1 = 0, X_2 = 0) \approx  \cfrac{1516}{2899} \approx 0.52 \\
+			P(Y = 1 | X_1 = 0, X_2 = 0) \approx  \cfrac{625}{2899} \approx 0.22 \\
+			P(Y = 2 | X_1 = 0, X_2 = 0) \approx  \cfrac{758}{2899} \approx 0.26 \\
+		\end{array}
+		\right.
+		$
+	\end{latin}
+	پس بردار خواسته شده برابر با مقدار زیر است:
+	\begin{center}
+		$
+\begin{pmatrix}
+	0.52 \\
+	0.22 \\
+	0.26
+\end{pmatrix}
+		$
+	\end{center}
+	\subsection*{بخش \lr{b}}
+	طبق قانون بیز داریم:
+	\begin{latin}
+		$
+		P_{Y | X_1} = \cfrac{P(X_1 | Y) * P(Y)}{P(X_1)} \Rightarrow P(Y = c | X_1 = 0) = \cfrac{P(X_1 = 0 | Y = c)P(Y = c)}{\sum_{i = 0}^2 P(X_1 = 0 | Y = i)P(Y = i)}
+		$
+		\\\\
+		$
+		h(c) = P(X_1 = 0 | Y = c)P(Y = c) = (1 - \theta_c) * prior_c 
+		$
+		\\
+		$
+		\Rightarrow
+		\left\{
+		\begin{array}{ll}
+			h(0)= 0.5 * 0.5 = \cfrac{4}{16}\\
+			h(1) = 0.25 * 0.25 = \cfrac{1}{16}\\
+			h(2) = 0.25 * 0.5 = \cfrac{2}{16}
+		\end{array}
+		\right.
+		\Rightarrow
+		\left\{
+				\begin{array}{ll}
+			P(Y = 0 | X_2 = 0) = \cfrac{h(0)}{\sum_{i = 0}^2 h(i)} = \cfrac{4}{7}\\
+			P(Y = 1 | X_2 = 0) = \cfrac{h(1)}{\sum_{i = 0}^2 h(i)} = \cfrac{1}{7}\\
+			P(Y = 2 | X_2 = 0) = \cfrac{h(2)}{\sum_{i = 0}^2 h(i)} = \cfrac{2}{7}\\
+		\end{array}
+		\right.
+		$
+	\end{latin}
+	 و بردار خواسته شده برابر خواهد بود با:
+	 \begin{center}
+	 	$
+	 	\begin{pmatrix}
+	 		\cfrac{4}{7} \\
+	 		\cfrac{1}{7}\\
+	 		\cfrac{2}{7}
+	 	\end{pmatrix}
+	 	$
+	 \end{center}
+	 \subsection*{بخش \lr{c}}
+	 مشابه قسمت‌های قبل عمل می‌کنیم (در اینجا منظور از $P(X_2)$ مقدار تابع 
+	 \lr{PDF}
+	 در آن نقطه است و نه احتمال آن نقطه)
+	 \begin{latin}
+	 $
+	 h(c) = P(X_2 = 1 | Y = c)P(Y = c) = \cfrac{1}{\sigma_c \sqrt{2\pi}} * e^{(\cfrac{-1}{2} * (\cfrac{1 - \mu_c}{\sigma_c})^2}) * prior_c 
+	 $
+	 	\end{latin}
+	 	چون 
+	 	$
+	 	\sigma_c
+	 	$
+	 	در همه موارد برابر 
+	 	$
+	 	1$
+	 	است می‌توان آن را جایگذاری کرد.
+	 	\begin{latin}
+	 		$
+	 		K = \cfrac{1}{\sqrt{2\pi}}
+	 		$
+	 		\\
+	 		$
+	 		h(c) = K * e^{\cfrac{-(1 - \mu_c)^2}{2}} * prior_c
+	 		\Rightarrow
+	 				\left\{
+	 		\begin{array}{ll}
+	 			h(0) = K * e^{-2} * 0.5 \approx 0.068K\\
+	 			h(1) = K * e^{-0.5} * 0.25 \approx 0.152K \\
+	 			h(0) = K * e^{0} * 0.25  = 0.25K
+	 		\end{array}
+	 		\right.
+	 		\Rightarrow \sum_{i = 0}^2 h(i) =  0.47K
+	 		$
+	 		\\
+	 		$
+	 		\Rightarrow
+	 			 				\left\{
+	 		\begin{array}{ll}
+	 			P(Y = 0 | X_2 = 1) = \cfrac{h(0)}{\sum_{i = 0}^2 h(i)} = \cfrac{68}{470} \\
+	 			P(Y = 1 | X_2 = 1) = \cfrac{h(1)}{\sum_{i = 0}^2 h(i)} = \cfrac{152}{470} \\
+	 			P(Y = 2 | X_2 = 1) = \cfrac{h(2)}{\sum_{i = 0}^2 h(i)} = \cfrac{250}{470} \\
+	 		\end{array}
+	 		\right.
+	 		$
+	 	\end{latin}
+	 	و بردار خواسته شده برابر خواهد بود با:
+	 		 \begin{center}
+	 		$
+	 		\begin{pmatrix}
+	 			\cfrac{68}{470} \\
+	 		\cfrac{152}{470} \\
+	 			\cfrac{250}{470} \\
+	 		\end{pmatrix}
+	 		$
+	 	\end{center}
+	 	\subsection*{بخش \lr{d}}
+برای قسمت 
+\lr{c}
+می‌توان دید که احتمال $Y$ رابطه مستقیمی دارد با اینکه چقدر میانگین توزیع 
+$
+P(X_2 | Y)
+$
+که یک توزیع نمایی است به 
+$
+0
+$
+نزدیک‌تر است. یعنی می‌توان رابطه مستقیم بین
+$
+P(Y| X_2)
+$
+و 
+$
+P(X_2 | Y)
+$
+را مشاهده کرد. برای مثال برای 
+$
+Y = 0
+$
+با این که احتمال 
+\lr{prior}
+برابر ۰.۵ است،‌ولی چون توزیع 
+$
+X_2 | Y = 0
+$
+یک توزیع نمایی با میانگین 
+$
+-1
+$ 
+است، احتمال آن کمتر است. در بخش \lr{b} این اتفاق با شدت کمتری می‌افتد. زیرا مقادیر 
+$
+\theta
+$ نسبت به مقادیر
+\lr{prior}
+تغییرات بسیار جدی‌ای ندارند (به نسبت توزیع نمایی که با فاصله گرفتن چند انحراف معیار از میانگین، تابع 
+\lr{pdf}
+کاهش زیادی خواهد داشت.) برای همین می‌توان دید که احتمال‌های بدست آمده به نسبت به احتمال 
+\lr{prior}
+نزدیک ترند.
+\section*{سوال ۳}
+
+مدل فرض شده یک مدل 
+\lr{Naive Bayes}
+است که توزیع کلمات را یک توزیع چندجمله‌ای فرض کرده است.
+\cite{gfg_multinomial_bayes}
+تابع توزیع احتمال برای توزیع ‌چندجمله‌ای برابر زیر است
+\cite{wikipedia_multinomial}
+: 
+\begin{latin}
+	$
+	X \sim Multinomial(n, p_1, p_2, ..., p_k) \Rightarrow P_X(x_1, x_2, ..., x_k) = \cfrac{n!}{x_1!x_2!x_3!...x_k!} p_1^{x_1}p_2^{x_2}...p_k^{x_k}
+	$
+\end{latin}
+
+برای محاسبه احتمال خواسته شده با استفاده از قانون بیز داریم:
+\begin{latin}
+	$
+	P(Y = 1 | x) = \cfrac{P(x | Y = 1) * P(Y = 1)}{\sum_{i = 0}^1 P(x | Y = i) P(Y = i)}
+	$
+\end{latin}
+برای محاسبه 
+$
+P(x | Y = 1)
+$
+می‌توان از تابع توزیع احتمال توزیع چندجمله‌ای استفاده کرد. پس:
+\begin{latin}
+	$
+	P(x | Y = 1) =  \cfrac{n!}{c_1!c_2!c_3!...c_d!} \prod\limits_{i = 1}^{d} (P_{i | y = 1})^{c_i}
+	$
+\end{latin}
+پس داریم:
+\begin{latin}
+	$
+	P(Y = 1 | x) = \cfrac{P(x | Y = 1)P(Y = 1)}{\sum\limits_{i = 0}^{1} P(x | Y = i) P (Y = i)} 
+	= \cfrac{P(Y = 1) * \prod\limits_{i = 1}^{d} (P_{i | y = 1})^{c_i} }{P(Y = 1) * \prod\limits_{i = 1}^{d} (P_{i | y = 1})^{c_i}  + P(Y = 0) * \prod\limits_{i = 1}^{d} (P_{i | y = 0})^{c_i} } 
+	= \cfrac{P_y * \prod\limits_{i = 1}^{d} (P_{i | y = 1})^{c_i} }{P_y * \prod\limits_{i = 1}^{d} (P_{i | y = 1})^{c_i}  + (1 - P_y)* \prod\limits_{i = 1}^{d} (P_{i | y = 0})^{c_i} } 
+	$
+\end{latin}
+\section*{بخش \lr{b}}
+برای محاسبه مرز تصمیم‌گیری می‌توان مقدار 
+\lr{Posterior}
+ها را باهم برابر قرار داد، چون مخرج ها باهم برابر هستند،‌می‌توان فقط صورت‌ها را باهم برابر قرار داد:
+\begin{latin}
+	$
+	P(Y = 0 | x) = P(Y = 1 | x) \Rightarrow P_y   \prod\limits_{i = 1}^{d} (P_{i | y = 1})^{c_i} = (1 - P_y) * \prod\limits_{i = 1}^{d} (P_{i | y = 0})^{c_i}
+	$
+\end{latin}
+چون می‌خواهیم درنهایت به یک ترکیب خطی از 
+$
+c_i
+$
+ها برسیم،‌برای تبدیل ضرب به جمع می‌توان از آن لگاریتم گرفت (چون لگاریتم یک تابع یکنوا است،‌خطی بودن را تغییر نمی‌دهد)
+\begin{latin}
+	$
+	log(P_y) + \sum\limits_{i = 1}^d c_i log(P_{i | Y = 1}) = log (1 - P_y) + \sum\limits_{i = 1}^d c_i log(P_{i | Y = 0})
+	\Rightarrow
+	log(\cfrac{P_y}{1 - P_y}) +  \sum\limits_{i = 1}^d c_i log(\cfrac{P_{i | Y = 1}}{P_{i | Y = 0}}) = 0
+	$
+\end{latin}
+از آنجایی که در مدل مقادیر 
+$
+P_y
+$
+و
+$
+P_i | Y = 0 
+$
+و
+$
+P_i | Y = 1
+$
+از پیش تعریف شده‌اند و مقادیر ثابتی هستند،‌ می‌توان دید که مرز تصمیم درواقع برابر مقدار زیر است:
+\begin{latin}
+	~\\
+	$
+	b + \sum\limits_{i = 1}^d w_i c_i = 0
+	$
+	\\
+	$
+	b = log(\cfrac{P_y}{1 - P_y})
+,
+	w = log(\cfrac{P_{i | Y = 1}}{P_{i | Y = 0}})
+	$
+\end{latin}
+و واضح است که این یک خط است.
+\section*{بخش \lr{c}}
+صورت و مخرج احتمال را به صورت تقسیم می‌کنیم:
+\begin{latin}
+	$
+	P(Y = 1 | x) = \cfrac{1}{1 + \cfrac{(1 - P_y) * \prod \limits_{i = 1}^d (P_{i | y = 0})^{c_i}}{P_y * \prod \limits_{i = 1}^d (P_{i | y = 1})^{c_i}}}
+	$
+\end{latin}
+از کسر حاصل در مخرج می‌توان لگاریتم گرفت و $e$ را به توان آن رساند:
+\begin{latin}
+	$
+	P(Y = 1 | x) = \cfrac{1}{1 + e^{log(\cfrac{1 - P_y}{P_y}) + \sum\limits_{i = 1}^d c_i log(\cfrac{P_{i | y = 0}}{P_{i | y = 1}})}}
+	$
+\end{latin}
+مشابه قسمت \lr{b} ضرایب ثابت هستند پس اگر 
+$
+\theta_0
+$
+را برابر 
+$
+log\cfrac{P_y}{1 - P_y}
+$
+بگیریم و 
+$
+\theta_i 
+$
+را برابر 
+$
+log(\cfrac{P_{i | y = 1}}{P_{i | y = 0}})
+$
+بگیریم داریم:
+\begin{latin}
+	$
+	P(Y = 1 | c) = \cfrac{1}{1 + e^{-(\theta_0 + \sum\limits_{i = 1}^d c_i \theta_i)}} = \cfrac{1}{1 + e^{-(\theta_0 + \theta^T c)}}
+	$
+\end{latin}
+\section*{سوال ۴}
+\subsection*{بخش \lr{a}}
+چون داریم بیشینه می‌گیریم، هیچگاه نباید 
+$P(data | \theta)$
+ صفر بشود (زیرا کمینه می‌شود) پس می‌توان فرض کرد که همه داده‌ها در ناحیه لوزی شکل هستند: 
+ 
+ \begin{latin}
+ 	~\\
+ $
+ \theta \geq ||x||_1\ for\ all\ x_i
+ $
+ \\
+	$
+	\hat{\theta} = argmax P(data | \theta) = argmax (\cfrac{1}{2\theta^2})^N 
+	$
+\end{latin}
+واضح است که 
+$
+(\cfrac{1}{2\theta^2})^N
+$
+وقتی بیشینه است که 
+$\theta$
+کمترین مقدار ممکن را داشته باشد پس یعنی پاسخ 
+\lr{MLE}
+برابر با کمترین 
+$\theta$
+ای است
+ که در شرط اول صدق کند پس:
+\begin{latin}
+	$
+	\hat{\theta} = min(||x||_i) = min(|x_{i_1}| + |x_{i_2}|) \forall i
+	$
+\end{latin}
+\subsection*{بخش \lr{b}}
+تابع چگالی احتمال توزیع گاما برابر است با:
+\begin{latin}
+	$
+	f(x) = \cfrac{1}{\beta ^ \alpha \Gamma (\alpha )} x^{\alpha - 1} e ^ {\frac{-x}{\beta}}
+	$
+\end{latin}
+حال 
+\lr{MLE}
+به دنبال مقادیری برای 
+$\alpha$
+و 
+$\beta$
+است که حاصل ضرب $f$ های آن‌ها بیشینه شود. برای راحتی می‌توان اینجا لگاریتم گرفت و سپس جمع این موارد را مورد بررسی قرار داد:
+\begin{latin}
+	$
+	log(L) = (\alpha - 1)log(x) + \cfrac{-x}{\beta} log(e) -\alpha log(\beta) - log(\Gamma(\alpha))
+	$
+	\\
+	$
+	= (\alpha - 1)log(x) + \cfrac{-x}{\beta}  -\alpha log(\beta) - log(\Gamma(\alpha))
+	$
+\end{latin}
+با مشتق گرفتن نسبت به $\beta$ داریم:
+\begin{latin}
+	$
+	\cfrac{x}{\beta^2} - \alpha \cfrac{1}{\beta} = 0 \Rightarrow x = \alpha \beta \Rightarrow \beta = \cfrac{x}{\alpha}
+	$
+\end{latin}
+در حل برای راحتی برای یک مقدار $x$ حل شد. چون در اینجا $x$ ها 
+\lr{iid}
+هستند، مقدار 
+\lr{likelihood}
+آن‌ها باهم جمع می‌شود و چون مشتق می‌تواند وارد جمع شود، می‌توان این جمع را در مرحله آخر انجام داد پس داریم:
+\begin{latin}
+	$
+	\sum\limits_{i = 1}^n (\cfrac{x}{\beta^2} - \alpha \cfrac{1}{\beta}) = 0 \Rightarrow \sum\limits_{i = 1}^n x_i = n\alpha \beta \Rightarrow \beta = \cfrac{\bar{x}}{\alpha}
+	$
+
+\end{latin}
+	\section*{سوال ۵}
+	\subsection*{بخش \lr{a}}
+		
+	توزیع دیریکله درواقع یک توزیع با 
+	\lr{PDF}
+	زیر است:
+	\cite{wikipedia_dirichlet}
+	\begin{latin}
+		$
+		\cfrac{1}{B(\alpha)} \prod \limits_{i = 1}^k x_i^{\alpha_i - 1}, B(\alpha) =  \cfrac{\prod\limits_{i = 1}^k \Gamma(\alpha_i)}{\Gamma(\sum\limits_{i = 1}^k \alpha_i)}
+		$
+	\end{latin}
+	برای اثبات 
+	\lr{conjugate prior}
+	باید درواقع ثابت کنیم که اگر توزیع 
+	\lr{prior}
+	یک توزیع دیریکله باشد و توزیع 
+	\lr{likelihood}
+	یک توزیع چندجمله‌ای باشد، توزیع 
+	\lr{posterior}
+	یک توزیع دیریکله است. 
+	\cite{wikipedia_conjugate}
+
+	
+	
+	\begin{latin}
+		~\\
+		$
+		\text{prior: } P(p | \alpha) = \cfrac{\Gamma(\sum\limits_{i = 1}^k \alpha_i)}{\prod\limits_{i = 1}^k \Gamma \alpha_k} \prod\limits_{i = 1}^k {p_k}^{\alpha_i - 1}
+		$
+		\\
+		$
+		\text{likelihood: } P(x | p) = \cfrac{N!}{\prod\limits_{i = 1}^k x_k!}   \prod \limits_{i = 1}^k p_i^{x_i}
+		$
+		\\
+		$
+		\Rightarrow \text{posterior: } P(p | x, \alpha) = \cfrac{P(x | p) P(p | \alpha)}{P(x | \alpha)} = \cfrac{P(x | p) P(p | \alpha)}{\bigintsss P(x|p) P(p | \alpha) dp}
+		$
+		\\
+		$
+		P(x | p) P (p | \alpha) =  \cfrac{N!}{\prod\limits_{i = 1}^k x_k!}   \prod \limits_{i = 1}^k p_i^{x_i} * \cfrac{\Gamma(\sum\limits_{i = 1}^k \alpha_i)}{\prod\limits_{i = 1}^k \Gamma \alpha_i} \prod\limits_{i = 1}^k {p_k}^{\alpha_i - 1}
+		 = \cfrac{N!  \Gamma(\sum\limits_{i = 1}^k \alpha_i)}{\prod\limits_{i = 1}^k x_k! \prod\limits_{i = 1}^k \Gamma \alpha_k} \prod\limits_{i = 1}^k p_i ^{x_i + \alpha_i - 1}
+		$
+	\end{latin}
+	چون قرار است مقدار حاصل به روی انتگرال نسبت به 
+	$p$
+	تقسیم شود، می‌توان عواملی که در آن $p$ نیست را درنظر نگرفت:
+	\begin{latin}
+		$
+		P(p | x, \alpha) = \cfrac{\prod\limits_{i = 1}^k p_i ^{x_i + \alpha_1 - 1}}{\bigintsss \prod\limits_{i = 1}^k p_i ^{x_i + \alpha_k - 1}dp}
+		$
+	\end{latin}
+	چون شیوه محاسبه این انتگرال ساده نبود از یکی از سایتهای محاسبه 
+	\cite{integral_calc}
+	\footnote{توزیع دیریکله در درس و کتاب 
+	\lr{rice}
+	نبود و جستجو برای یافتن پاسخ این انتگرال به جایی نرسید. برای محاسبه انتگرال و مشتق این مقدار حدود دوساعت زمان صرف شد و پس از به نتیجه نرسیدن صرفا برای محاسبه انتگرال (و مشتق در قسمت بعد) از منابع خارجی استفاده شد که
+	\lr{cite} 
+	شد.}
+	کمک گرفته شد که به خروجی زیر رسید:
+	\begin{latin}
+		$
+		\bigintsss \prod\limits_{i = 1}^k p_i ^{x_i + \alpha_k - 1}dp = B(\alpha + x) \Rightarrow P(p | x) = \cfrac{1}{B(\alpha + x)} * \prod \limits_{i = 1}^k p_i^{x_i + \alpha_i - 1} = Dir(\alpha + x)
+		$
+		\end{latin}
+ پس می‌توان دید  اگر 
+ \lr{likelihood}
+ از توزیع چندجمله‌ای و
+ \lr{prior}
+ از توزیع دیریکله باشد توزیع 
+ \lr{posterior}
+ از نوع دیریکله است.
+ \subsection*{بخش \lr{b}}
+ در اثبات بخش قبل عملا ثابت شد که توزیع 
+ \lr{Posterior}
+ یک توزیع دیریکله است که نقاط تمرکز آن باتوجه به داده شیفت پیدا کرده‌اند. باتوجه به این‌که مقادیر اولیه 
+$\alpha$
+برابر با 
+$u_i = i$
+بوده‌اند و مقادیر مشاهده‌شده در داده برابر 
+$
+n_i
+$ بوده است، توزیع 
+\lr{Posterior}
+یک توزیع دیریکله با پارامتر 
+$\alpha_i = u_i + n_i$
+می‌باشد. حال باید دید با کدام مقادیر $p$ این مقدار بیشینه می‌شود. دوباره چون مشتق گرفتن از این توزیع کار ساده‌ای نیست از منابع خارجی کمک گرفته شد.
+\cite{integral_calc} 
+باتوجه به نتیجه می‌توان دید که احتمال وقتی بیشینه می‌شود که:
+\begin{latin}
+	$
+	p_i = \cfrac{\alpha_i - 1}{\sum\limits_{j = 1}^k \alpha_j - k} 
+	= \cfrac{n_i + i - 1}{1000 + 7 * 3} 
+	= \cfrac{n_i + i - 1}{1021}
+	$
+\end{latin}
+	\section*{سوال ۶}
+	\subsection*{بخش \lr{a}}
+	توزیع نرمال برای \lr{k} متغیر بصورت زیر است:
+	\begin{latin}
+		~\\
+		$
+		f = (2\pi)^{-(\frac{k}{2})} * \cfrac{1}{\sqrt{|\Sigma|}} * e ^ {-\frac{1}{2}(x - \mu)^T \Sigma^{-1} (x - \mu)}
+		$
+		\\\\
+		$
+		\mu = \text{matrix of means of dimension k * 1)}
+		$
+		\\
+		$
+		\Sigma = \text{Covariance matrix of dimension k * k}
+		$
+	\end{latin}
+	پس ابتدا باید ماتریس میانگین و کواریانس را بدست آورد که محاسبه شده‌اند. با توجه به نتایج برای کلاس اول ($y = 0$) داریم:
+	\begin{latin}
+		~\\
+		$
+		\mu \approx \begin{pmatrix}
+			-2.64 \\
+			0.19 \\
+		\end{pmatrix}
+		,
+		\Sigma \approx \begin{pmatrix}
+			0.05 & 0.05 \\
+			0.05 & 0.21 \\
+		\end{pmatrix}
+		\Rightarrow |\Sigma| \approx 0.008
+		\Rightarrow \Sigma^{-1} \approx \begin{pmatrix}
+		26.25 & -6.25 \\
+		-6.25 & 6.25 \\
+		\end{pmatrix}
+		$
+	\end{latin}
+	و برای کلاس دوم خواهیم داشت:
+	\begin{latin}
+		$
+		\mu \approx \begin{pmatrix}
+			0.53 \\
+			-0.25
+		\end{pmatrix}
+		,
+		\Sigma \approx \begin{pmatrix}
+			0.35 & 0.19 \\
+			0.19 & 0.18
+		\end{pmatrix}
+		\Rightarrow |\Sigma| \approx 0.027 
+		\Rightarrow \Sigma ^ {-1} \approx \begin{pmatrix}
+			6.69 & -7.06 \\
+			-7.06 & 13.01
+		\end{pmatrix}
+		$
+	\end{latin}
+	و برای کلاس سوم داریم:
+	\begin{latin}
+		$
+		\mu \approx \begin{pmatrix}
+			2.1 \\
+			0.05
+		\end{pmatrix}
+		,
+		\Sigma \approx \begin{pmatrix}
+			0.48 & 0.27 \\
+			0.27 & 0.22
+		\end{pmatrix}
+		\Rightarrow |\Sigma| \approx 0.038
+		\Rightarrow \Sigma ^ {-1} \approx \begin{pmatrix}
+			5.92& -7.02 \\
+			-7.02 & 12.66
+		\end{pmatrix}
+		$
+	\end{latin}
+	
+	که باید در رابطه زیر جایگذاری شوند
+	\begin{latin}
+		$
+		P_{X} (x) = \cfrac{1}{2\pi * |\Sigma|} * e^{-\frac{1}{2}(x - \mu)^T\Sigma^{-1}(x - \mu)}
+		$
+	\end{latin}
+	چون هدف بدست آوردن پارامتر‌های توزیع است این مقدار از محاسبه کافیست.
+	\subsection*{بخش \lr{b}}
+	برای محاسبه تابع تفکیک
+		\LTRfootnote{Discriminant Function}
+		  چون احتمال 
+	\lr{prior}
+	تعیین نشده می‌توان آن را برای کلاس ها یکسان در نظر گرفت و صرفا 
+	\lr{likelihood}
+را حساب کرد. 
+\subsection*{بخش \lr{c}}
+باتوجه به اینکه ماتریس کواریانس یکسان گرفته شد، نواحی بصورت خطی جداپذیر هستند.
+
+{
+	\centering
+	\includegraphics[width=0.6\textwidth]{pics/6_1.png}
+	\captionof{figure}{کانتور‌ها باتوجه به \lr{Discriminant Function}}
+}
+
+
+\subsection*{بخش \lr{d}}
+باید دو تابع 
+\lr{PDF}
+را برابر هم قرار داد. در قسمت‌های قبل به دلیل این‌که محاسبه خیلی سخت نبود،‌ماتریس‌های کواریانس جداگانه حساب شد ولی در اینجا با فرض یکی بودن ماتریس کواریانس حل می‌شود زیرا در غیر اینصورت ناحیه خطی نمی‌شود (در نمودار ها هم فرض یکی بودن نشان داده شده و هم فرض متفاوت بودن ):
+\begin{latin}
+	$
+	m_1 = x - \mu_1, m_2 = x - \mu_2
+	$
+	$
+	(x - \mu_1)^T \Sigma^{-1}  (x - \mu_1) =(x - \mu_2)^T \Sigma^{-1}  (x - \mu_2)  
+	$
+\end{latin}
+با باز کردن حاصل داریم:
+\begin{latin}
+	$
+	(x - \mu_1)^T \Sigma^{-1}  (x - \mu_1)  =
+	 x^T \Sigma^{-1} x - \mu_1^T \Sigma^{-1} x - x^T\Sigma^{-1}\mu_1 + \mu_1^T \Sigma^{-1}  \mu_1
+	$
+\end{latin}
+بخش‌های این معادله هرکدام عدد هستند می‌توان بجای 
+$
+x^T\Sigma^{-1}\mu_1
+$
+ترانهاد آن را قرار داد. همچنین چون 
+$\Sigma$
+یک ماتریس متقارن است، ترانهاد آن با خودش برابر است پس داریم:
+\begin{latin}
+	$
+	x^T\Sigma^{-1}\mu_1 = (x^T\Sigma^{-1}\mu_1)^T = \mu_1^T \Sigma^{-1} x
+	$
+\end{latin}
+پس در فرمول ناحیه تصمیم داریم:
+\begin{latin}
+	$
+	x^T \Sigma^{-1} x - 2\mu_1^T \Sigma^{-1} x + \mu_1^T \Sigma^{-1}  \mu_1 
+	=
+	x^T \Sigma^{-1} x - 2\mu_2^T \Sigma^{-1} x + \mu_2^T \Sigma^{-1}  \mu_2
+	$
+	\\
+	$
+	\Rightarrow
+	\mu_2^T \Sigma^{-1}  \mu_2 + 2\mu_1^T \Sigma^{-1} x 
+	=
+	\mu_1^T \Sigma^{-1}  \mu_1 + 2\mu_2^T \Sigma^{-1} x 
+	\Rightarrow
+	2(\mu_2^T\Sigma^{-1} - \mu_1^T\Sigma^{-1}) x 
+	= 
+	 \mu_2^T \Sigma^{-1}  \mu_2
+	 -
+	 \mu_1^T \Sigma^{-1}  \mu_1
+	$
+\end{latin}
+در اینجا می‌توان جایگذاری کرد و سپس با محاسبه معکوس ماتریس ضریب 
+$x$
+جواب را حساب کرد:
+\begin{latin}
+	$
+	\Sigma^{-1} = \begin{pmatrix}
+		29.49 & -7.6 \\
+		-7.6 & 6.64
+	\end{pmatrix}, \mu_1 = \begin{pmatrix}
+	-2.65 \\
+	0.19
+	\end{pmatrix}, \mu_2  \begin{pmatrix}
+	0.53 \\ 
+	-0.25
+	\end{pmatrix}
+	$
+	\\
+	$
+	\begin{pmatrix}
+		96.98 & -27.02
+	\end{pmatrix} 
+	x = -101.53
+	\Rightarrow 96.98 x_1 - 27.02 x_2 = 101.53
+	$
+\end{latin}
+
+{
+	\centering
+	\includegraphics[width=0.6\textwidth]{pics/6_d1.png}
+	\captionof{figure}{به دلیل ساده‌سازی در محاسبات، خط مرز تصمیم منطبق نیست اما کلیت آن واضح است.}
+}
+
+\subsection*{بخش \lr{e}}
+در اینصورت در معادله 
+\lr{Discriminant Function}
+بعد از گرفتن لگاریتم، یک طرف معادله با 
+$
+log(\cfrac{p_1}{p_2})
+$
+جمع می‌شود و عملا درنهایت مرز تصمیم به سمت کلاسی که احتمال 
+\lr{prior}
+بیشتری دارد شیفت پیدا می‌کند. از آنجایی که شیب خط به این مقدار وابسته نیست (زیرا در ضریب $x$ نمود پیدا نمی‌کند) صرفا عرض از مبدا مرز تصمیم فرق می‌کند و شیب خط فرقی نمی‌کند. همچنین چون این ضریب در چیزی ضرب نمی‌شود،‌عملا تاثیر کمی دارد.
+
+برای مثال اگر داشته باشیم 
+$
+p_1 = 1000p_2
+$
+معادله نهایی برابر خواهد شد با:
+\begin{latin}
+	$
+	96.98 x_1 - 27.02 x_2 = 101.53 - 0.5 ln(1000) = 98.07
+	$
+\end{latin}
+{
+	\centering
+	\includegraphics[width=0.6\textwidth]{pics/6_e.png}
+	\captionof{figure}{می‌توان دید که در عکس سمت راست، مرز تصمیم کمی بیش‌تر به سمت چپ رفته است.}
+}
+\subsection*{بخش \lr{f}}
+تنها برای بخش \lr{d} برای خطی بودن نیاز به فرض یکی بودن کواریانس بود. در باقی موارد یکی بودن و نبودن تفاوتی در نمایش داده ندارد (مرز تصمیم خطی نمی‌شود صرفا)
+{
+	\centering
+	\includegraphics[width=0.6\textwidth]{pics/6_f.png}
+	\captionof{figure}{مهم ترین تغییری که با استفاده مجزا از کواریانس رخ می‌دهد، خطی نبودن مرز تصمیم است. به طور دقیق تر، مرز تصمیم از خط به سطح مشترک دو تابع گاوسی تبدیل می‌شود.}
+}
+\subsection*{بخش \lr{i}}
+کافیست تا 
+\lr{Discriminant Function}
+مربوط به 
+\lr{Rejection}
+محاسبه شود. در سوال اول این حساب شد که مقدار آن درصورت برابر بودن ریسک همه کلاس‌ها برابر است با:
+$
+1 - \cfrac{\lambda_r}{\lambda_s} = 1 - \lambda_r
+$
+عملا یک بیان دیگر این مسئله این است که اگر احتمال از حدی پایین‌تر است (از
+$1 - \lambda_r$
+)
+و مدل با اطمینان بالایی خروجی نمی‌دهد، خروجی ندهد!
+
+{
+	\centering
+	\includegraphics[width=0.6\textwidth]{pics/6_i.png}
+	\captionof{figure}{با کم شدن خطای رد، نواحی بیشتری بدون تصمیم می‌مانند. البته چون در اینجا بجای احتمال تابع چگالی احتمال موجود است، حتی می‌توان مقادیر منفی را بررسی کرد زیرا \lr{PDF} ممکن است بیشتر از یک باشد.}
+}
+با توچه به عکس به نظر انتخاب ریسک رد بین ۰.۹ تا ۰.۹۹ انتخابی منطقی باشد.
+\section*{سوال ۷}
+چون 
+\lr{Naive Bayes}
+ است، فرض شده فیچرها مستقل هستند. برای هر ورودی چک می‌شود که کدام کلاس احتمال 
+ $
+ likelihood * prior
+ $
+ بیشتری را نتیجه می‌دهد و سپس بهترین کلاس انتخاب می‌شود. 
+ 
+ برای محاسبه متریک‌ها ابتدا باتوجه به نوع متریک، ماسک انتخاب می‌شود که نشان می‌دهد کدام داده‌ها روی متریک تاثیر گذارند، سپس نسبت 
+ \lr{True positive}
+ به کل داده سنجیده می‌شود.
+ 
+ \section*{سوال ۸}
+ \subsection*{بخش \lr{a}}
+ توزیع کلمات بصورت چندجمله‌ای درنظر گرفته شد. برای تخمین 
+ \lr{MLE}
+ توزیع چندجمله‌ای، یک شهود این است که احتمال هر فیچر متناسب باشد با تعداد آن داده که بصورتی نرمالایز شده باشد که جمع احتمالات یک باشد. برای اثبات این موضوع می‌توان ثابت کرد که اگر 
+ $x_i$
+ از 
+ $x_j$ 
+ بزرگ‌تر باشد باید
+ $p_i$
+ از 
+ $p_j$
+ بزرگ‌تر باشد.
+ \begin{latin}
+ 	$
+ 	p_i < p_j , x_i > x_j, c = x_j - x_i
+ 	$
+ 	\\
+ 	$
+ 	p_i^{x_i}  p_j ^{x_j} = (p_i)^{x_j + c} (p_j)^{x_j} = p_i^c p_i^{x_j} p_j^{x_j}  < p_j^c p_i^{x_j} p_j^{x_j} \Rightarrow p_i^{x_i} p_j^{x_j} < p_j ^{x_j + c} p_i ^ {x_j} \Rightarrow p_i^{x_i} p_j^{x_j}  <  p_j^{x_i} p_i^{x_j}
+ 	$
+ \end{latin}
+ یعنی بدون تغییر در مقدار 
+ $p_i + p_j$
+ اگر نسبت $p$ ها متناظر با نسبت $x$ ها نباشد، مقدار 
+ \lr{likelihood}
+ بیشینه نخواهد شد (می‌توان با یک ترکیب دیگر مقدار بهتری یافت.) پس می‌توان دید که نسبت $p$ ها باید متناظر با $x$ باشد. البته اثبات ارائه شده تنها برای نسبت دومتغیر است، ولی با وارد شدن چند متغیر نیز اثبات همچنان کار می‌کند (صرفا کافیست که $x_i$ از همه متغیر های دیگر بزرگ‌تر باشد.) 
+ 
+ پس عملا تخمین 
+ \lr{MLE}
+ برای توزیع چندجمله این می‌باشد که نسبت $p_i$ ها برابر نسبت $x_i$ ها باشد. همچنین چون ترم اول تابع چگالی احتمال توزیع چندجمله‌ای نسبت به $p$ ثابت است در کلاس‌های متفاوت برابر است و می‌توان از آن صرف نظر کرد.
+ 
+
+\subsubsection*{سوالات}
+\begin{enumerate}
+	\item
+
+روی مجموعه داده تست ۸۵  مورد درست حدس زده شدند.
+\item 
+درواقع 
+\lr{classifier}
+از روی \lr{likelihood} احتمال رخ دادن داده درصورتی که در هر کلاس باشد را حساب می‌کند و کلاسی که بیشینه آن را می‌دهد خروجی می‌دهد.
+\item 
+چون در این‌جا بسیاری از فیچرها صفر هستند و عملکرد \lr{MLE} را تحت تاثیر قرار می‌دهند. 
+\lr{MLE}
+در حالتی که همه فیچرها دخیل باشند بهترین عملکرد را دارد. ولی اگر بسیاری از فیچرها تاثیر نداشته باشند، نتایج 
+\lr{PDF}
+ها می‌تواند نزدیک به هم باشند و دچار اشتباه شود. هرچند به نسبت خروجی قابل قبول است.
+\end{enumerate}
+\subsection*{بخش \lr{b}}
+چون توزیع 
+\lr{prior}
+برای همه کلاس‌ها یکی می‌شود، می‌توان آن را درنظر نگرفت، اما توزیع دیریکله در 
+\lr{likelihood}
+نیز تاثیر می‌گذارد. چون فرض گرفته می‌شود که از قبل هر داده 
+$\beta$
+بار دیده شده، موقع تخمین 
+\lr{likelihood}
+بجای محاسبه 
+\lr{count}
+باید از 
+\lr{count + $\beta$}
+استفاده کرد.
+\subsection*{بخش \lr{c}}
+باتوجه به نمودار مقادیر بالای $\beta$ خوب نیست زیرا عملا باعث می‌شود تا در
+\lr{classifier}
+تاثیر داده کمرنگ شود و همه کلاس‌ها هم احتمال شوند. اما مقادیر پایین آن باعث می‌شود تا دقت بهبود یابد. همچنین احتمال صفر شدن لگاریتم دیگر پیش نمی‌آید زیرا هر کلمه یک احتمال هرچند خیلی کم ولی غیر صفر دارد.
+
+\begin{table}[h]
+	\caption{تاثیر $\beta$ بر دقت}
+	\centering
+	\begin{latin}
+	\begin{tabular}{cc}
+		\textbf{$\beta$} & \textbf{Accuracy} \\
+		0 & 83 \\
+		$ 10^{-8}$ & 87 \\
+		$ 10^{-6}$ & 86 \\
+		0.001 & 86 \\
+		0.01 & 87 \\
+		0.1 & 87 \\
+		1 & 79 \\
+		2 & 65 \\
+		5 & 55 \\
+		10 & 54 \\
+		1000.0 & 50 \\
+	\end{tabular}
+\end{latin}
+\end{table}
+{
+	\centering
+	\includegraphics[width=0.6\textwidth]{pics/8_c.png}
+	\captionof{figure}{تاثیر $\beta$ در دقت. بهترین دقت در 0.1 بدست می‌آید.}
+}
+%	\end{latin}
+\section*{بخش \lr{d}}
+\begin{table}[h]
+	\caption{تاثیر تعداد داده بر دقت}
+	\centering
+	\begin{tabular}{cc}
+		\textbf{تعداد داده} & \textbf{درصد دقت} \\
+		1 & 46 \\
+		5 & 59 \\
+		10 & 75 \\
+		15 & 60 \\
+		20 & 71 \\
+		25 & 81 \\
+		30 & 81 \\
+		35 & 83 \\
+		40 & 84 \\
+		45 & 88 \\
+		50 & 87 \\
+	\end{tabular}
+\end{table}
+{
+	\centering
+	\includegraphics[width=0.6\textwidth]{pics/8_d.png}
+	\captionof{figure}{می‌توان دید با بیش‌تر شدن داده دقت بهبود می‌یابد.}
+}
+	
+\section*{منابع خارج از درس}
+	\begin{latin}
+			\printbibliography[heading=none]
+		
+	\end{latin}
+
+\end{document}

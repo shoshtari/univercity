@@ -1,0 +1,7 @@
+\contentsline {figure}{\numberline {1}{\ignorespaces کانتور‌ها باتوجه به \lr {Discriminant Function}}}{15}{figure.1}%
+\contentsline {figure}{\numberline {2}{\ignorespaces به دلیل ساده‌سازی در محاسبات، خط مرز تصمیم منطبق نیست اما کلیت آن واضح است.}}{16}{figure.2}%
+\contentsline {figure}{\numberline {3}{\ignorespaces می‌توان دید که در عکس سمت راست، مرز تصمیم کمی بیش‌تر به سمت چپ رفته است.}}{17}{figure.3}%
+\contentsline {figure}{\numberline {4}{\ignorespaces مهم ترین تغییری که با استفاده مجزا از کواریانس رخ می‌دهد، خطی نبودن مرز تصمیم است. به طور دقیق تر، مرز تصمیم از خط به سطح مشترک دو تابع گاوسی تبدیل می‌شود.}}{17}{figure.4}%
+\contentsline {figure}{\numberline {5}{\ignorespaces با کم شدن خطای رد، نواحی بیشتری بدون تصمیم می‌مانند. البته چون در اینجا بجای احتمال تابع چگالی احتمال موجود است، حتی می‌توان مقادیر منفی را بررسی کرد زیرا \lr {PDF} ممکن است بیشتر از یک باشد.}}{18}{figure.5}%
+\contentsline {figure}{\numberline {6}{\ignorespaces تاثیر $\beta $ در دقت. بهترین دقت در 0.1 بدست می‌آید.}}{22}{figure.6}%
+\contentsline {figure}{\numberline {7}{\ignorespaces می‌توان دید با بیش‌تر شدن داده دقت بهبود می‌یابد.}}{22}{figure.7}%

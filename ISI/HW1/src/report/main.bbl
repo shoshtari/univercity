@@ -1,0 +1,142 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nty/global//global/global/global}
+    \entry{gamblers_ruin_medium}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=ed977a417f58eafab5fafee613eeaf0f}{%
+           family={Agrawal},
+           familyi={A\bibinitperiod},
+           given={Naman},
+           giveni={N\bibinitperiod}}}%
+      }
+      \strng{namehash}{ed977a417f58eafab5fafee613eeaf0f}
+      \strng{fullhash}{ed977a417f58eafab5fafee613eeaf0f}
+      \strng{fullhashraw}{ed977a417f58eafab5fafee613eeaf0f}
+      \strng{bibnamehash}{ed977a417f58eafab5fafee613eeaf0f}
+      \strng{authorbibnamehash}{ed977a417f58eafab5fafee613eeaf0f}
+      \strng{authornamehash}{ed977a417f58eafab5fafee613eeaf0f}
+      \strng{authorfullhash}{ed977a417f58eafab5fafee613eeaf0f}
+      \strng{authorfullhashraw}{ed977a417f58eafab5fafee613eeaf0f}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://medium.com/data-science/gamblers-ruin-problem-a-probability-antiquity-6d3f5fe20812}}
+      \field{journaltitle}{Medium}
+      \field{note}{Accessed: 2025-11-20}
+      \field{title}{Gambler’s Ruin Problem: A Probability Antiquity}
+      \field{year}{2022}
+    \endentry
+    \entry{youtube_conditional_expect}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=ff21463911be239d8ce699a5ed666c50}{%
+           family={{Bright side of maths}},
+           familyi={B\bibinitperiod}}}%
+      }
+      \strng{namehash}{ff21463911be239d8ce699a5ed666c50}
+      \strng{fullhash}{ff21463911be239d8ce699a5ed666c50}
+      \strng{fullhashraw}{ff21463911be239d8ce699a5ed666c50}
+      \strng{bibnamehash}{ff21463911be239d8ce699a5ed666c50}
+      \strng{authorbibnamehash}{ff21463911be239d8ce699a5ed666c50}
+      \strng{authornamehash}{ff21463911be239d8ce699a5ed666c50}
+      \strng{authorfullhash}{ff21463911be239d8ce699a5ed666c50}
+      \strng{authorfullhashraw}{ff21463911be239d8ce699a5ed666c50}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://www.youtube.com/watch?v=GDQW5AC0SDQ}}
+      \field{note}{Accessed: 2025-11-20}
+      \field{title}{Probability Theory 21 | Conditional Expectation given events}
+    \endentry
+    \entry{wikipedia_conditional_expect}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=b6aea1a416c89509a7df1cbb69249cb6}{%
+           family={{Wikipedia contributors}},
+           familyi={W\bibinitperiod}}}%
+      }
+      \strng{namehash}{b6aea1a416c89509a7df1cbb69249cb6}
+      \strng{fullhash}{b6aea1a416c89509a7df1cbb69249cb6}
+      \strng{fullhashraw}{b6aea1a416c89509a7df1cbb69249cb6}
+      \strng{bibnamehash}{b6aea1a416c89509a7df1cbb69249cb6}
+      \strng{authorbibnamehash}{b6aea1a416c89509a7df1cbb69249cb6}
+      \strng{authornamehash}{b6aea1a416c89509a7df1cbb69249cb6}
+      \strng{authorfullhash}{b6aea1a416c89509a7df1cbb69249cb6}
+      \strng{authorfullhashraw}{b6aea1a416c89509a7df1cbb69249cb6}
+      \field{extraname}{1}
+      \field{sortinit}{W}
+      \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://en.wikipedia.org/wiki/Conditional_expectation}}
+      \field{note}{Accessed: 2025-11-20}
+      \field{title}{Conditional Expectaion}
+    \endentry
+    \entry{wikipedia_kurtosis}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=b6aea1a416c89509a7df1cbb69249cb6}{%
+           family={{Wikipedia contributors}},
+           familyi={W\bibinitperiod}}}%
+      }
+      \strng{namehash}{b6aea1a416c89509a7df1cbb69249cb6}
+      \strng{fullhash}{b6aea1a416c89509a7df1cbb69249cb6}
+      \strng{fullhashraw}{b6aea1a416c89509a7df1cbb69249cb6}
+      \strng{bibnamehash}{b6aea1a416c89509a7df1cbb69249cb6}
+      \strng{authorbibnamehash}{b6aea1a416c89509a7df1cbb69249cb6}
+      \strng{authornamehash}{b6aea1a416c89509a7df1cbb69249cb6}
+      \strng{authorfullhash}{b6aea1a416c89509a7df1cbb69249cb6}
+      \strng{authorfullhashraw}{b6aea1a416c89509a7df1cbb69249cb6}
+      \field{extraname}{2}
+      \field{sortinit}{W}
+      \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://en.wikipedia.org/wiki/Kurtosis}}
+      \field{note}{Accessed: 2025-11-20}
+      \field{title}{Kurtosis}
+    \endentry
+    \entry{wikipedia_timsort}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=b6aea1a416c89509a7df1cbb69249cb6}{%
+           family={{Wikipedia contributors}},
+           familyi={W\bibinitperiod}}}%
+      }
+      \strng{namehash}{b6aea1a416c89509a7df1cbb69249cb6}
+      \strng{fullhash}{b6aea1a416c89509a7df1cbb69249cb6}
+      \strng{fullhashraw}{b6aea1a416c89509a7df1cbb69249cb6}
+      \strng{bibnamehash}{b6aea1a416c89509a7df1cbb69249cb6}
+      \strng{authorbibnamehash}{b6aea1a416c89509a7df1cbb69249cb6}
+      \strng{authornamehash}{b6aea1a416c89509a7df1cbb69249cb6}
+      \strng{authorfullhash}{b6aea1a416c89509a7df1cbb69249cb6}
+      \strng{authorfullhashraw}{b6aea1a416c89509a7df1cbb69249cb6}
+      \field{extraname}{3}
+      \field{sortinit}{W}
+      \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://en.wikipedia.org/wiki/Timsort}}
+      \field{note}{Accessed: 2025-11-20}
+      \field{title}{TimSort}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

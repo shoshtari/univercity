@@ -1,0 +1,971 @@
+\documentclass[12pt]{article}
+
+\usepackage[a4paper, margin=0.5in]{geometry}
+\usepackage{anyfontsize}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{setspace}
+\usepackage{hyperref}
+\usepackage[backend=biber]{biblatex}
+\usepackage{float}
+\usepackage{svg}
+\usepackage{xepersian}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{enumitem}
+\usepackage{bigints}
+\hypersetup{colorlinks,urlcolor=blue}
+%\settextfont[Scale=1.1]{Far.Mitra}
+
+\settextfont[Scale=1.0, Size=14pt]{B Nazanin}
+\defpersianfont\persiantitlefont[Scale=1.0, Size=18pt]{B Titr}
+\setlatintextfont[Scale=1.0, Size=12pt]{Times New Roman}
+\deflatinfont\englishtitlefont[Scale=1.0, Size=16pt]{Times New Roman Bold}
+
+\usepackage[backend=biber]{biblatex}
+\addbibresource{references.bib}
+
+
+\def\labelitemi{$\diamond$}
+\def\labelitemii{$\ast$}
+
+
+\begin{document}
+	\linespread{3}
+	\setstretch{1.5}
+	
+	% --- HEADER ROW ---
+	\begin{minipage}[t]{0.7\textwidth}
+		
+		{\huge\textcolor{teal!70!black}{\title\textbf{{استنباط آماری}}}}\\[4pt]
+		
+	\end{minipage}
+	\hfil
+	\begin{minipage}[t]{0.15\textwidth}
+		\centering
+		\includegraphics[width=0.9\linewidth]{pics/logo.png}\\[6pt]
+		{\small پاییز ۱۴۰۴}
+	\end{minipage}
+	
+	
+	
+	{
+		
+		\Large{تمرین اول}
+		
+		\large مرتضی ملکی‌نژاد شوشتری - ۸۱۰۱۰۴۲۵۶ 
+		
+		
+	}
+	
+	\vspace{1.2cm}
+	
+	
+	
+	\vspace{0.3cm}
+	\hrule 
+	\vspace{0.6cm}
+	
+	\section*{سوال ۱}
+	\begin{flushleft}
+		$
+		Cov(X, Y) = E((X - \mu_x)(Y - \mu_y)) = \sum_{i=1}^{n}\sum_{j=1}^{n} (x_i - \mu_x)(y_j - \mu_y) P(x_i, y_j)
+		= E(XY) - E(X)E(Y)
+		$
+	\end{flushleft}
+	
+	پس برای محاسبه کوواریانس ‌نیاز است تا $E(XY)$، $E(Y)$ و  $E(X)$ حساب شوند.
+	
+	واضح است که 
+	$
+	E(X) = \cfrac{n + 1}{2}
+	$
+	.
+	
+	برای محاسبه 
+	$
+	E(Y)
+	$
+	با استفاده از قانون احتمال کل و امید شرطی داریم:
+	
+	\begin{flushleft}
+		$
+		E(Y) =\sum_{i=1}^{n} E(Y | X = x_i)P(X = x_i)  =  \cfrac{1}{n} \sum_{i=1}^{n} E(Y | X = x_i) 
+		$
+		\\
+		$
+		P(Y = y | X= x) = \left\{
+		\begin{array}{ll}
+			0                   & (x = y)    \\
+			\cfrac{1}{n - 1} & (x \neq y) 
+		\end{array}
+		\right.
+		$
+		\\
+		$
+		E(Y | X = x) = \sum_{i=1}^{n} y_i P(Y = y_i, X = x) =( \sum_{i=1}^{n} y_i * \cfrac{1}{n - 1} )- \cfrac{x}{n - 1} = \cfrac{1}{n - 1} * (\cfrac{n(n + 1)}{2} - x) 
+		\Rightarrow
+		E(Y) = \cfrac{1}{n}  \sum_{i=1}^{n}  \cfrac{1}{n - 1} * (\cfrac{n(n + 1)}{2} - x) = \cfrac{1}{n(n - 1)} \sum_{i=1}^{n} \cfrac{n(n + 1)}{2} - x = \cfrac{1}{n ( n - 1)} (\cfrac{n ^ 2(n + 1)}{2} - \cfrac{n (n + 1)}{2}) = \cfrac{1}{n (n - 1)} (\cfrac{n^3 - n}{2}) = \cfrac{n + 1}{2}
+		$
+	\end{flushleft}
+	که مطابق انتظار است زیرا توزیع $X$ متقارن است و هر تاثیری که $X=x$ به ازای $x$ کوچک دارد با $X=x'$ به ازای $x'$ بزرگ خنثی می‌شود و امید $Y$ برابر میانگین می‌شود. حال برای محاسبه کوواریانس به محاسبه $E(XY)$ نیاز است:
+	
+	\begin{flushleft}
+		$
+		P(X = x, Y = y) = \left\{
+		\begin{array}{ll}
+			0                   & (x = y)    \\
+			\cfrac{1}{n(n - 1)} & (x \neq y) 
+		\end{array}
+		\right.
+		$
+		\\~\\
+		$
+		E(XY) = \sum_{i=1}^{n} \sum_{j=1}^{n} i*j*P(X = i, Y = j) = \cfrac{1}{n(n - 1)} (\sum_{i=1}^{n} \sum_{j=1}^{n} ij - \sum_{i=1}^{n} i ^ 2) = \cfrac{1}{n(n - 1)} (\sum_{i=1}^{n} i)^2 - \sum_{i=1}^{n} i ^ 2)  = \cfrac{1}{n(n - 1)} ((\cfrac{n(n + 1)}{2})^2 - (\cfrac{n(n + 1)(2n + 1)}{6})) = \cfrac{1}{n - 1} * (\cfrac{n(n + 1)^2}{4} - \cfrac{(n + 1)(2n + 1)}{6}) = \cfrac{n + 1}{n - 1} (\cfrac{n^2 + n}{4} - \cfrac{2n + 1}{6}) = \cfrac{n + 1}{n - 1} * \cfrac{3n^2 + 3n - 4n - 2}{12} = \cfrac{n + 1}{n - 1} * \cfrac{3n^2 - n - 2}{12}  = \cfrac{n + 1}{n - 1} * \cfrac{(n -1)(3n + 2)}{12} = \cfrac{(n + 1)(3n + 2)}{12} = \cfrac{3n^2 + 5n + 2}{12}
+		$
+	\end{flushleft}
+	پس داریم:
+	
+	\begin{flushleft}
+		$
+		Cov(X, Y) = E(XY) - E(X)E(Y) = \cfrac{3n^2 + 5n + 2}{12} - (\cfrac{n +  1}{2})^2 = \cfrac{3n^2 + 5n + 2}{12} - \cfrac{n^2 + 2n + 1}{4} = \cfrac{-n - 1}{12} = -\cfrac{n + 1}{12}
+		$
+	\end{flushleft}
+	\section*{سوال ۲}
+	\subsection*{بخش \lr{a}}
+	
+	
+	\begin{flushleft}
+		$
+		Y = 5X +  \epsilon \Rightarrow   \left\{
+		\begin{array}{ll}
+			E(Y) = 5E(X) + E(\epsilon) = 5 * 0 + 0 = 0                                 \\
+			Var(Y) = 25Var(X) + Var(\epsilon) = 25 * \cfrac{4}{12} + 1 = \cfrac{28}{3} 
+		\end{array}
+		\right.  
+		$
+	\end{flushleft}
+	\subsection*{بخش \lr{b}}
+	\begin{flushleft}
+		$
+		Var(Y) = E(Y^2) - E(Y)^2 \Rightarrow E(Y ^ 2) = Var(Y) + E(Y) ^ 2 = \cfrac{28}{3} + 0^2 = \cfrac{28}{3}
+		$
+	\end{flushleft}
+	\subsection*{بخش \lr{c}}
+	\begin{flushleft}
+		$
+		E(Y | X = x) = E(5X + \epsilon | X = x) = E(5X | X = x) + E(\epsilon | X = x) = 5x + E(\epsilon) = 5x + 0 =  5x
+		$
+	\end{flushleft}
+	\subsection*{بخش \lr{d}}
+	
+	\begin{flushleft}
+		$
+		E(X^k\epsilon) = E(X^k)E(\epsilon) = 0
+		$
+		\\
+		$
+		E(X\epsilon^k) = E(X)E(\epsilon^k) = 0
+		$
+		\\
+		$
+		E(Y^3) = E((5X + \epsilon)^3) \xrightarrow{E(X\epsilon^k) = E(X^k\epsilon) = 0} E(Y^3) = 125XE(^3) + E(\epsilon^3) 
+		$
+	\end{flushleft}
+	از آنجایی که $x^3$ یک تابع فرد است و توزیع های $X$ و $\epsilon$ حول میانگین (صفر) متقارن هستند و بازه انتگرال گیری نیز حول صفر متقارن است می‌توان نتیجه گرفت که:
+	\begin{flushleft}
+		$
+		E(X^3) = E(\epsilon^3) = 0 \Rightarrow E(Y^3) = 0
+		$
+	\end{flushleft}
+	\subsection*{بخش \lr{e}}
+	\begin{flushleft}
+		$
+		Cov(\epsilon, \epsilon^2) = E(\epsilon^3) - E(\epsilon)E(\epsilon^2) \xrightarrow{E(\epsilon) = 0} Cov(\epsilon, \epsilon^2) = E(\epsilon^3)
+		$
+	\end{flushleft}
+	
+	مشابه بخش قبل چون $\epsilon$ یک توزیع متقارن حول صفر است، امید ممان‌های فرد آن صفر است پس:
+	
+	\begin{flushleft}
+		$
+		E(\epsilon^3)  = 0 \Rightarrow Cov(\epsilon, \epsilon^3) = 0
+		$
+	\end{flushleft}
+	ولی این به این معنی نیست که آن‌ها مستقل از هم هستند. به وضوح با دانستن مقدار $\epsilon$ می‌توان مقدار $\epsilon^2$ را بدست آورد. (برای استقلال، دانستن مقدار $\epsilon$ نباید هیچ دانشی درباره مقدار $\epsilon^2$ بدهد.)
+	
+	\subsection*{بخش \lr{f}}
+	\begin{flushleft}
+		$
+		Cov(X, Y) = E((X - E(X))(Y - E(Y))) = E(XY) - E(X)E(Y)
+		$
+	\end{flushleft}
+	حال باید دید اگر $H = aX + b$ باشد، رابطه بین 
+	$
+	H - E(H)
+	$
+	و
+	$
+	X - E(X)
+	$
+	چیست:
+	
+	\begin{flushleft}
+		$
+		E(H) = aE(X) + b
+		\Rightarrow
+		H - E(H) = aX + b - aE(X) - b = a(X - E(X))
+		$
+		\\
+		$
+		Cov(H, Y) = E((H - E(H))(Y - E(Y))) = E(a(X - E(X))(Y - E(Y))) = aE((X - E(X))(Y - E(Y))) = aCov(X, Y)
+		$
+	\end{flushleft}
+	با دوبار اعمال این فرمول می‌توان یافت:
+	\begin{flushleft}
+		$
+		Cov(n + mX, h + gY) = mCov(X, h + gY) = mgCov(X, Y)
+		$
+	\end{flushleft}
+	\subsection*{بخش \lr{g}}
+	\begin{flushleft}
+		$
+		Cov(X, Y) = E(X - E(X), Y - E(Y))
+		$
+	\end{flushleft}
+	اگر $M$ را برابر 
+	$
+	X - E(X)
+	$
+	و $N$ را برابر 
+	$
+	Y - E(Y)
+	$
+	قرار داد داریم:
+	
+	
+	\begin{flushleft}
+		$
+		E(M) = E(X) - E(E(X)) = 0 \Rightarrow E(M^2) = E(M)^2 + Var(M) = Var(M) = Var(X)
+		$
+		\\
+		$
+		E(N) = E(Y) - E(E(Y)) = 0 \Rightarrow E(N^2) = E(N)^2 + Var(N) = Var(N) = Var(Y)
+		$
+		\\
+		$
+		Cov(X, Y) = E(MN)
+		$
+	\end{flushleft}
+	طبق نامساوی کوشی-شوارتز داریم:
+	\begin{flushleft}
+		$
+		Cov(X, Y) = E(MN) \leq \sqrt{E(M^2)E(N^2)} = \sqrt{Var(X)Var(Y)} \Rightarrow 	Cov(X, Y) \leq \sqrt{Var(X)Var(Y)}
+		$
+	\end{flushleft}
+	\section*{سوال ۳}
+	 داریم:
+	\begin{flushleft}
+		$
+		E(X) = \int\limits_0^\infty xf(x)d_x \xrightarrow{x = \int\limits_0^x 1d_t} E(X) = \int\limits_0^\infty \int\limits_0^x d_t f(x) d_x
+		$
+	\end{flushleft}
+	چون $X > 0$ می‌توان ترتیب انتگرال را عوض کرد ولی چون در حدود انتگرال $x$ وجود دارد اول باید صفحه را برحسب $t$ بدست آورد:
+	
+	\begin{flushleft}
+		$
+		0 \leq x \leq \infty  ,
+		0 \leq t \leq x
+		\Rightarrow 
+		0 \leq t \leq \infty ,
+		t \leq x \leq \infty
+		$
+	\end{flushleft}
+	پس:
+	
+	\begin{flushleft}
+		$
+		E(X) = \int\limits_0^\infty \int\limits_0^x d_t f(x) d_x = \int\limits_0^\infty \int\limits_t^\infty f(x) d_x d_t 
+		$
+		\\
+		$
+		\int\limits_t^\infty f(x) d_x = \int\limits_0^\infty f(x) d_x  - \int\limits_0^t f(x) d_x = 1 - F(t)
+		$
+		\\
+		$
+		\Rightarrow E(X) = \int\limits_0^\infty (1 - F(t))d_t
+		$
+	\end{flushleft}
+	\section*{سوال ۴}
+	در جدول زیر، عنوان سطر ها برابر رنگ مشاهده شده توسط شاهد و عنوان ستون ها برابر رنگ واقعی ماشین ها است. هر خانه جدول عنوان می‌کند که اگر شاهد ماشینی با رنگ برابر با رنگ ستون را ببینید، با چه احتمالی رنگ سطر را می‌گوید.
+	\begin{table}[htbp] \label{q4_t1}
+		\centering
+		\caption{جدول نتایج طبقه‌بندی}
+		\begin{tabular}{|c|c|c|}
+			\hline
+			& \textbf{آبی} & \textbf{سبز} \\
+			\hline
+			\textbf{آبی} & ۹۹            & ۲              \\
+			\hline
+			\textbf{سبز} & ۱              & ۹۸            \\
+			\hline
+		\end{tabular}
+	\end{table}
+	
+	با وجود شهادت شاهد مبنی بر آبی بودن تاکسی، به احتمال
+	$
+	\cfrac{2}{101}
+	$
+	ماشین سبز بوده است. شاهد از هر ۱۰۰ ماشین سبز، ۲ تا را آبی می‌بیند و احتمال دارد که در شب حادثه نیز یکی از این ماشین‌های سبز را به اشتباه آبی دیده باشد.
+	
+	\section*{سوال ۵}
+	
+	\begin{flushleft}
+		$
+		P(i) = \cfrac{\lambda^ie^{-\lambda}}{i!} \Rightarrow \cfrac{P(i)}{P(i - 1)} = 
+		\cfrac{\lambda^ie^{-\lambda}}{i!} * \cfrac{(i - 1)!}{\lambda^{i - 1}e^{-\lambda}}
+		= 
+		\cfrac{\lambda}{i}
+		$
+	\end{flushleft}
+	با توجه به این، می‌توان نتیجه گرفت اگر $\lambda$ بزرگ تر از $i$ باشد،‌مقدار $P(i)$ بزرگ تر از $P(i - 1)$ است. از طرفی واضح است که 
+	$
+	\cfrac{\lambda}{i}
+	$
+	با افزایش $i$ کاهش می‌یابد. پس باید آخرین جایی را پیدا کرد که این مقدار از یک بزرگ تر است (میدانیم که $i$ مقداری صحیح و نامنفی دارد):
+	
+	\begin{flushleft}
+		$
+		\cfrac{\lambda}{i} \geq 1 \xrightarrow{i > 0} \lambda \geq i \xrightarrow{i \in \mathbb{W}} i \leq \lfloor \lambda \rfloor
+		$
+	\end{flushleft}
+	پس می‌توان دید آخرین جایی که 
+	$P(i)$
+	در آن از
+	$P(i - 1)$
+	بزرگ‌تر بوده در
+	$i = \lfloor \lambda \rfloor$ 
+	است.
+	
+	{\footnotesize
+		(به ازای 
+		$
+		i = 0
+		$
+		نامساوی بالا مبهم می‌شود. ولی چون هدف یافتن نسبت 
+		$
+		P(i)
+		$
+		به 
+		$
+		P(i - 1)
+		$
+		است، عملا جایگذاری 
+		$
+		i = 0
+		$
+		معنایی ندارد و از 
+		$
+		i = 1
+		$ 
+		می‌توان نسبت جملات به همدیگر را یافت.
+		)
+		
+	}
+	
+	\section*{سوال ۶}
+	
+	
+	\begin{flushleft}
+		$
+		X = exp(\lambda), Y = exp(\mu) \Rightarrow f_{X, Y} = f_x f_y = \cfrac{1}{\lambda \mu} e ^{-(\cfrac{x}{\lambda} + \cfrac{y}{\mu})}
+		$
+		\\
+		$
+		Z = min(X, Y)
+		$
+	\end{flushleft}
+	هدف یافتن
+	$
+	E(Z)
+	$
+	با توجه به 
+	$
+	X<Y
+	$
+	است. با توجه به امید شرطی داریم: 
+	\footnote{
+	این قضیه امید شرطی در درس نبود. با خواندن صفحه ویکی‌پدیا
+	\cite{wikipedia_conditional_expect}
+	و دیدن این ویدیو 
+	\cite{youtube_conditional_expect}
+	فرمول امید شرطی بدست آمد.
+	}
+	
+	\begin{flushleft}
+		$
+		E(Z | X < Y) = E(min(X, Y) | X < Y) = E(X | X< Y) = \cfrac{E(X.1_{\{X < Y\}})}{P(X < Y)}
+		$
+		\\
+		$
+		E(X.1_{\{X < Y\}}) 
+		= \int\limits_0^\infty \int\limits_x^\infty xf_{X, Y}d_yd_x 
+		=  \int\limits_0^\infty (x* \cfrac{1}{\lambda} e^{-\cfrac{x}{\lambda}} \int\limits_x^\infty \cfrac{1}{\mu}e^{-\cfrac{y}{\mu}}d_yd_x) 
+		= \int\limits_0^\infty (x * \cfrac{1}{\lambda} e ^ {-\cfrac{x}{\lambda}} * e^{-\cfrac{x}{\mu}}) 
+		\xrightarrow{t = \cfrac{1}{\mu} + \cfrac{1}{\lambda}} 
+		= \cfrac{1}{\lambda} \int\limits_0^\infty xe^{-tx}d_x
+		= \cfrac{1}{\lambda} ([\cfrac{-1}{t}xe^{-tx}]_0^\infty - \int\limits_0^\infty \cfrac{-1}{t} e^{-tx}d_x)
+		\xrightarrow{\lim_{x \to \infty} x e^{-x} = 0} 
+		= \cfrac{1}{\lambda} * \cfrac{1}{t^2} = \cfrac{\mu^2\lambda}{(\lambda + \mu)^2}
+		$
+		\\
+		$
+		P(X < Y) =  \int\limits_0^\infty \int\limits_x^\infty f_{X, Y}d_yd_x = 
+		\int\limits_0^\infty (\cfrac{1}{\lambda} e ^ {-\cfrac{x}{\lambda}}
+		\int\limits_x^\infty \cfrac{1}{\mu} e ^ {-\cfrac{y}{\mu}}d_y d_x
+		)
+		= \int\limits_0^\infty (\cfrac{1}{\lambda} e ^ {-\cfrac{x}{\lambda}} * (e ^{\cfrac{-x}{\mu}})
+		= \cfrac{1}{\lambda} \int\limits_0^\infty e ^{-x(\cfrac{1}{\lambda} + \cfrac{1}{\mu})}
+		= \cfrac{1}{\lambda} * \cfrac{\mu \lambda}{\mu + \lambda} = \cfrac{\mu}{\mu  + \lambda}
+		$
+		\\
+		$
+		\Rightarrow E(X | X<Y) = \cfrac{\cfrac{\lambda\mu^2}{(\lambda + \mu)^2}}{\cfrac{\mu}{\mu + \lambda}} = \cfrac{\lambda\mu}{\lambda + \mu} 
+		$
+	\end{flushleft}
+	\section*{سوال ۷}
+	با استفاده از قانون امید‌های متوالی می‌توان حساب کرد: (چون به ازای $X = x$ محاسبات انجام می‌شود، به استقلال متغیرها نیازی نیست.)
+	\begin{flushleft}
+		$
+		 E((Y - g(X))^2) = E(E([Y - g(x)]^2|X))
+		$
+		\\
+		$
+		c(x) = E(Y | X = x) \Rightarrow E((Y - g(x))^2|X = x) = g(x)^2 - 2g(x)c(x) + c(x)^2
+		$
+	\end{flushleft}
+	واضح است که مقدار بالا وقتی کمینه است که 
+	$
+	g(x)
+	$
+	برابر با
+	$
+	c(x)
+	$
+	باشد.
+	
+
+
+	\section*{سوال ۸}
+	
+	\begin{flushleft}
+		$
+		0 \leq y \leq \sqrt{1 - x^2}, - \sqrt(1 - y^2)  \leq x \leq  \sqrt(1 - y^2) 
+		$
+	\end{flushleft}
+	باتوجه به اینکه توزیع توام 
+	$
+	X
+	$
+	و
+	$
+	Y
+	$
+	یک توزیع یکنواخت است، توزیع 
+	$
+	Y | X = x
+	$
+	نیز یکنواخت است و به شکل 
+	$
+	Y
+	$
+	نقطه‌هایی است که در نیم دایره
+	$
+	x^2 + y^2 = 1 , y \geq 0
+	$
+	با
+	$
+	X = x$
+	قرار دارند. پس یعنی عملا نقطه‌های روی پاره‌خط بین نقاط
+	$
+	(x, 0)
+	$
+	و
+	$
+	(x, \sqrt(1 - x^2))
+	$
+	هستند. برای پیش‌بینی 
+	$Y$
+	می‌دانیم بهترین تخمین 
+	$
+	E(Y | X)
+	$
+	است. باتوجه به اینکه این توزیع یکنواخت است و حدود پایین و بالای آن معلوم است داریم:
+	\begin{flushleft}
+
+	$
+	E(Y | X = x) = \cfrac{0 + \sqrt{1 - x^2}}{2}
+	$
+		\end{flushleft}
+		
+		برای تخمین 
+		$
+		X
+		$
+		از روی 
+		$
+		Y
+		$
+		نیز می‌توان به همین طریق حساب کرد با این تفاوت که حد پایین 
+		$
+		X
+		$
+		صفر نیست.
+		
+		\begin{flushleft}
+			$
+			E(X | Y = y) = \cfrac{ -\sqrt(1 - y^2) + \sqrt(1 - y^2)}{2} = 0
+			$
+		\end{flushleft}
+		\section*{سوال ۹}
+		\subsection*{۱}
+
+		اگر به ازای هر بازه بین 
+		$
+		a_i
+		$
+		و 
+		$
+		a_{i + 1}
+		$
+		 مقدار \lr{MSE} را کمینه کرد.می‌توان
+		$
+		E((X - Y)^2 | a_i < X < a_{i + 1})
+		$
+		را حساب کرد و سپس همه این احتمالات را جمع کرد. از طرفی از آنجا که حدود انتگرال‌های $X$ از هم مجزا می‌شود و $y_i$ ها تاثیری برهم دیگر ندارند، می‌توان صرفا بر اساس یکی از این احتمالات شرطی $MSE$ را کمینه کرد و تعمیم داد. داریم:
+		
+		\begin{flushleft}
+			$
+			MSE = E((X - Y)^2) = \sum\limits_{i = -\infty}^\infty \int\limits_{a_i}^{a_{i + 1}} (x - y_i)^2 f_X(x) f_Y(y) d_x  \Rightarrow
+			best y_i = argmin \int\limits_{a_i}^{a_{i + 1}} (x - y_i)^2 f_X(x) d_x
+			$
+		\end{flushleft}
+		از آنجایی که هدف کمینه کردن این مقدار است، ‌می‌توان 
+		$
+		f_Y(y)
+		$
+		را حذف کرد زیرا مقداری ثابت دارد و سپس از
+		$
+		y_i
+		$
+		مشتق گرفت چون نسبت به $y_i$ مشتق گرفته می‌شود می‌توان مشتق را به درون انتگرال برد. از طرفی چون تابع 
+		$
+		(x - y_i)^2
+		$
+		نسبت به 
+		$
+		y_i
+		$
+		یک اکسترمم دارد که مینیمم آن است می‌توان با صفر قرار دادن مشتق مقدار بهینه 
+		$
+		y_i
+		$
+		را بدست آورد.
+		\begin{flushleft}
+			$
+			best y_i = argmin \int_{a_i}^{a_{i + 1}} (x - y_i)^2 f_X(x) d_x
+			\Rightarrow
+			 \int_{a_i}^{a_{i + 1}} (2y_i - 2x)f_X(x) d_x = 0 
+			 \Rightarrow
+			 \int\limits_{a_i}^{a_{i + 1}} (y_i f_X(x) - xf_X(x)) d_x = 0 
+			 \Rightarrow
+			 y_i \int\limits_{a_i}^{a_{i + 1}} f_X(x) d_x = \int\limits_{a_i}^{a_{i + 1}}  xf_X(x) d_x
+			 \Rightarrow y_i P(a_i < X < a_{i + 1}) = E(X.1_{a_i < X < {a_{i + 1}}}) \Rightarrow y_i = \cfrac{{}E(X.1_{a_i < X < {a_{i + 1}}}) } { P(a_i < X < a_{i + 1}) } = E(X | a_i < X < a_{i + 1})
+			$
+		\end{flushleft}
+		که این دور از انتظار نیست زیرا داشتیم که برای تخمین یک توزیع با یک عدد بهترین عدد برابر میانگین توزیع است. در اینجا نیز چون توزیع $X$ را بین 
+		$a_i$
+		و 
+		$a_{i + 1}$
+	به‌نظر	می‌خواهیم با یک عدد تخمین بزنیم، ‌بهترین تخمین امید $X$ در آن ناحیه است.
+	\subsection*{۲}
+	اگر داشته باشیم:
+	
+	\begin{latin}
+
+
+	$
+	y_i = E(X | a_i < X < a_{i + 1}) \Rightarrow E(Y | a_i < Y < a_{i + 1}) = y_i = E(X | a_i < X < a_{i + 1}) 
+	$
+	\\
+	$\Rightarrow E(X | a_i < X < a_{i + 1}) = E(Y | a_i < Y < a_{i + 1}) 
+	$
+		\end{latin}
+		از طرفی براساس قانون احتمال کل و قانون امید شرطی داریم:
+		\begin{latin}
+			$
+			E(X) = E(X | A) + E(X | ~A) \Rightarrow E(X) = \sum_{-\infty}^{\infty} E(a_i < X < a_{i + 1}) = \sum_{-\infty}^{\infty} E(a_i < Y < a_{i + 1}) = E(Y)
+			$
+			\\
+			$
+			\Rightarrow E(X) = E(Y)
+			$
+		\end{latin}
+	\subsection*{۳}
+	\begin{latin}
+		$
+		Var(Y) = E(Y^2) - E(Y) ^2= E(Y^2) - E(X)^2 \Rightarrow Var(Y) + E((X - Y)^2) - Var(X) = E(Y^2) - E(X)^2  +  E((X - Y)^2)  - E(X ^ 2) + E(X)^2 = E(Y^ 2)  + E((X - Y)^2) - E(X^2) = 2E(Y ^ 2) - 2E(XY)
+		$
+	\end{latin}
+	اگر این رابطه به تکه‌های بین نمونه‌برداری شکسته شود داریم:
+	\begin{latin}
+		$
+		 Var(Y) + E((X - Y)^2) - Var(X)  = \sigma_{i = -\infty}^\infty 2(E(Y^2 | a_i < Y < a_{i + 1}) - E(XY | a_i < Y < a_{i + 1})) 
+		 = 2(y_i^2 - E(y_iX | a_i < Y < a_{i + 1})) =2y_i(y_i - E(X | a_i < Y < a_{i + 1})) = 2y_i (y_i - y_i) = 0
+		 \Rightarrow Var(Y) + E((X - Y)^2) - Var(X)  = 0 \Rightarrow Var(X) = E((X - Y)^2) + Var(Y) 
+		 $
+	\end{latin}
+	\section*{سوال ۱۰}
+	\subsection*{\lr{a}}
+	\begin{flushleft}
+	$
+	E(|X - a|) = \int\limits_0^A |x - a| f_X(x) d_x = \cfrac{1}{A} \int\limits_0^A |x - a|  d_x = \cfrac{1}{A} (\int\limits_0^a |x - a|  d_x + \int\limits_a^A |x - a|  d_x) = \cfrac{1}{A} (\int\limits_0^a (a - x)  d_x + \int\limits_a^A (x - a)  d_x)  = \cfrac{1}{A} ([ax - \cfrac{x^2}{2}]_0^a + [\cfrac{x^2}{2} - ax]_a^A )  = \cfrac{1}{A} (\cfrac{a^2}{2}  + \cfrac{A^2}{2} -aA + \cfrac{a^2}{2})
+	$
+		\end{flushleft}
+		هدف کمینه کردن این مقدار است پس داریم:
+		\begin{flushleft}
+			$
+			a = argmin(\cfrac{1}{A} (\cfrac{a^2}{2}  + \cfrac{A^2}{2} -aA + \cfrac{a^2}{2}))
+			$
+			\\
+			$
+			\cfrac{d}{da} (2a^2 + A^2 - 2aA ) = 0 \Rightarrow 4a - 2A = 0 \Rightarrow a = \cfrac{A}{2} 
+			$
+		\end{flushleft}
+		\subsection*{\lr{b}}
+		مشابه قسمت قبل می‌توان انتگرال را به دو قسمت شکست. البته چون توزیع دیگر یکنواخت نیست نمی‌توان 
+		$
+		f_X(x)
+		$
+		را از انتگرال بیرون آورد.
+		
+		\begin{flushleft}
+			$
+			E(|X - a|) = \int\limits_0^a (a - x)\cfrac{1}{\lambda}e^{\cfrac{-x}{\lambda}}  d_x + \int\limits_a^\infty (x - a)\cfrac{1}{\lambda}e^{\cfrac{-x}{\lambda}}   d_x 
+			$
+		\end{flushleft}
+		چون هدف کمینه کردن این‌مقدار با تنظیم $a$ می‌باشد، می‌توان از ضرایب ثابت صرف نظر کرد (در اینجا چون مینیمم بودن اکسترمم بدیهی نیست باید چک شود):
+		\begin{flushleft}
+			$
+			best\ a = argmin \int\limits_0^a (a - x)\cfrac{1}{\lambda}e^{\cfrac{-x}{\lambda}}  d_x + \int\limits_a^\infty (x - a)\cfrac{1}{\lambda}e^{\cfrac{-x}{\lambda}}   d_x  = argmin \int\limits_0^a (a - x)e^{\cfrac{-x}{\lambda}}  d_x + \int\limits_a^\infty (x - a)e^{\cfrac{-x}{\lambda}}   d_x 
+			$
+			\\
+			$
+			\int\limits_0^a (a - x)e^{\cfrac{-x}{\lambda}}  d_x  = [-a\lambda e^{\cfrac{-x}{\lambda}} - -\lambda^2((\cfrac{-1}{\lambda}x - 1)e^{\cfrac{-x}{\lambda}})]_0^a \xrightarrow{t = \cfrac{-a}{\lambda}} \int\limits_0^a (a - x)e^{\cfrac{-x}{\lambda}}  d_x = -a\lambda e^t + \lambda^2((t - 1)e^t) - (-a\lambda - \lambda^2) 
+			$
+			\\
+			$
+						\int\limits_a^\infty (x - a)e^{\cfrac{-x}{\lambda}}  d_x  = [a\lambda e^{\cfrac{-x}{\lambda}}  -\lambda^2((\cfrac{-1}{\lambda}x - 1)e^{\cfrac{-x}{\lambda}})]_a^\infty \xrightarrow{t = \cfrac{-a}{\lambda}} = -a\lambda e^t + \lambda^2((t - 1)e^t) 
+			$
+			\\
+			$
+			 \int\limits_0^a (a - x)\cfrac{1}{\lambda}e^{\cfrac{-x}{\lambda}}  d_x + \int\limits_a^\infty (x - a)\cfrac{1}{\lambda}e^{\cfrac{-x}{\lambda}}   d_x  =  -2a\lambda e^t + 2\lambda^2((t - 1)e^t) + a\lambda + \lambda^2
+			$
+		\end{flushleft}
+		حال می‌توان نسبت به $a$ مشتق گرفت و برابر صفر قرار داد (برای راحتی قبل از مشتق همه عوامل بر 
+		$
+		\lambda
+		$
+		تقسیم شده‌اند.)
+		\begin{flushleft}
+			$
+			-2ae^t + 2\lambda ((t - 1)e^t) + a + \lambda
+			\Rightarrow -2e^t + \cfrac{-1}{\lambda} * -2a + 2\lambda (\cfrac{-1}{\lambda})(te^t) + 1 = 0 \Rightarrow 
+			\cfrac{2a}{\lambda} + 1 = 2e^t+  2te^t \Rightarrow 2e^t+  2te^t + 2t = 1
+			$
+		\end{flushleft}
+		این معادله با روش‌های کلی حل نمی‌شود و با استفاده از روش‌های عددی باید حل شود. با استفاده از کتابخانه‌های محاسبه مقدار 
+		$
+		t
+		$
+		حدودا برابر
+		$
+		-0.181955
+		$
+		می‌شود 
+		و از آنجا که
+		$
+		t = \cfrac{-x}{\lambda}
+		$
+		مقدار 
+		$a
+		$
+		برابر 
+		$
+		0.81955\lambda
+		$
+		می‌شود.
+		
+		\section*{سوال ۱۱}
+		\subsection*{بخش \lr{a}}
+
+
+\begin{itemize}[label=\textbullet, leftmargin=*, align=left]
+	 \begin{latin}
+	 	\item 			\textbf{$
+	 	X \sim Uniform(0, 2)
+	 	$}
+	 \end{latin}
+
+		\begin{flushleft}
+
+			
+			$
+			X \sim Uniform(0, 2) \Rightarrow \mu = 1,  \sigma^2 = \cfrac{(2 - 0)^2}{12} = \cfrac{1}{3} \Rightarrow \sigma = \cfrac{\sqrt{3}}{3}
+			$
+			\\
+			$
+			P(|X - \mu|\geq 2\sigma) = P(|X - 1| \geq \cfrac{2\sqrt3}{3}) = P (X > 1 , X - 1 > \cfrac{2\sqrt3}{3}) + P(X < 1,   1 - X < \cfrac{-2\sqrt3}{3})
+			$
+			\\
+			$ = 2P(X > 1 + \cfrac{2\sqrt3}{3})  \xrightarrow{1 + 2\cfrac{\sqrt3}{3} \approx 2.15} 2P(X > 1 + \cfrac{2\sqrt3}{3}) = 2*0 = 0
+			$
+		\end{flushleft}
+		که با نامساوی چبیشف نیز همخوانی دارد.
+
+	 \begin{latin}
+	\item 			\textbf{
+						$
+	P(-1) = P(1) = \cfrac{1}{2}
+	$
+	}
+\end{latin}
+
+				\begin{flushleft}
+
+					
+					$
+					\mu = 0, \sigma^2 = E((X - \mu)^2) = 1 \Rightarrow \sigma = 1
+					$
+					\\
+					$
+					P(|X - \mu| > 2\sigma) = P(|X| > 2) = P (X > 2) + P(X < -2) = 0 
+					$
+				\end{flushleft}
+			\end{itemize}
+				\subsection*{بخش \lr{b}}
+				\begin{latin}
+					$
+					P(|X - \mu| > c ) \leq \cfrac{E((X - \mu)^4)}{c^4}
+					$
+					\\
+					$
+					\textbf{Markov} \Rightarrow P((X - \mu)^4 > c) < \cfrac{E((X - \mu)^4)}{c^4}
+					$
+				\end{latin}
+				از طرفی داریم:
+				\begin{flushleft}
+					$
+					|X - \mu| > c \xrightarrow{|X - \mu| > c > 0} (|X - \mu|)^2 > c^2 \Rightarrow (X - \mu)^4 > c^4
+					$
+				\end{flushleft}
+				یعنی اگر 
+				$
+				x - \mu
+				$
+				از 
+				$c$
+				بزرگتر باشد،‌
+				$
+				(x - \mu)^4
+				$
+				هم از
+				$
+				c^4
+				$
+				بزرگتر است. پس می‌توان نتیجه گرفت:
+				\begin{flushleft}
+					$
+					P(|X - \mu| > c) < P((X - \mu)^4 > c^4) 
+					$
+				\end{flushleft}
+	اگر این دونامساوی را کنار هم گذاشت داریم:
+	\begin{flushleft}
+		$
+\left\{
+\begin{array}{ll}
+	P((X - \mu)^4 > c) < \cfrac{E((X - \mu)^4)}{c^4}    \\
+	P(|X - \mu| > c) < P((X - \mu)^4 > c^4) 
+\end{array}
+\right. \Rightarrow P(|X - \mu| > c) <   \cfrac{E((X - \mu)^4)}{c^4} 
+		$
+	\end{flushleft}
+	\subsection*{بخش \lr{c}}
+	حل نشده.
+	\section*{سوال ۱۲}
+	درواقع هدف محاسبه این مقدار است:
+	\begin{latin}
+		$
+		E(exp(En(X)))
+		$
+	\end{latin}
+	به‌صورت کلی برای توزیع نمایی با پارامتر 
+	$\lambda$
+	داریم:
+	\begin{latin}
+		$
+		f_{exp(\lambda)} (x) = \cfrac{1}{\lambda}e^{\cfrac{-x}{\lambda}} \Rightarrow E(exp(\lambda)) = \lambda
+		$
+	\end{latin}
+	پس برای توزیع 
+	$
+	exp(En(X))
+	$
+	داریم:
+	\begin{latin}
+$
+E(f(g(x))) = \int f(g(x)) f_X(x) d_x= \int e^{en(x)}  \cfrac{1}{\sqrt{2\pi}} e^{-x^2} = \cfrac{1}{\sqrt{2\pi}} \int e^{en(x) - x^2}
+$
+	\end{latin}
+	(این سوال با این فرض حل شد که تابع توزیع چگالی احتمال توزیع نمایی مطابق چیزی که در اسلایدها گفته شده یعنی
+	$
+	\cfrac{1}{\lambda}  e ^{\frac{-x}{\lambda}}
+	$
+	باشد. 
+	 )
+	\section*{سوال ۱۳}
+	بخش‌های خواسته‌شده در کد اکسریپت آمده‌اند. ولی برای شفاف‌سازی در گزارش مسئله به صورت تحلیلی بررسی می‌شود. جهت سادگی می‌توان فرض کرد که مقدار شرط‌بندی در هر قسمت مقدار ثابت «یک» می‌باشد. زیرا حالات دیگر را می‌توان به این حالت تبدیل کرد. صرفا کافی است که تبدیل‌های زیر انجام شوند:
+	\begin{flushleft}
+		$
+		target\ amount = \lceil \cfrac{target\ amount - (initial\ amount\ mod\ bet\ amount)} {bet\ amount} \rceil
+		$
+		\\
+		$
+		initial\ amount = \lfloor \cfrac{initial\ amount}{bet\ amount} \rfloor
+		$
+		\\
+		$
+		bet\ amount = 1
+		$
+	\end{flushleft}
+	پس مسئله به این تغییر می‌کند که با چه احتمالی تعداد برد‌های قمارباز از تعداد باخت‌های او به اندازه 
+	$
+	target\ amount - initial\ amount
+	$
+	بیشتر است به شرطی که تعداد باخت‌های او از ابتدای بازی بیشتر از تعداد برد‌ها به‌علاوه 
+	$
+	initial\ amount
+	$
+	نشود. می‌توان با‌استفاده از توزیع دوجمله‌ای فرم باز احتمال برد را نوشت. ولی از آنجا که هدف این سوال این نیست و زمان زیادی می‌طلبد با یک جستجو می‌توان فرم بسته راه‌حل را یافت. 
+	\cite{gamblers_ruin_medium}
+	
+	\section*{سوال ۱۴}
+	 فرمول کشیدگی 
+	\LTRfootnote{Kurtosis}
+	با جستجو 
+	پیدا شد.
+		\cite{wikipedia_kurtosis}
+		به غیر از این تنها مورد اضافه کشیدن نمودار‌های ویولنی بر روی نمودار‌های جعبه‌ای است که توزیع تاخیر‌ها را بهتر نمایش می‌دهد. 
+		
+		برای الگوریتم‌ها می‌توان دید که با این‌که مرتب‌سازی ادغامی و مرتب‌سازی سریع به مراتب سریع‌تر از مرتب‌سازی درجی هستند،‌اما کشیدگی مرتب‌سازی درجی کمتر است. زیرا برای محاسبه کشیدگی داده ها با توجه به مقدار میانگین و انحراف معیار نرمال می‌شوند و باتوجه به نمودار ویولنی می‌توان دید که اگر مقیاس درنظر گرفته نشود (زیرا نرمال می‌شود) در مرتب سازی درجی، داده‌ها فاصله کمتری از میانگین دارند.
+		
+		البته در مرتب‌سازی سریع اگر ایده‌هایی مثل انتخاب دو عضو برای 
+		\lr{pivot}
+		و سه تکه کردن مرتب‌سازی و یا حذف 
+		\lr{Tail recursion}
+		انجام شود، می‌توان به یک الگوریتم پایدارتر
+		\LTRfootnote{Consistent}
+		دست یافت.
+		
+		به چهار الگوریتم معرفی شده، الگوریتم مرتب‌سازی پایتون نیز اضافه شد. الگوریتم مرتب‌سازی پایتون 
+		\lr{TimSort}
+		\cite{wikipedia_timsort}
+		نام دارد که ایده کلی آن این است که آرایه‌های کوچک با استفاده از مرتب‌سازی درجی و آرایه‌های بزرگ با استفاده از مرتب‌سازی ادغامی مرتب شوند تا در 
+		\lr{n}
+		های کوچک، از ضریب کم مرتب‌سازی ادغامی بتوان استفاده کرد و در 
+		\lr{n}
+		های بزرگ، بتوان با اردر 
+		\lr{nlogn}
+		همچنان آرایه را مرتب نمود. پس در اینجا نیز انتظار می‌رود که سرعت 
+		\lr{Timsort}
+		شبیه 
+		مرتب‌سازی ادغامی
+		و
+		مرتب‌سازی سریغ
+		باشد (که درواقع از آنجایی که در هسته و با 
+		\lr{C}
+		پیاده‌سازی شده سریعتر نیز است.)
+		و شکل توزیع آن شبیه مرتب‌سازی ادغامی باشد.
+	\section*{سوال ۱۵}
+	خواسته سوال اعمال نویز 
+	\LTRfootnote{noise}
+	باتوجه به توزیع داده‌شده است. طبق توضیحات داده شده، توزیع باید بر روی مکان پیکسل نویز تاثیر بزارد و نه بر روی تغییر رنگ پیکسل. به همین منظور برای توزیع‌های نرمال و نمایی مقدار 
+	\lr{x}
+	و
+	\lr{y}
+	برابر دو نمونه‌برداری یک بعدی از توزیع مادر هستند که در کنار هم قرار می‌گیرند و پیکسل‌های نویزی را تشکیل می‌دهند. همچنین از آنجایی که توزیع نمایی به شدت کاهشی است، برای آن‌که نویز نمایش معناداری روی تصویر پیدا بکند،‌ با توجه به میزان کمینه و بیشینه در نمونه‌برداری،‌نقطه‌های نمونه‌برداری شده به مقیاس تصویر رسیدند تا بتوان بهتر شکل توزیع را نشان داد (در غیر اینصورت صرفا در پنج پیکسل ابتدایی تصویر جمعیت پیکسل ها رخ می‌داد که داده‌ای نمی‌دهد.)
+	\subsection*{بخش \lr{a}}
+	برای این بخش مطابق خواسته نویز بر روی تصاویر اعمال شد. برای توزیع یکنواخت پیکسل‌های نویزی تمرکز خاصی روی یک قسمت تصویر ندارند و در همه تصویر پراکنده هستند.  
+	
+	برای توزیع نمایی نیز تمرکز پیکسل نویز بر بخش بالا سمت چپ تصویر (مبدا مختصات) است، زیرا در توزیع نمایی با فاصله گرفتن از مبدا احتمال چگالی نقطه بصورت نمایی کم می‌شود. 
+	
+	در بخش توزیع نرمال،‌از آنجایی که میانگین و واریانس بصورت تصادفی و یکنواخت تعیین می‌شود نمی‌توان حالت کلی بیان کرد. اگر واریانس قسمت 
+	\lr{X}
+	و قسمت 
+	\lr{Y}
+	باهم برابر می‌بود، نویز به شکل یک دایره محو شونده به وجود می‌آمد که میزان شدت محوشدگی به میزان واریانس و جایگاه مرکز دایره به مقدار میانگین 
+	\lr{X}
+	و 
+	\lr{Y}
+	بستگی می‌داشت. برای واریانس‌ بالا نویز نرمال  به نویز یکنواخت نزدیک می‌شود و برای واریانس پایین اکثر تصویر سالم است و صرفا یک بخش کوچک از تصویر به شدت درگیر نویز می‌شود. در مثال‌های نمایش داده شده می‌توان این موضوع را برای انتخاب های مختلف پارامترهای توزیع دید.
+	\subsection*{بخش \lr{b}}
+	خیر  میزان اطلاعات از دست رفته به مکانی که نویز در آن اعمال می‌شود بستگی دارد. درواقع خواسته سوال محاسبه احتمال زیر است:
+	\begin{flushleft}
+		$
+		E(a < X < b, c < Y < d)
+		$
+	\end{flushleft}
+	
+	برای مثال برای توزیع نمایی که تمرکز بیشتری در مبدا دارد، تقریبا هیچ داده‌ای از دست نمی‌رود، زیرا فاصله صورت از مبدا به نسبت زیاد است (با توجه به روند شدید کاهشی توزیع نمایی) با توچه به تابع 
+	\lr{CDF}
+	داریم:
+		\begin{flushleft}
+		$
+		E(a < X < b, c < Y < d) = [1 - e ^ {\frac{1}{x}} ]_a^b *[1 - e ^ {\frac{1}{x}} ]_c^d  = (e^\frac{1}{a} - e^\frac{1}{b})  * (e^\frac{1}{c} - e^\frac{1}{d}) 
+		$
+	\end{flushleft}
+	 با تغییر کمینه و بیشینه از حالت معمول به ابتدا و انتهای تصویر، صرفا مقدار 
+	 \lr{a, b, c, d}
+	 تغییر می‌کند و شکل توزیع تغییر نمی‌کند. اگر ضریب مقیاس 
+	 \lr{k}
+	 باشد، همه این مقادیر در \lr{k} ضرب خواهند شد و سپس باید مقایسه کرد که حاصل ضرب این احتمال در میزان نویز درنهایت بالای 
+	 $
+	 0.2
+	 $ 
+	 می‌شود یا خیر (که با شهود می‌شود دید که خیر و از آنجا که سوال مقدار دقیق نخواسته حساب نمی‌شود.)
+	
+ برای توزیع نرمال، اگر پارامتر‌ها باعث بشوند که تمرکز نویز روی صورت نباشد، میزان اطلاعات از دست رفته می‌تواند تغییر کند. چون تابع 
+ \lr{CDF}
+ توزیع نرمال فرم بسته‌ای ندارد، و سوال نیز نخواسته، فرمول احتمال محاسبه نمی‌شود اما شهودا می‌توان دریافت که احتمال از دست رفتن اطلاعات از توزیع نمایی بیشتر است ولی اگر میانگین توزیع از قسمت صورت دور باشد و یا واریانس زیاد به طوری که تمرکز پیکسل‌های خراب روی یک قسمت نباشد و یا واریانس کم به طوری که پیکسل‌های خراب وارد صورت نشوند احتمال از دست رفتن اطلاعات کمتر است.
+ 
+ برای توزیع یکنواخت از آنجا که پیکسل‌های خراب در هیچ قسمتی تمرکز ندارند و بصورت یکنواخت پخش شده‌اند، به راحتی می‌توان دریافت که نسبت پیکسل‌های خراب به همه پیکسل‌ها برابر همان نرخ نویز می‌باشد. به طور خاص برای حالت مرزی 0.2 چون ممکن است در نمونه برداری پیکسل‌های مرزی به صورت کاملا یکنواخت نباشند، احتمال خرابی تصویر به سمت 
+ $
+ 0.5
+ $
+ سوق پیدا می‌کند ولی برای باقی موارد این احتمال مطابق انتظار برابر 
+ $
+ 1
+ $
+ می‌باشد.
+ \subsection*{بخش \lr{c}}
+ به طور کلی فیلتر میانه‌گیر برای حذف نویز نمک و فلفل عملکرد بهتری نسبت به فیلترهایی مثل فیلتر میانگین‌گیری و یا فیلتر گاوسی دارد. زیرا تاثیر نویز‌های خراب را کمینه می‌کند. پارامتر مهم فیلتر میانه‌گیر سایز کرنل می‌باشد. با زیاد شدن سایز کرنل، نویز‌های نمک و فلفل بیشتری حذف می‌شوند ولی اطلاعات رنگی پیکسل‌ها نیز بیشتر از بین می‌رود و با کرنل‌های بزرگ، تعداد رنگ‌های تصویر کم شده و تصویر حالت آبرنگی پیدا می‌کند. 
+ 
+ فیلتر میانه گیر در حالتی که پیکسل‌های نویز نمک و فلفل گستردگی بالایی داشته باشند بهترین عملکرد خود را دارد زیرا با تجمع پیکسل‌های نویزی،‌ممکن است میانه آن‌ها نیز روی یکی از نقاط نویز بیفتد ولی با گستردگی بالا،‌می‌توان با احتمال خوبی مطمئن بود که میانه نویز نیست و یکی از نقاط اصلی تصویر است. 
+
+\section*{منابع خارج از درس}
+	\begin{latin}
+			\printbibliography[heading=none]
+		
+	\end{latin}
+
+\end{document}

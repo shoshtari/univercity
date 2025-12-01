@@ -1,0 +1,8 @@
+#/bin/bash
+tex_ext="aux bbl bcf blg dvi idx ilg ind lof log out nav pdf snm toc synctex.gz fdb_latexmk fls xml"
+# Remove all files with the specified extensions in the current directory
+for ext in $tex_ext; do
+    find . -type f -name "*.$ext" -exec rm -f {} \;
+done
+
+rm main-blx.bib

@@ -1,0 +1,128 @@
+% !TEX TS-program = xelatex
+
+% Document class and spacing
+\renewcommand{\baselinestretch}{1.4}
+
+% Packages
+\usepackage{graphicx}
+\usepackage{amsmath, amssymb}
+\usepackage{geometry}
+\usepackage{setspace}
+\usepackage{fancyhdr}
+\usepackage{caption}
+\usepackage{titlesec}
+\usepackage{bigints}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{titlesec}
+\usepackage{tcolorbox}
+\usepackage{xepersian}
+\usepackage{calc}
+\usepackage{eso-pic}
+\usepackage[backend=biber]{biblatex}
+\addbibresource{references.bib}
+% Fonts
+\settextfont[BoldFont = *Bd,
+  ItalicFont = *It,
+  Scale=1,
+  BoldItalicFont = *BdIt,
+  Path={./font/},
+  Extension = .ttf,
+  Color=black
+]{XB Niloofar}
+\setlatintextfont[Scale=0.85, Color=black]{Times New Roman}
+
+% Colors
+\definecolor{darkblue}{rgb}{.204,.353,.541}
+\definecolor{lightblue}{RGB}{210, 227, 245}
+
+% Custom section fonts
+\newfontfamily\subsubsectionfont[
+  Scale=1,
+  Path={./font/},
+  Extension = .ttf,
+  Color=black
+]{XB Titre}
+
+% Section box command
+\newcommand{\sectionbox}[1]{%
+  \begin{tcolorbox}[colback=lightblue, colframe=lightblue, width=\linewidth, sharp corners]
+    \color{darkblue} \eighteenpt #1
+  \end{tcolorbox}
+}
+
+% Section and subsection formatting
+\titleformat{\section}
+{\eighteenpt}{} {0em} {\subsubsectionfont \sectionbox}
+\titlespacing{\section}{0pt}{0pt}{0pt}
+\titleformat{\subsection}
+{\color{darkblue}\sixteenpt\bfseries}
+{\thesubsection}{1em}
+{}
+
+% Page frame margins
+\newlength{\PageFrameTopMargin}
+\newlength{\PageFrameBottomMargin}
+\newlength{\PageFrameLeftMargin}
+\newlength{\PageFrameRightMargin}
+
+\setlength{\PageFrameTopMargin}{1cm}
+\setlength{\PageFrameBottomMargin}{1cm}
+\setlength{\PageFrameLeftMargin}{1cm}
+\setlength{\PageFrameRightMargin}{1cm}
+
+\makeatletter
+
+% Page frame drawing
+\newlength{\Page@FrameHeight}
+\newlength{\Page@FrameWidth}
+\AddToShipoutPicture{
+  \setlength{\Page@FrameHeight}{\paperheight-\PageFrameTopMargin-\PageFrameBottomMargin}
+  \setlength{\Page@FrameWidth}{\paperwidth-\PageFrameLeftMargin-\PageFrameRightMargin}
+  \put(\strip@pt\PageFrameLeftMargin,\strip@pt\PageFrameTopMargin){
+    {\framebox(\strip@pt\Page@FrameWidth, \strip@pt\Page@FrameHeight){}}
+  }
+}
+\makeatother
+
+% Font size commands
+\newcommand{\sixteenpt}{\fontsize{16pt}{18pt}\selectfont}
+\newcommand{\eighteenpt}{\fontsize{18pt}{20pt}\selectfont}
+\newcommand{\twentytwopt}{\fontsize{22pt}{24pt}\selectfont}
+\newcommand{\twentyeightpt}{\fontsize{28pt}{30pt}\selectfont}
+
+\makeatletter
+\def\maketitle{
+  \begin{center}
+    % Row with logos
+    \begin{tabular}{ p{3cm} p{7cm} p{3.5cm} }
+      \includegraphics[width=3cm]{img/logo.png} &
+      \vspace{-3cm}
+      \begin{center}
+        {\sixteenpt{\textbf{دانشگاه تهران}}\\
+          \sixteenpt{\textbf{پردیس دانشکده‌های فنی}}\\
+        \sixteenpt{\textbf{دانشکده مهندسی برق و کامپیوتر}}}
+      \end{center}
+      &% Empty middle space
+      \includegraphics[width=3.5cm]{img/eng-logo.png} % Right logo
+    \end{tabular}
+
+    \vspace{5cm}
+    {\twentyeightpt{\textbf{رباتیک}}}\\
+
+    \vspace{1.5cm}
+    {\twentytwopt{\textbf{تمرین شماره \assignNum}}}\\
+
+    \vspace{4cm}
+    {\sixteenpt{نام و نام خانوادگی}}\\
+    {\sixteenpt{\@author}}\\[2em]
+
+    {\sixteenpt{شماره دانشجویی}}\\
+    {\sixteenpt{\SNum}}\\
+
+    \vspace{3cm}
+    {\normalsize\@date}
+  \end{center}
+}
+\makeatother

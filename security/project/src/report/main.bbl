@@ -1,0 +1,405 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nty/global//global/global/global}
+    \entry{kaminsky}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=4f9773cef6088c61be0c046277f889b3}{%
+           family={al},
+           familyi={a\bibinitperiod},
+           given={Nikolaos\bibnamedelima Alexiou},
+           giveni={N\bibinitperiod\bibinitdelim A\bibinitperiod},
+           prefix={et},
+           prefixi={e\bibinitperiod}}}%
+      }
+      \strng{namehash}{4f9773cef6088c61be0c046277f889b3}
+      \strng{fullhash}{4f9773cef6088c61be0c046277f889b3}
+      \strng{fullhashraw}{4f9773cef6088c61be0c046277f889b3}
+      \strng{bibnamehash}{4f9773cef6088c61be0c046277f889b3}
+      \strng{authorbibnamehash}{4f9773cef6088c61be0c046277f889b3}
+      \strng{authornamehash}{4f9773cef6088c61be0c046277f889b3}
+      \strng{authorfullhash}{4f9773cef6088c61be0c046277f889b3}
+      \strng{authorfullhashraw}{4f9773cef6088c61be0c046277f889b3}
+      \field{sortinit}{a}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE}
+      \field{title}{Formal Analysis of the Kaminsky DNS Cache-Poisoning Attack Using Probabilistic Model Checking}
+      \verb{doi}
+      \verb https://doi.org/10.1109/HASE.2010.25
+      \endverb
+    \endentry
+    \entry{nsec5}{misc}{}{}
+      \name{author}{6}{}{%
+        {{hash=44afe10a627ebeab3fa6005ad265ca01}{%
+           family={Goldberg},
+           familyi={G\bibinitperiod},
+           given={Sharon},
+           giveni={S\bibinitperiod}}}%
+        {{hash=c6af39e79e88306281e6e0b0ccea956c}{%
+           family={Naor},
+           familyi={N\bibinitperiod},
+           given={Moni},
+           giveni={M\bibinitperiod}}}%
+        {{hash=f018de5455b4ae91eab93cf9f116549f}{%
+           family={Papadopoulos},
+           familyi={P\bibinitperiod},
+           given={Dimitrios},
+           giveni={D\bibinitperiod}}}%
+        {{hash=33bfd322f3ef71fd734a29a0a051ac87}{%
+           family={Reyzin},
+           familyi={R\bibinitperiod},
+           given={Leonid},
+           giveni={L\bibinitperiod}}}%
+        {{hash=f0928320ba5bb81eeff3065bab417fbe}{%
+           family={Vasant},
+           familyi={V\bibinitperiod},
+           given={Sachin},
+           giveni={S\bibinitperiod}}}%
+        {{hash=e50728a5a15945aeec8ef2f8610b54fa}{%
+           family={Ziv},
+           familyi={Z\bibinitperiod},
+           given={Asaf},
+           giveni={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{cd356056de59dd56321df7ed0da9c0d9}
+      \strng{fullhash}{39045568caeac369226c4bd8d71e802c}
+      \strng{fullhashraw}{39045568caeac369226c4bd8d71e802c}
+      \strng{bibnamehash}{cd356056de59dd56321df7ed0da9c0d9}
+      \strng{authorbibnamehash}{cd356056de59dd56321df7ed0da9c0d9}
+      \strng{authornamehash}{cd356056de59dd56321df7ed0da9c0d9}
+      \strng{authorfullhash}{39045568caeac369226c4bd8d71e802c}
+      \strng{authorfullhashraw}{39045568caeac369226c4bd8d71e802c}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{Cryptology {ePrint} Archive, Paper 2014/582}
+      \field{title}{{NSEC5}: Provably Preventing {DNSSEC} Zone Enumeration}
+      \field{year}{2014}
+      \verb{urlraw}
+      \verb https://eprint.iacr.org/2014/582
+      \endverb
+      \verb{url}
+      \verb https://eprint.iacr.org/2014/582
+      \endverb
+    \endentry
+    \entry{cloudflare}{misc}{}{}
+      \list{organization}{1}{%
+        {Cloudflare}%
+      }
+      \field{sortinit}{H}
+      \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
+      \field{labeltitlesource}{title}
+      \field{title}{How does DNSSEC work?}
+      \verb{urlraw}
+      \verb https://www.cloudflare.com/learning/dns/dnssec/how-dnssec-works/
+      \endverb
+      \verb{url}
+      \verb https://www.cloudflare.com/learning/dns/dnssec/how-dnssec-works/
+      \endverb
+    \endentry
+    \entry{medium}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=32be744c6f62b808a32aa26e0d3bc4c8}{%
+           family={Makarem},
+           familyi={M\bibinitperiod},
+           given={Christopher},
+           giveni={C\bibinitperiod}}}%
+      }
+      \strng{namehash}{32be744c6f62b808a32aa26e0d3bc4c8}
+      \strng{fullhash}{32be744c6f62b808a32aa26e0d3bc4c8}
+      \strng{fullhashraw}{32be744c6f62b808a32aa26e0d3bc4c8}
+      \strng{bibnamehash}{32be744c6f62b808a32aa26e0d3bc4c8}
+      \strng{authorbibnamehash}{32be744c6f62b808a32aa26e0d3bc4c8}
+      \strng{authornamehash}{32be744c6f62b808a32aa26e0d3bc4c8}
+      \strng{authorfullhash}{32be744c6f62b808a32aa26e0d3bc4c8}
+      \strng{authorfullhashraw}{32be744c6f62b808a32aa26e0d3bc4c8}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{How DNSSEC Works}
+      \verb{urlraw}
+      \verb https://medium.com/iocscan/how-dnssec-works-9c652257be0
+      \endverb
+      \verb{url}
+      \verb https://medium.com/iocscan/how-dnssec-works-9c652257be0
+      \endverb
+    \endentry
+    \entry{performance}{inproceedings}{}{}
+      \name{author}{3}{}{%
+        {{hash=01a65a4b47f5785c1a5a12e0410debcc}{%
+           family={Migault},
+           familyi={M\bibinitperiod},
+           given={Daniel},
+           giveni={D\bibinitperiod}}}%
+        {{hash=6ecc0dc34c9ccd2ac3966d1fb6aafa70}{%
+           family={Girard},
+           familyi={G\bibinitperiod},
+           given={Cédric},
+           giveni={C\bibinitperiod}}}%
+        {{hash=9d8161f9798cfb263a74eaae51893023}{%
+           family={Laurent},
+           familyi={L\bibinitperiod},
+           given={Maryline},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{ae31d81d16f636a7db3e9d54fcb3a3f3}
+      \strng{fullhash}{ae31d81d16f636a7db3e9d54fcb3a3f3}
+      \strng{fullhashraw}{ae31d81d16f636a7db3e9d54fcb3a3f3}
+      \strng{bibnamehash}{ae31d81d16f636a7db3e9d54fcb3a3f3}
+      \strng{authorbibnamehash}{ae31d81d16f636a7db3e9d54fcb3a3f3}
+      \strng{authornamehash}{ae31d81d16f636a7db3e9d54fcb3a3f3}
+      \strng{authorfullhash}{ae31d81d16f636a7db3e9d54fcb3a3f3}
+      \strng{authorfullhashraw}{ae31d81d16f636a7db3e9d54fcb3a3f3}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{2010 International Conference on Network and Service Management}
+      \field{title}{A performance view on DNSSEC migration}
+      \field{year}{2010}
+      \field{pages}{469\bibrangedash 474}
+      \range{pages}{6}
+      \verb{doi}
+      \verb 10.1109/CNSM.2010.5691275
+      \endverb
+      \keyw{Servers;Internet;Time factors;Security;Testing;Organizations;Communities;DNS;DNSSEC;performance;migration}
+    \endentry
+    \entry{prefetch}{inproceedings}{}{}
+      \name{author}{5}{}{%
+        {{hash=01a65a4b47f5785c1a5a12e0410debcc}{%
+           family={Migault},
+           familyi={M\bibinitperiod},
+           given={Daniel},
+           giveni={D\bibinitperiod}}}%
+        {{hash=0cb49eacb77c02f9b91c9668f65a8e66}{%
+           family={Senecal},
+           familyi={S\bibinitperiod},
+           given={Stephane},
+           giveni={S\bibinitperiod}}}%
+        {{hash=b4b52b23d77be9fe581d97e5da5e68a4}{%
+           family={Francfort},
+           familyi={F\bibinitperiod},
+           given={Stanislas},
+           giveni={S\bibinitperiod}}}%
+        {{hash=a566715fbbf02fd5f29f6ff116a24d98}{%
+           family={Herbert},
+           familyi={H\bibinitperiod},
+           given={Emmanuel},
+           giveni={E\bibinitperiod}}}%
+        {{hash=9d8161f9798cfb263a74eaae51893023}{%
+           family={Laurent},
+           familyi={L\bibinitperiod},
+           given={Maryline},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{e413be2a632cc61b804b821d1fcdce28}
+      \strng{fullhash}{d47091f0e920c21b748c43a055f77e0d}
+      \strng{fullhashraw}{d47091f0e920c21b748c43a055f77e0d}
+      \strng{bibnamehash}{e413be2a632cc61b804b821d1fcdce28}
+      \strng{authorbibnamehash}{e413be2a632cc61b804b821d1fcdce28}
+      \strng{authornamehash}{e413be2a632cc61b804b821d1fcdce28}
+      \strng{authorfullhash}{d47091f0e920c21b748c43a055f77e0d}
+      \strng{authorfullhashraw}{d47091f0e920c21b748c43a055f77e0d}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{month}{07}
+      \field{title}{PREFETCHing to overcome DNSSEC Performance Issue on large Resolving Platform}
+      \field{year}{2013}
+      \field{pages}{694\bibrangedash 703}
+      \range{pages}{10}
+      \verb{doi}
+      \verb 10.1109/TrustCom.2013.84
+      \endverb
+    \endentry
+    \entry{secspider}{inproceedings}{}{}
+      \name{author}{3}{}{%
+        {{hash=0c17e532e869f4e011f1177958f0f3e1}{%
+           family={Osterweil},
+           familyi={O\bibinitperiod},
+           given={Eric},
+           giveni={E\bibinitperiod}}}%
+        {{hash=b7e94e45937d801f3b00f56af0ed6946}{%
+           family={Massey},
+           familyi={M\bibinitperiod},
+           given={Dan},
+           giveni={D\bibinitperiod}}}%
+        {{hash=cc2e36f00f725b723902ed63824d79e4}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Lixia},
+           giveni={L\bibinitperiod}}}%
+      }
+      \strng{namehash}{df563d9c4bc13fbb12fafacb653f932c}
+      \strng{fullhash}{df563d9c4bc13fbb12fafacb653f932c}
+      \strng{fullhashraw}{df563d9c4bc13fbb12fafacb653f932c}
+      \strng{bibnamehash}{df563d9c4bc13fbb12fafacb653f932c}
+      \strng{authorbibnamehash}{df563d9c4bc13fbb12fafacb653f932c}
+      \strng{authornamehash}{df563d9c4bc13fbb12fafacb653f932c}
+      \strng{authorfullhash}{df563d9c4bc13fbb12fafacb653f932c}
+      \strng{authorfullhashraw}{df563d9c4bc13fbb12fafacb653f932c}
+      \field{sortinit}{O}
+      \field{sortinithash}{2cd7140a07aea5341f9e2771efe90aae}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{2009 Annual Computer Security Applications Conference}
+      \field{title}{Deploying and Monitoring DNS Security (DNSSEC)}
+      \field{year}{2009}
+      \field{pages}{429\bibrangedash 438}
+      \range{pages}{10}
+      \verb{doi}
+      \verb 10.1109/ACSAC.2009.47
+      \endverb
+      \keyw{Cryptography;Computer security;Computerized monitoring;Data security;Application software;Computer errors;Protection;US Government;Internet;Domain Name System;DNSSEC;monitoring;distributed;security;Internet;DNS;zones}
+    \endentry
+    \entry{ecc}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=b9508ee2e144288c3877185c716d4c54}{%
+           family={Rijswijk-Deij},
+           familyi={R\bibinithyphendelim D\bibinitperiod},
+           given={Roland},
+           giveni={R\bibinitperiod},
+           prefix={van},
+           prefixi={v\bibinitperiod}}}%
+        {{hash=ae2f93721d829e3f63fa3a712fefd396}{%
+           family={Sperotto},
+           familyi={S\bibinitperiod},
+           given={Anna},
+           giveni={A\bibinitperiod}}}%
+        {{hash=f60eb4a9f3abb113820391a125a8883f}{%
+           family={Pras},
+           familyi={P\bibinitperiod},
+           given={Aiko},
+           giveni={A\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {New York, NY, USA}%
+      }
+      \list{publisher}{1}{%
+        {Association for Computing Machinery}%
+      }
+      \strng{namehash}{251abd1f03e8454b9a6c65f463440370}
+      \strng{fullhash}{251abd1f03e8454b9a6c65f463440370}
+      \strng{fullhashraw}{251abd1f03e8454b9a6c65f463440370}
+      \strng{bibnamehash}{251abd1f03e8454b9a6c65f463440370}
+      \strng{authorbibnamehash}{251abd1f03e8454b9a6c65f463440370}
+      \strng{authornamehash}{251abd1f03e8454b9a6c65f463440370}
+      \strng{authorfullhash}{251abd1f03e8454b9a6c65f463440370}
+      \strng{authorfullhashraw}{251abd1f03e8454b9a6c65f463440370}
+      \field{sortinit}{R}
+      \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{The Domain Name System Security Extensions (DNSSEC) add authenticity and integrity to the DNS, improving its security. Unfortunately, DNSSEC is not without problems. DNSSEC adds digital signatures to the DNS, significantly increasing the size of DNS responses. This means DNSSEC is more susceptible to packet fragmentation and makes DNSSEC an attractive vector to abuse in amplification-based denial-of-service attacks. Additionally, key management policies are often complex. This makes DNSSEC fragile and leads to operational failures. In this paper, we argue that the choice for RSA as default cryptosystem in DNSSEC is a major factor in these three problems. Alternative cryptosystems, based on elliptic curve cryptography (ECDSA and EdDSA), exist but are rarely used in DNSSEC. We show that these are highly attractive for use in DNSSEC, although they also have disadvantages. To address these, we have initiated research that aims to investigate the viability of deploying ECC at a large scale in DNSSEC.}
+      \field{issn}{0146-4833}
+      \field{journaltitle}{SIGCOMM Comput. Commun. Rev.}
+      \field{month}{9}
+      \field{number}{5}
+      \field{title}{Making the Case for Elliptic Curves in DNSSEC}
+      \field{volume}{45}
+      \field{year}{2015}
+      \field{pages}{13\bibrangedash 19}
+      \range{pages}{7}
+      \verb{doi}
+      \verb 10.1145/2831347.2831350
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1145/2831347.2831350
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1145/2831347.2831350
+      \endverb
+      \keyw{fragmentation,elliptic curve cryptography,eddsa,ecdsa,dnssec,dns,ddos,amplification attack}
+    \endentry
+    \entry{cmuCachePoisoning2014}{misc}{}{}
+      \name{author}{2}{}{%
+        {{hash=3571a961c5ce10b7e905c2812c1d9f4d}{%
+           family={Spring},
+           familyi={S\bibinitperiod},
+           given={Jonathan},
+           giveni={J\bibinitperiod}}}%
+        {{hash=430c994de7363d1a59ac57ad7d6d7392}{%
+           family={Metcalf},
+           familyi={M\bibinitperiod},
+           given={Leigh\bibnamedelima B.},
+           giveni={L\bibinitperiod\bibinitdelim B\bibinitperiod}}}%
+      }
+      \list{organization}{1}{%
+        {Carnegie Mellon University, Software Engineering Institute}%
+      }
+      \strng{namehash}{b021ae7fa178b4c7a424d60ccddb1b60}
+      \strng{fullhash}{b021ae7fa178b4c7a424d60ccddb1b60}
+      \strng{fullhashraw}{b021ae7fa178b4c7a424d60ccddb1b60}
+      \strng{bibnamehash}{b021ae7fa178b4c7a424d60ccddb1b60}
+      \strng{authorbibnamehash}{b021ae7fa178b4c7a424d60ccddb1b60}
+      \strng{authornamehash}{b021ae7fa178b4c7a424d60ccddb1b60}
+      \strng{authorfullhash}{b021ae7fa178b4c7a424d60ccddb1b60}
+      \strng{authorfullhashraw}{b021ae7fa178b4c7a424d60ccddb1b60}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Probable Cache Poisoning of Mail Handling Domains}
+      \verb{urlraw}
+      \verb https://insights.sei.cmu.edu/blog/probable-cache-poisoning-of-mail-handling-domains/
+      \endverb
+      \verb{url}
+      \verb https://insights.sei.cmu.edu/blog/probable-cache-poisoning-of-mail-handling-domains/
+      \endverb
+    \endentry
+    \entry{adapt}{inproceedings}{}{}
+      \name{author}{1}{}{%
+        {{hash=0c30b8317b76d851424a9e137f03f2f3}{%
+           family={Wander},
+           familyi={W\bibinitperiod},
+           given={Matthäus},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{0c30b8317b76d851424a9e137f03f2f3}
+      \strng{fullhash}{0c30b8317b76d851424a9e137f03f2f3}
+      \strng{fullhashraw}{0c30b8317b76d851424a9e137f03f2f3}
+      \strng{bibnamehash}{0c30b8317b76d851424a9e137f03f2f3}
+      \strng{authorbibnamehash}{0c30b8317b76d851424a9e137f03f2f3}
+      \strng{authornamehash}{0c30b8317b76d851424a9e137f03f2f3}
+      \strng{authorfullhash}{0c30b8317b76d851424a9e137f03f2f3}
+      \strng{authorfullhashraw}{0c30b8317b76d851424a9e137f03f2f3}
+      \field{sortinit}{W}
+      \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{2017 Network Traffic Measurement and Analysis Conference (TMA)}
+      \field{title}{Measurement survey of server-side DNSSEC adoption}
+      \field{year}{2017}
+      \field{pages}{1\bibrangedash 9}
+      \range{pages}{9}
+      \verb{doi}
+      \verb 10.23919/TMA.2017.8002913
+      \endverb
+      \keyw{Superluminescent diodes;Servers;Public key;Probes;Domain Name System}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

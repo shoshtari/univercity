@@ -1,0 +1,137 @@
+\documentclass[12pt]{article}
+
+\usepackage[a4paper, margin=0.5in]{geometry}
+\usepackage{anyfontsize}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{setspace}
+\usepackage{hyperref}
+\usepackage[backend=biber]{biblatex}
+\usepackage{float}
+\usepackage{svg}
+\usepackage{xepersian}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{enumitem}
+\usepackage{bigints}
+\hypersetup{colorlinks,urlcolor=blue}
+%\settextfont[Scale=1.1]{Far.Mitra}
+
+\settextfont[Scale=1.0, Size=14pt]{B Nazanin}
+\defpersianfont\persiantitlefont[Scale=1.0, Size=18pt]{B Titr}
+\setlatintextfont[Scale=1.0, Size=12pt]{Times New Roman}
+\deflatinfont\englishtitlefont[Scale=1.0, Size=16pt]{Times New Roman Bold}
+
+\usepackage[backend=biber]{biblatex}
+\addbibresource{references.bib}
+
+
+\def\labelitemi{$\diamond$}
+\def\labelitemii{$\ast$}
+
+
+\begin{document}
+	\linespread{3}
+	\setstretch{1.5}
+	
+	% --- HEADER ROW ---
+	\begin{minipage}[t]{0.7\textwidth}
+		
+		{\huge\textcolor{teal!70!black}{\title\textbf{{استنباط آماری}}}}\\[4pt]
+		
+	\end{minipage}
+	\hfil
+	\begin{minipage}[t]{0.15\textwidth}
+		\centering
+		\includegraphics[width=0.9\linewidth]{pics/logo.png}\\[6pt]
+		{\small پاییز ۱۴۰۴}
+	\end{minipage}
+	
+	
+	
+	{
+		
+		\Large{تمرین دوم}
+		
+		\large مرتضی ملکی‌نژاد شوشتری - ۸۱۰۱۰۴۲۵۶ 
+		
+		
+	}
+	
+	\vspace{1.2cm}
+	
+	
+	
+	\vspace{0.3cm}
+	\hrule 
+	\vspace{0.6cm}
+	\section*{سوال ۱}
+	\subsection*{بخش \lr{A}}
+	\subsubsection*{بخش \lr{a}}
+	داریم:
+	\begin{latin}
+		$
+		p(\bar{x_n}- z_{\frac{\alpha}{2}} \sigma_{\bar{x_n}} < \mu < \bar{x_n} + z_{\frac{\alpha}{2}} \sigma_{\bar{x_n}} ) \approx 1 - \alpha
+		$ 
+		\\
+		$
+		\sigma_{\bar{x_n}} = \cfrac{s(n)}{\sqrt{n}} = 2.5 
+		\Rightarrow
+		p(75358 - 2.5 z_{2.5} < \mu < 75358 + 2.5 z_{2.5})  \xrightarrow{z_{2.5} = 1.96} p(75353.1 < \mu < 75362.9)
+		\Rightarrow \text{95\% confidence interval: } [75353.1, 75362.9]
+		$
+	\end{latin}
+	کار بهتر این است که بجای توزیع \lr{Z} از توزیع \lr{T} استفاده شود،‌ولی باتوجه به اینکه 
+	\lr{n}
+	از ۳۰ بزرگ‌تر است و توزیع \lr{T} تفاوت کمی با \lr{Z} دارد و در درس نیز از توزیع \lr{Z} استفاده شده، از توزیع \lr{Z} استفاده شد.
+	\subsubsection*{بخش \lr{b}}
+	گزینه ۴. چیزی که بازه اطمینان می‌گوید این است که احتمال این‌که این بازه شامل میانگین باشد چقدر است. به بیان ملموس تر، در توزیع‌هایی که می‌توانند همچنین نمونه برداری ای داشته باشند، میانگین ۹۵ درصد آن‌ها در این بازه است.
+	\subsubsection*{بخش \lr{d}}
+	عملا باید حاصل 
+	$
+	\cfrac{z_{2.5}  * s(n)}{\sqrt{n}}
+	$
+	از یک کوچکتر شود. پس داریم:
+	\begin{latin}
+		$
+		\sqrt{n} \geq 25 * 1.96 \Rightarrow \sqrt{n} \geq 49.0 \Rightarrow n \geq 2401
+		$
+	\end{latin}
+	پس برای اینکه حدود بازه اطمینان از میانگین ۱ واحد اختلاف داشته باشند با فرض این که در تلاش‌های مجدد نیز واریانس نمونه ۲۵ باشد، باید سایز نمونه حداقل ۲۴۰۱ باشد.
+\subsection* {بخش \lr{B}}
+\subsubsection*{بخش \lr{a}}
+طبق قضیه 
+\lr{CLT}
+و باتوجه به اینکه 
+\lr{n}
+از ۳۰ بزرگتر است، 
+توزیع 
+\lr{Sample mean}
+یک توزیع نرمال می‌باشد. برای میانگین توزیع، دو گزینه در اختیار است؛ $100$ و $102.25$ مقدار $102.25$  از یک نمونه‌برداری بدست آمده و نمی‌تواند مقدار میانگین را بدرستی تخمین بزند. دراینجا با فرض درست بودن ادعا توزیع بدست می‌آید و سپس در قسمت بعد با بازه اطمینان میزان درستی این فرض چک می‌شود. برای واریانس ولی چون واریانس جامعه موجود است، می‌توان واریانس 
+\lr{Sample mean}
+را براحتی بدست آورد:
+\begin{latin}
+	$
+	\sigma = 5 \Rightarrow \sigma_{\bar{x}} = \cfrac{\sigma}{\sqrt{n}} = \cfrac{5}{6}
+	$
+\end{latin}
+پس درنهایت می‌توان گفت توزیع 
+\lr{Sample mean}
+یک توزیع از نوع 
+$
+Normal(100, \cfrac{5}{6}) 
+$
+می‌باشد.
+\subsubsection*{بخش \lr{b}}
+باید مقدار 
+$
+\sigma_{\bar{x}} z
+$
+ را حساب کرد. مقدار واریانس درقسمت قبل محاسبه شد. 
+\section*{منابع خارج از درس}
+	\begin{latin}
+			\printbibliography[heading=none]
+		
+	\end{latin}
+
+\end{document}
