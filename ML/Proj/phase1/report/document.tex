@@ -1,0 +1,227 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{hyperref}
+\usepackage{geometry}
+\usepackage{enumitem}
+\usepackage{float}
+
+\geometry{margin=1in}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+
+\title{Language Identification from Audiobook Speech: A Technical Report}
+\author{}
+\date{}
+
+\begin{document}
+	
+	\maketitle
+	
+	
+	\section{Introduction to Language Identification}
+	
+	\subsection{Definition and Importance}
+	Spoken Language Identification (LID) is the automated detection of language from speech segments. Applications include:
+	\begin{itemize}
+		\item \textbf{Voice assistants}: Automatic language switching (Alexa, Siri)
+		\item \textbf{Multilingual systems}: Content routing and processing
+		\item \textbf{Call centers}: Language-based query distribution
+		\item \textbf{Media monitoring}: Broadcast content classification
+	\end{itemize}
+	
+	\subsection{Controlled vs. Real-world Data}
+	\begin{itemize}
+		\item \textbf{Controlled recordings}: Studio environments with consistent conditions. (e.g., Common Voice dataset) Sudden changes in tone or noise are very rare 
+		\item \textbf{Real-world audiobooks}: Variable quality, emotional expression, narrative pacing. The model should be robust to tone and detect language from words.
+	\end{itemize}
+	
+	\subsection{LID Paradigms}
+	\textbf{Closed-set LID}: Identifies among known languages only.
+	\begin{itemize}
+		\item \textit{Implementation}: Multi-class classification.
+		\item \textit{Use case}: All possible languages are predefined. for example in this project, there are a handful of available languages. or an app where it has implementation for only five language.
+	\end{itemize}
+	
+	\textbf{Open-set LID}: Identifies or rejects unknown languages.
+	\begin{itemize}
+		\item \textit{Implementation}: Binary classifiers per language 
+		\item \textit{Use case}: Unknown languages may appear, model can determine which group of language has the most unknown rate and for example, stakeholders can determine which language to add next with more insight.
+	\end{itemize}
+	
+	\section{Challenges in Language Identification}
+	
+	\subsection{Key Challenges}
+	\begin{enumerate}
+		\item \textbf{Similarity}: Italian, Spanish and French are all latin based. and have high lexical similarity.
+		\item \textbf{Accent}: Regional differences (Roman vs. Milanese Italian)
+		\item \textbf{Noise}: Spoken language has high noise in urban cities
+		\item \textbf{Device effects}: Recording quality vary greatly.
+		\item \textbf{Short segments}: If a segment is too short, model performance may be low or at best inconsistent. 
+		
+		
+	\end{enumerate}
+	
+	\subsection{Solution Strategies}
+	\begin{itemize}
+		\item \textbf{Data collection}: Get data from every source (both high and low quality, different accent and so on) so that the model know not to overfit on an accent or a single pronounciation
+		\item \textbf{Data augmentation}: Speed perturbation, noise injection so reduce noise effect in classification.
+		\item \textbf{Overfit solutions}: By introducing tools like regularization or drop out layer, the model will be forced to pay attention to all features and not classify by just a single feature.
+	\end{itemize}
+	
+	\section{Audio Data Characteristics and Selection}
+	
+	\subsection{Selection Criteria for LID}
+	\begin{itemize}
+		\item As discussed in previous section, one way to overcome diversity in spoken language is to have diverse training data. if we have data from all scenarios it will be good. but it is not neccessary. for example, if we want to automaticaly detect language of an audiobook, noise will play a much smaller effect in data.
+		\item An ideal data is one that is as diverse as we want to and has a suitable segment size so that the model can actually learn pattern in voices.
+		\item tone, speech, amplitude, phonetic and pronounciation are some of the features where humans use to detect language. 
+	\end{itemize}
+	
+	\subsection{Desirable Properties}
+	\begin{enumerate}
+		\item Clean speech with minimal background noise or music
+		\item Multiple speakers for gender and age diversity
+		\item Balanced phoneme representation
+		\item Optimal segment duration (long enough so that model can learn pattern but not too long.)
+	\end{enumerate}
+	
+	\subsection{Qualitative Evaluation}
+	Listening assessment revealed:
+	\begin{itemize}
+		\item Clear articulation in audiobook speech
+		\item Consistent recording quality
+		\item Emotional variation within narrative
+		\item Potential bias toward literary vocabulary
+		\item Bias can be incurred from reader (high speed reader, gender, etc)
+	\end{itemize}
+	
+	\section{Feature Extraction Techniques}
+	
+	\begin{table}[H]
+		\centering
+		\caption{Feature Extraction Methods Comparison}
+		\begin{tabularx}{\textwidth}{lXcXX}
+			\toprule
+			\textbf{Feature} & \textbf{How it Works} & \textbf{LID Suitability} & \textbf{Advantages} & \textbf{Limitations} \\
+			\midrule
+			\textbf{MFCC} & Models human auditory perception via mel filterbanks & High & Robust to noise, standard in speech processing & Loses spectral detail \\
+			\textbf{FFT} & Frequency domain representation & Low & Complete frequency information & Sensitive to noise \\
+			\textbf{Log-Mel Spectrogram} & Power spectrum on mel scale & Medium & Preserves temporal patterns & High dimensionality \\
+			\textbf{Spectral Centroid} & Center of mass of spectrum & Low & Simple to compute & Language-insensitive \\
+			\textbf{Chroma Features} & Maps to 12 pitch classes & Very Low & Pitch-invariant & Designed for music \\
+			\textbf{Spectral Contrast} & Difference between peak/valley & Medium & Robust to loudness variations & Computationally expensive \\
+			\textbf{Zero-Crossing Rate} & Rate of sign changes & Low & Simple, fast & Limited discriminative power \\
+			\textbf{LPC} & Linear prediction coefficients & High & Compact representation, efficient & Assumes source-filter model \\
+			\textbf{PLP} & Perceptually weighted LPC & High & Noise robust, compact & Complex computation \\
+			\bottomrule
+		\end{tabularx}
+	\end{table}
+	
+	
+	\section{Similarity Learning for Language Discrimination}
+	
+	\subsection{Definition}
+	Similarity Learning learns a metric space where samples of the same language are closer than samples of different languages, without explicit classification boundaries. Sometimes its called contrastive learning.
+	
+	\subsection{Loss Functions \cite{triplet_lossf}}
+	\begin{enumerate}
+		\item \textbf{Contrastive Loss}:
+		\[
+		L = (1-Y) \cdot D^2 + Y \cdot \max(0, m-D)^2
+		\]
+		Where $D$ is distance, $Y=1$ for same language, $m$ is margin
+		
+		Contrastive loss is used to minimize the distance between instances of same group.
+		
+		\item \textbf{Triplet Loss}:
+		\[
+		L = \max(0, d(a, p) - d(a, n) + \text{margin})
+		\]
+		Requires triplets: anchor $a$, positive $p$ (same language), negative $n$ (different)
+		
+		It calculate wether a is near p or q . 
+	\end{enumerate}
+	
+	\subsection{Application to LID}
+We can check the new data is near to instances of which class and then classify it (something like KNN). 
+
+In order to do this, we need to get a good feature extraction where instances of different classes are far from each other and instances of same class are near together. so that whatever loss we use, its value for pairs of same class must be lower than pairs of different classes.
+
+Assuming we have extracted (or generated) such a feature, then we can calculate contrastive or triplet loss and do the classification by returning nearest instance(or k nearest instances) class. 
+	
+	\subsection{Advantages}
+	\begin{itemize}
+		\item Enables open-set recognition
+		\item Learns language-specific subspaces
+		\item Robust to unseen accents/variants
+		\item Usually needs lower data than a full classification (but not always)
+		\item Althought it is supervised learning, it can be used to discover new unknown unlabled data because it partion the feature space and we can infer that this new language is like french but with a hint from arabic (just a wild undiscovered language!)
+	\end{itemize}
+	
+	\subsection{Implementation Strategy}
+As discussed in feature extraction section, MFCC features are suitable for LID. we can extract MFCC features (along with some other useful feature like LPC) then using a Siamese NN 
+\cite{siamese_nn}
+we calculate distance from samples and then classify it by something like KNN
+
+
+	\section{References}
+	\begin{thebibliography}{9}
+		
+		% Feature Extraction (Wikipedia & Alternative Sources)
+		\bibitem{wikipedia_mfcc}
+		Wikipedia contributors.
+		``Mel-frequency cepstrum,''
+		\textit{Wikipedia, The Free Encyclopedia}, 2024.
+		Available: \url{https://en.wikipedia.org/wiki/Mel-frequency_cepstrum}.
+		
+		\bibitem{wikipedia_mel}
+		Wikipedia contributors.
+		``Mel scale,''
+		\textit{Wikipedia, The Free Encyclopedia}, 2024.
+		Available: \url{https://en.wikipedia.org/wiki/Mel_scale}.
+
+		
+		\bibitem{devopedia_features}
+		Devopedia.
+		``Audio Feature Extraction,''
+		2021.
+		Available: \url{https://devopedia.org/audio-feature-extraction}. % (Lists Chroma, Spectral Contrast, Zero-Crossing Rate)
+		
+		\bibitem{kaldi_plp}
+		Kaldi.
+		``Feature extraction,''
+		\textit{Kaldi Documentation}.
+		Available: \url{https://kaldi-asr.org/doc/feat.html}. % (Details PLP computation)
+		
+		
+		\bibitem{siamese_nn}
+		Wikipedia contributors.
+		``Siamese neural network,'' 
+		\textit{Wikipedia, The Free Encyclopedia}, 
+		Available: \url{https://en.wikipedia.org/wiki/Siamese_neural_network}. 
+		[Accessed: \today].
+		
+		\bibitem{SpeechFlow}
+		zhongemma
+		``Siamese neural network,'' 
+		\textit{SpeechFlow}, 
+		Available: \url{https://github.com/SpeechFlow-io/Spoken_language_identification}. 
+		[Accessed: \today].
+		% Used for formal definiton of Spoken language identification
+		
+		
+				\bibitem{triplet_loss}
+		Wikipedia contributors.
+		``Triplet Loss'' 
+		\textit{Wikipedia, The Free Encyclopedia}, 
+		Available: \url{https://en.wikipedia.org/wiki/Triplet_loss}. 
+		[Accessed: \today].
+		
+	\end{thebibliography}
+\end{document}c
