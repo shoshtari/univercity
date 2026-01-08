@@ -1,0 +1,141 @@
+syms theta1 theta2 theta3 theta4 real
+q = [theta1; theta2; theta3; theta4];
+function a = get_a(a_len, b, theta)
+    a = [
+        a_len*cos(theta);
+        a_len*sin(theta);
+        b
+    ];
+end
+function Q = get_Q(alpha, theta)
+    Q = [
+        cos(theta), -sin(theta)*cos(alpha),  sin(theta)*sin(alpha);
+        sin(theta),  cos(theta)*cos(alpha), -cos(theta)*sin(alpha);
+        0,           sin(alpha),             cos(alpha)
+    ];
+end
+function T = get_T(alpha, theta, a_len, b)
+    Q = get_Q(alpha, theta);
+    a = get_a(a_len, b, theta);
+    T = [
+        Q, a;
+        0 0 0 1
+    ];
+end
+
+% Forward
+T1 = get_T(sym(pi)/2,     theta1,  786.71, 260);
+T2 = get_T(sym(pi),       theta2,  945,     0);
+T3 = get_T(3*sym(pi)/2,   theta3, 1270.15, 251.5);
+T4 = get_T(0,        theta4,    0,     0);
+
+T = simplify(T1 * T2 * T3 * T4);
+disp("Forward kinematic problem")
+disp(T(1:3), (1:3))
+disp(T(1:3, 4))
+
+
+function theta_sol = calc_inverse(x, y, z, phi, initial_guess)
+    global T
+    syms theta1 theta2 theta3 theta4 real
+    symbols = [theta1 theta2 theta3 theta4];
+
+    Q = T(1:3, 1:3);
+    a = T(1:3, 4);
+
+    phi_p = trace(Q);
+
+    eqs = [
+        a(1) - x;
+        a(2) - y;
+        a(3) - z;
+        phi_p - phi;
+    ];
+
+    eq_fun = matlabFunction(eqs, 'Vars', {symbols});
+    
+    if nargin < 4
+        initial_guess = [0.1 0.1 0.1 0.1];
+    end 
+    options = optimoptions('fsolve', ...
+        'Algorithm', 'levenberg-marquardt', ...
+        'Display', 'off');
+
+    theta_sol = fsolve(@(th) eq_fun(th), initial_guess, options);
+end
+
+inv = calc_inverse(1500, 15, 1450, 0);
+forward = subs(T, transpose(q), inv);
+Q = forward(1:3, 1:3);
+a = forward(1:3, 4);
+disp("Inverse problem for start position")
+disp(double(a))
+disp(double((trace(Q))))
+
+
+inv = calc_inverse(1800, 40, 660, 0);
+forward = subs(T, transpose(q), inv);
+Q = forward(1:3, 1:3);
+a = forward(1:3, 4);
+disp("Inverse problem for end position")
+disp(double(a))
+disp(double(trace(Q)))
+
+
+% 1.5: Plot joints position
+start_joint = calc_inverse(1500, 15, 1450, 0);
+end_joint   = calc_inverse(1800, 40, 660, 0);
+
+T_total = 2;   % seconds
+N = 100;       % number of steps
+t = linspace(0, T_total, N);
+
+% Cubic trajectory (zero velocity at start/end)
+theta_traj = zeros(N, 4);
+for i = 1:4
+    theta0 = start_joint(i);
+    thetaf = end_joint(i);
+    theta_traj(:,i) = theta0 + (thetaf - theta0).*(3*(t/T_total).^2 - 2*(t/T_total).^3);
+end
+
+joint_positions = zeros(N, 4, 3);
+
+for k = 1:N
+    th = theta_traj(k,:);
+    
+    % Compute individual transforms for this timestep
+    T1_num = double(subs(T1, theta1, th(1)));
+    T2_num = double(subs(T2, theta2, th(2)));
+    T3_num = double(subs(T3, theta3, th(3)));
+    T4_num = double(subs(T4, theta4, th(4)));
+    
+    % Compute cumulative transforms
+    T12 = T1_num * T2_num;
+    T123 = T12 * T3_num;
+    T1234 = T123 * T4_num;
+    
+    % Extract joint positions in base frame
+    P1 = T1_num(1:3,4);
+    P2 = T12(1:3,4);
+    P3 = T123(1:3,4);
+    P4 = T1234(1:3,4);
+    
+    joint_positions(k,1,:) = P1';
+    joint_positions(k,2,:) = P2';
+    joint_positions(k,3,:) = P3';
+    joint_positions(k,4,:) = P4';
+end
+
+% Plot all joints in one 3D figure
+figure; hold on;
+colors = ['r','g','b','k'];
+for j = 1:4
+    plot3(squeeze(joint_positions(:,j,1)), ...
+          squeeze(joint_positions(:,j,2)), ...
+          squeeze(joint_positions(:,j,3)), ...
+          'Color', colors(j), 'LineWidth', 2);
+end
+xlabel('X'); ylabel('Y'); zlabel('Z');
+title('3D Trajectories of All Joints');
+legend('Joint 1','Joint 2','Joint 3','Joint 4');
+grid on; axis equal;
