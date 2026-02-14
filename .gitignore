@@ -221,6 +221,9 @@ venv/
 *.fls
 *.main.fdb_latexmk
 *zip
+*.lof 
+*.lot
 
 # Papers 
 */papers/*.pdf
+

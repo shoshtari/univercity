@@ -279,8 +279,278 @@ $W_2$
 یک تابع بصورت زیر است:
 \begin{latin}
 	$
-	U(x) = \left[
-	\right]
+	U(x) = \left\{
+	\begin{array}{ll}
+	0 \quad  (x < 0) \\
+	1 \quad  (x \geq 0) \\
+		\end{array}
+	\right.
 	$
 \end{latin}
+پس با توجه به اینکه
+$
+a_1 = relu(z_1)
+$
+مقدار 
+$
+\cfrac{\partial a_1}{\partial z_1}
+$
+برابر با 
+$U(z_1)$
+می‌شود.
+\subsection{}
+داریم:
+
+\begin{latin}
+	$
+	z_1 = W_1 x^{(i)} + b_1 \Rightarrow \cfrac{\partial z_1}{W_1} = x^{(i)}
+	$
+\end{latin}
+\subsection{}
+داریم:
+\begin{latin}
+	~\\
+	$
+	\cfrac{\partial J}{\partial W_1} = \cfrac{\partial J}{\partial \hat{y}} * \cfrac{\partial \hat{y}}{\partial z_2} * \cfrac{\partial z_2}{\partial a_1} *
+	\cfrac{\partial a_1}{\partial z_1} * \cfrac{\partial z_1}{\partial W_1} 
+	\\
+	= 
+	\cfrac{-1}{m} \sum\limits_{i = 1}^m ((\cfrac{1 - y^{(i)}}{1 - \hat{y}^{(i)}} - \cfrac{y^{(i)}}{\hat{y}^{(i)}}) * ( \cfrac{e^{-z_2^{(i)}}}{(1 + e^{-z_2^{(i)}})^2} ) * ( W_2 ) * U(z_1) * x^{(i)} ) 
+	$
+\end{latin}
+\lr{\section{Hessian of a Two-Layer Network}}
+\subsection{}
+داریم:
+\begin{latin}
+	~\\
+	$
+	\cfrac{\partial E_n}{w^{(2)}} = \cfrac{\partial E_n}{\partial a_k} * \cfrac{\partial a_k}{w^{(2)}}
+	= \delta_k z_j 
+	\\
+	\Rightarrow 
+	\cfrac{\partial^2 E_n}{ \partial w_j^{(2)} \partial w_j'^{(2)}}	= \cfrac{\partial (\delta_k z_j')}{\partial w_{j'}^{(2)}}
+	= z_j \cfrac{\partial \delta_k}{\partial w_{j'}^{(2)}} = z_j * \cfrac{\partial \delta_k}{\partial a_k} * \cfrac{\partial a_k}{\partial w_{j'}^{(2)}}
+	\\\\
+	= z_j * M_{jj'} * z_{j'} = z_j z_{j'} M_{jj'}
+	$
+\end{latin}
+\subsection{}
+داریم:
+\begin{latin}
+	~\\
+	$
+		\cfrac{\partial E_n}{w_j^{(1)}} = \cfrac{\partial E_n}{\partial a_k} * \cfrac{\partial a_k}{z_j} * \cfrac{\partial z_j}{w_j^{(1)}}
+		= \delta_k * w^{(2)} * h'(a_j) * x
+		\\
+		\Rightarrow
+		\cfrac{\partial^2 E_n}{ \partial w_j^{(1)} \partial w_j'^{(1)}}
+		= 	\cfrac{\partial (\delta_k * w^{(2)} * h'(a_j) * x_j)}{\partial w_{j'}^{(1)}}
+		= w^{(2)} * x_j * \cfrac{\partial \delta_k * h'(a_j)}{\partial w_{j'}^{(1)}}
+\\
+		= w^{(2)} * x_j * (\cfrac{\partial \delta_k}{\partial a_k} * \cfrac{\partial a_k}{z_j} * \cfrac{\partial z_j}{w_{j'}^{(1)}} * h'(a_j)
+		+ 
+		\delta_k * \cfrac{\partial h'(a_j)}{\partial a_j}  * \cfrac{\partial a_j}{W_{j'}^{(1)}}
+		)
+		\\
+		= 
+		w^{(2)} * x_j (M_{jj'} * w^{(2)} * h'(a_{j'}) * x_{j'} + \delta_k * h''(a_j) * 0) 
+		\\
+		= w^{{(2)}^2} * x_j * x_{j'} * M_{jj'}  * h'(a_j) * h'(a_{j'})
+	$
+\end{latin}
+منظور از 
+$
+w^{(2)}
+$
+مقدار جمع کل وزن‌های لایه دوم می‌باشد.
+\subsection{}
+داریم:
+\begin{latin}
+	$
+	\cfrac{\partial E_n}{w_j^{(2)} w_i^{(1)} } 
+	= 
+	 \cfrac{\partial (\delta_k z_j)}{\partial w_{i}^{(1)}}
+	 =
+	 \cfrac{z_j \partial (\delta_k )}{\partial w_{i}^{(1)}} + \cfrac{\delta_k \partial ( z_j)}{\partial w_{i}^{(1)}}
+	 =
+	 z_j M_{ij} w^{(2)} h'(a_j) x_i + \delta_k h'(a_j) x_i  
+	 	$
+\end{latin}
+\lr{\section{LDA}}
+اگر در عبارت 
+$
+\sum\limits_{j = 1}^{n_2} (y_i - y_j)^2
+$
+مقدار 
+$y_i$
+برابر با میانگین باشد، حاصل جمع برابر با همان 
+$s_2$
+می‌شود. حال اگر در نظر بگیریم که 
+$y_i = m_2 + \delta_i$
+داریم:
+\begin{latin}
+	~\\
+	$
+	\sum\limits_{j = 1}^{n_2} (y_i - y_j)^2 = \sum\limits_{j = 1}^{n_2} (y_j - m_2 - \delta_i)^2
+	 = 
+	 \sum\limits_{j = 1}^{n_2} ((y_j - m_2) ^2 + \delta_i^2 - 2\delta_i (y_j - m_2) )
+	 \\
+	 = 
+	 s_2^2 + n_2 \delta_i^2 + 0 = s_2^2 + n_2 \delta_i
+	$
+\end{latin}
+
+(چون حاصل جمع تفاوت $y_2$ از $m_2$ صفر می‌شود، عبارت سوم صفر شد.)
+
+پس مقدار $J$ برابر است با:
+\begin{latin}
+	~\\
+	$
+	J = \cfrac{1}{n_1 n_2} 	\sum\limits_{i = 1}^{n_1}  	\sum\limits_{j = 1}^{n_2} (y_1 - y_2)^2 
+	=   \cfrac{1}{n_1 n_2} 	\sum\limits_{i = 1}^{n_1}  (s_2^2 + n_2 \delta_i^2)
+	\\
+	= \cfrac{1}{n_1 n_2} 	\sum\limits_{i = 1}^{n_1}  (s_2^2 + n_2 (y_i - m_2)^2)
+	= \cfrac{s_2^2}{n_2} + \cfrac{1}{n_1} \sum\limits_{i = 1}^{n_1}  (y_i - m_2)^2
+	\\
+	= \cfrac{s_2^2}{n_2} + \cfrac{1}{n_1} \sum\limits_{i = 1}^{n_1}  (y_i - m_1 + m_1 - m_2)^2
+	\\
+	= \cfrac{s_2^2}{n_2} + \cfrac{1}{n_1} \sum\limits_{i = 1}^{n_1}  ((y_1 - m_1)^2 + (m_1 - m_2)^2 + 2(y_i - m_1)(_m1-m_2))
+	\\
+	= \cfrac{s_2^2}{n_2} + \cfrac{s_1^2}{n_1} +  (m_1 - m_2)^2
+	$
+\end{latin}
+که این همان عبارت صورت سوال است.
+
+\lr{\subsection{PCA}}
+اگر با یک تبدیل خطی بخواهیم داده‌ها بیشترین پراکندگی را از هم داشته باشند داریم:
+\begin{latin}
+	~\\
+	$
+	y_i = w^T x_i  \quad w^T w = I \quad
+	v = \cfrac{1}{n} \sum\limits_{i = 1}^n (y_i - \bar{y})^2 
+	$
+\end{latin}	
+چون 
+$x$
+ها میانگین صفر دارند، میانگین 
+$y$
+نیز صفر است (زیرا ترکیب خطی است). پس یعنی هدف بیشینه کردن مقدار 
+$v  = \cfrac{1}{n} \sum\limits_{i = 1}^n (y_i)^2 $
+است. پس داریم:
+\begin{latin}
+	~\\
+	$
+	v = \sum\limits_{i = 1}^n (y_i )^2  = \sum\limits_{i = 1}^n (w^T x_i )^2
+	= \sum\limits_{i = 1}^n (w^T x_i) (x_i^T w) =\cfrac{1}{n}  w^T (\sum\limits_{i = 1}^n (x_i x_i^T)) w
+	= \cfrac{1}{n}  w^T nS w = w^T S w
+	$
+\end{latin}
+(چون میانگین صفر است، ماتریس کواریانس همان جمع ضرب ها شد)
+
+حال نیاز است تا مقداری برای 
+$w$ 
+انتخاب شود تا این عبارت را بیشینه کند(اگر شرط اندازه برای وزن‌ها نباشد، صرفا می‌توان وزن‌های بسیار بزرگ انتخاب کرد و به واریانس‌های زیاد رسید). اگر از شیوه لاگرانژین استفاده کنیم داریم:
+\begin{latin}
+	~\\
+	$
+	L = w^T S w - \lambda (ww^T - 1) \xrightarrow{derviative to w}
+	\cfrac{\partial L}{\partial w} = 2Sw - 2\lambda w = 0 \Rightarrow S w = \lambda w
+	$
+\end{latin}
+\lr{\section{Feature Selection}}
+با پیاده‌سازی هر دو روش و رسم نمودار خطا می‌توان دید بعد از انتخاب حدود هفتاد و پنج ویژگی دیگر مقدار CCR خیلی تغییری نمی‌کند. 
+{
+\centering
+\includegraphics[width=0.8\textwidth]{img/q7_1.png}
+\captionof{figure}{مقدار \lr{CCR} بر اساس تعداد ویژگی با مدل \lr{Miltinomial Naive Bayes}}
+}
+\begin{table}[h]
+	\centering
+	\caption{دقت مدل به‌ازای ۷۵ ویژگی}
+	\begin{latin}
+		\begin{tabular}{|c|c|}
+			\hline
+			Feature selection method & CCR\\
+			\hline
+			Forward Selection & 0.7964 \\
+			Backward Elimination & 0.8124 \\
+			\hline
+		\end{tabular}
+	\end{latin}
+\end{table}
+
+\begin{table}[h]
+	\centering
+	\caption{ویژگی‌های انتخاب شده در هر دو روش}
+	\begin{latin}
+		\begin{tabular}{|c|c|c|}
+			\hline
+			 Forward selection & Backward elimination \\
+			\hline
+0-19&20\\
+21&23\\
+23-29&33\\
+33&35-37\\
+36&45-46\\
+41-42&48-50\\
+44&52-53\\
+48-49&58\\
+52&60-66\\
+54-55&68\\
+58&73-79\\
+63&87-93\\
+69&102-109\\
+74-75&116\\
+78-79&118-120\\
+83&123\\
+90-91&130-134\\
+96-97&136\\
+99&138\\
+102&142-143\\
+104&145-151\\
+106&156-157\\
+109&161-162\\
+113&164\\
+119&172-174\\
+121&186\\
+124-125&189\\
+131&\\
+138&\\
+141&\\
+144-145&\\
+152&\\
+160&\\
+164&\\
+166&\\
+171-172&\\
+178-180&\\
+193&\\
+			\hline
+		\end{tabular}
+	\end{latin}
+\end{table}
+\lr{\section{Flower Image Classification}}
+با یک شبکه بدون لایه پنهان، اگر برای تابع خطا از 
+\lr{cross entropy}
+استفاده شود و از 
+\lr{scale}
+کردن ورودی و 
+\lr{learning rate decay}
+استفاده شود، به ازای ضریب یادگیری اولیه 
+$0.005$
+و ۳۰۰۰ دور یادگیری، می‌توان به دقت ۹۵ درصد روی داده‌های 
+\lr{train}
+و
+۶۴ درصد روی داده‌های 
+\lr{validation}
+رسید. البته همچنان بعد از این تعداد دور هم دقت مدل هم روی داده‌های 
+\lr{train}
+و هم روی 
+\lr{validation}
+به سمت بهبود می‌رود ولی مقدار بهبود ناچیز است.
+{
+\centering
+\includegraphics[width=0.8\textwidth]{img/q8_1.png}
+\captionof{figure}{مقدار ضرر در هر دور یادگیری}
+}
 \end{document}
