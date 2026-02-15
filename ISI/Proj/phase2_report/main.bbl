@@ -1,0 +1,51 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nty/global//global/global/global}
+    \entry{lending_club_kaggle}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=a7ca955958b5493fb8401ef1271021b4}{%
+           family={{wordsforthewise}},
+           familyi={w\bibinitperiod}}}%
+      }
+      \list{organization}{1}{%
+        {Kaggle}%
+      }
+      \strng{namehash}{a7ca955958b5493fb8401ef1271021b4}
+      \strng{fullhash}{a7ca955958b5493fb8401ef1271021b4}
+      \strng{fullhashraw}{a7ca955958b5493fb8401ef1271021b4}
+      \strng{bibnamehash}{a7ca955958b5493fb8401ef1271021b4}
+      \strng{authorbibnamehash}{a7ca955958b5493fb8401ef1271021b4}
+      \strng{authornamehash}{a7ca955958b5493fb8401ef1271021b4}
+      \strng{authorfullhash}{a7ca955958b5493fb8401ef1271021b4}
+      \strng{authorfullhashraw}{a7ca955958b5493fb8401ef1271021b4}
+      \field{sortinit}{w}
+      \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://www.kaggle.com/datasets/wordsforthewise/lending-club}}
+      \field{note}{Accessed: 2026-02-01}
+      \field{title}{Lending Club Dataset}
+      \field{year}{2018}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+
