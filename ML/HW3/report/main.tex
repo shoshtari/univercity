@@ -481,7 +481,7 @@ $w$
 
 \begin{table}[h]
 	\centering
-	\caption{ویژگی‌های انتخاب شده در هر دو روش}
+	\caption{ویژگی‌های انتخاب شده در هر دو روش برای داده \lr{tinyMNIST} در سوال ۷}
 	\begin{latin}
 		\begin{tabular}{|c|c|c|}
 			\hline
@@ -529,6 +529,8 @@ $w$
 		\end{tabular}
 	\end{latin}
 \end{table}
+
+\newpage
 \lr{\section{Flower Image Classification}}
 با یک شبکه بدون لایه پنهان، اگر برای تابع خطا از 
 \lr{cross entropy}
@@ -536,7 +538,7 @@ $w$
 \lr{scale}
 کردن ورودی و 
 \lr{learning rate decay}
-استفاده شود، به ازای ضریب یادگیری اولیه 
+استفاده شود و برای مقدار اولیه وزن‌ها از روش \lr{Xavier} استفاده شود، به ازای ضریب یادگیری اولیه 
 $0.005$
 و ۳۰۰۰ دور یادگیری، می‌توان به دقت ۹۵ درصد روی داده‌های 
 \lr{train}
@@ -548,9 +550,80 @@ $0.005$
 و هم روی 
 \lr{validation}
 به سمت بهبود می‌رود ولی مقدار بهبود ناچیز است.
+
 {
 \centering
 \includegraphics[width=0.8\textwidth]{img/q8_1.png}
-\captionof{figure}{مقدار ضرر در هر دور یادگیری}
+\captionof{figure}{مقدار ضرر در هر دور یادگیری برای مدل تک لایه}
 }
+
+چون بین مجموعه داده \lr{train} و \lr{test} فاصله زیاد است، انتظار می‌رود استفاده از روش‌هایی مثل 
+\lr{regularization}
+به دقت روی 
+\lr{validation}
+کمک کند و با استفاده از تکنیک‌های ذکر شده می‌توان به دقت 
+$0.9975$ 
+روی داده 
+\lr{train}
+و
+$0.72$
+روی داده 
+\lr{validation}
+رسید.
+
+با استفاده از \lr{transfer learning} و آموزش شبکه روی ویژگی‌های استخراج شده توسط شبکه 
+\lr{alexnet}
+و یا
+\lr{vgg16}
+می‌توان به دقت 
+$0.9943$ 
+روی داده 
+\lr{train}
+و 
+$0.8823$
+روی 
+\lr{validation}
+رسید.
+
+{
+	\centering
+	\includegraphics[width=0.8\textwidth]{img/q8_2.png}
+	\captionof{figure}{مقدار ضرر در هر دور یادگیری برای مدل دو لایه}
+}
+{
+	\centering
+	\includegraphics[width=0.8\textwidth]{img/q8_3.png}
+	\captionof{figure}{مقدار ضرر در هر دور یادگیری برای مدل دو لایه همراه با یک سری بهبود برای جلوگیری از بیش‌برازش}
+}
+
+{
+	\centering
+	\includegraphics[width=0.8\textwidth]{img/q8_4.png}
+	\captionof{figure}{مقدار ضرر در هر دور یادگیری برای مدل دو لایه با استخراج ویژگی از \lr{alexnet}}
+}
+
+{
+	\centering
+	\includegraphics[width=0.8\textwidth]{img/q8_5.png}
+	\captionof{figure}{مقدار ضرر در هر دور یادگیری برای مدل دو لایه با استخراج ویژگی از \lr{vgg16}}
+}
+
+\begin{table}[h]
+	\centering
+	\caption{دقت هر مدل}
+	\begin{latin}
+		\begin{tabular}{|c|c|c|c|}
+			\hline
+			Model & Train Loss & Train Accuracy  & Validation Acurracy \\
+			\hline
+			one layer & $0.3679$ & $0.9316$ & $0.622$ \\
+			two layer & $0.4042$ & $0.8947$ & $0.6449$ \\
+			two layer improved & $0.0443$ & $0.9975$ & $0.7201$ \\
+			alexnet + two layer improved & $0.1$ & $0.9943$ & $0.8823$ \\
+			vgg16 + two layer improved & $0.0566$ & $0.9983$ & $0.8823$ \\
+			\hline
+		\end{tabular}
+	\end{latin}
+\end{table}
+
 \end{document}

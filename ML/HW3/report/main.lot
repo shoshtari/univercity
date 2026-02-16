@@ -2,4 +2,5 @@
 \contentsline {table}{\numberline {2}{\ignorespaces ابعاد هر پارامتر در حالت معمولی}}{9}{table.caption.2}%
 \contentsline {table}{\numberline {3}{\ignorespaces ابعاد هر پارامتر در حالت \lr {vectorize}}}{9}{table.caption.3}%
 \contentsline {table}{\numberline {4}{\ignorespaces دقت مدل به‌ازای ۷۵ ویژگی}}{14}{table.caption.4}%
-\contentsline {table}{\numberline {5}{\ignorespaces ویژگی‌های انتخاب شده در هر دو روش}}{15}{table.caption.5}%
+\contentsline {table}{\numberline {5}{\ignorespaces ویژگی‌های انتخاب شده در هر دو روش برای داده \lr {tinyMNIST} در سوال ۷}}{18}{table.caption.5}%
+\contentsline {table}{\numberline {6}{\ignorespaces دقت هر مدل}}{19}{table.caption.6}%
