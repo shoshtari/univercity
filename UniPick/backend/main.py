@@ -15,6 +15,10 @@ def flush():
     """Flush the database and add courses"""
     commands.flush()
 
+@app.command()
+def runserver():
+    """Run the backend server"""
+    commands.runserver()
 
 if __name__ == "__main__":
     app()
