@@ -1,0 +1,29 @@
+#! /bin/bash
+
+ROOT_DIR="${1:-.}"
+
+echo "PROJECT TREE"
+echo "============"
+tree -I "__pycache__|.git|.venv|venv|*.pyc"
+echo
+echo "FILES"
+echo "====="
+echo
+
+find "$ROOT_DIR" \
+  -type f \
+  \( -name "*.py" -o -name "*.md" -o -name "*.txt" \) \
+  ! -path "*/__pycache__/*" \
+  ! -path "*/.git/*" \
+  ! -path "*/.venv/*" \
+  ! -path "*/venv/*" \
+| sort \
+| while read -r file; do
+    echo "----------------------------------------"
+    echo "FILE: $file"
+    echo "----------------------------------------"
+    echo
+    sed 's/^/    /' "$file"
+    echo
+    echo
+done

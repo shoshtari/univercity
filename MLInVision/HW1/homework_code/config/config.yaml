@@ -1,0 +1,12 @@
+batch_size: 8
+early_stopping_threshold: 0
+epochs: 50
+layers_sizes:
+- 64
+learning_rate: 1e-3
+logging_enable_print: false
+logging_step: 1
+loss_function: cross_entropy
+momentum: 0.9
+normalize: true
+regularization_factor: 0.001

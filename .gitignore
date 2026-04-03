@@ -227,3 +227,6 @@ venv/
 # Papers 
 */papers/*.pdf
 
+# Myself 
+_minted/
+_image/

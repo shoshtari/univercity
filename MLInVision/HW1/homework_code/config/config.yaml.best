@@ -1,0 +1,10 @@
+loss_function: cross_entropy
+epochs: 50
+normalize: true
+momentum: 0.9
+learning_rate: 1e-3
+batch_size: 8
+layers_sizes:
+  - 16
+logging_step: 1
+logging_enable_print: false
