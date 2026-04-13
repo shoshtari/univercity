@@ -1,10 +1,11 @@
-import common.configs as configs
-import sqlite3
+import structlog
+
+from db import CourseRepository
+
+logger = structlog.getLogger()
 
 
-def flush():
-    conn = sqlite3.connect(configs.DB_FILE)
-    cursor = conn.cursor()
-    cursor.execute("DELETE FROM course")
-    conn.commit()
-    conn.close()
+def flush() -> None:
+    course_repo = CourseRepository()
+    course_repo.flush()
+    logger.info("course repository flushed")

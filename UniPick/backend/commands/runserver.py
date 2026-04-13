@@ -1,30 +1,34 @@
-from flask import Flask, jsonify, request
+import structlog
+from flask import Flask
 from waitress import serve
+
+import api
 from common import configs
 
+logger = structlog.get_logger()
 
-import logging
-logger = logging.getLogger(__name__)
+
 def create_app() -> Flask:
-	app = Flask(__name__)
+    app = Flask(__name__)
 
-	@app.get("/")
-	def index():
-		return jsonify({"status": "ok", "service": "UniPick"})
+    app.add_url_rule("/liveness", view_func=api.liveness, methods=["GET"])
+    app.add_url_rule("/auth/signup", view_func=api.signup, methods=["POST"])
+    app.add_url_rule("/auth/login", view_func=api.login, methods=["POST"])
 
-	@app.get("/health")
-	def health():
-		return jsonify({"status": "healthy"})
+    return app
 
-	return app
 
-def runserver():
-	app = create_app()
-	logger.info(f"Starting UniPick backend server on {configs.WEBSERVER_HOST}:{configs.WEBSERVER_PORT}")
-	serve(
-	 	app,
-	   host=configs.WEBSERVER_HOST,
-	   port=configs.WEBSERVER_PORT,
-	   threads=configs.WEBSERVER_THREADS,
-	   connection_limit=configs.WEBSERVER_CONNECTION_LIMIT
-	)
+def runserver() -> None:
+    app = create_app()
+    logger.info(
+        "Starting UniPick backend server",
+        host=configs.WEBSERVER_HOST,
+        port=configs.WEBSERVER_PORT,
+    )
+    serve(
+        app,
+        host=configs.WEBSERVER_HOST,
+        port=configs.WEBSERVER_PORT,
+        threads=configs.WEBSERVER_THREADS,
+        connection_limit=configs.WEBSERVER_CONNECTION_LIMIT,
+    )
