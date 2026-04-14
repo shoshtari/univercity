@@ -1,0 +1,3 @@
+from typing import Any
+
+def serve(app: Any, **kwargs: Any) -> None: ...

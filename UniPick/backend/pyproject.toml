@@ -21,7 +21,8 @@ line-length = 88
 
 [tool.mypy]
 strict = true
-exclude = "^(venv|\\.venv)/"
+exclude = "^(venv|test)/"
+mypy_path = "typings"
 
 [[tool.mypy.overrides]]
 module = "jdatetime.*"

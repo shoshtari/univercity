@@ -2,15 +2,21 @@ import flask
 import structlog
 from flask import jsonify, request
 from pydantic import ValidationError
+from sqlalchemy.exc import IntegrityError
 
 import common.configs as configs
-from api.auth_schema import UserLoginIn, UserLoginOut, UserSignupIn, UserSignupOut
+from api.auth_schema import (
+    GetMeOut,
+    UserLoginIn,
+    UserLoginOut,
+    UserSignupIn,
+    UserSignupOut,
+)
+from common.errors import InvalidUserPasswordError
 from db import UserRepository
 from utils.jwt_wrapper import create_token
 
 logger = structlog.getLogger()
-
-user_repository = UserRepository()
 
 
 def signup() -> flask.Response | tuple[flask.Response, int]:
@@ -27,11 +33,11 @@ def signup() -> flask.Response | tuple[flask.Response, int]:
         return ans
 
     try:
-        user_id = user_repository.create(
+        user_id = UserRepository.create(
             username=payload.username,
             password=payload.password,
         )
-    except Exception as e:
+    except IntegrityError as e:
         logger.error("failed user creation", username=payload.username, error=e)
         return jsonify({"error": "username_already_exists"}), 409
 
@@ -57,22 +63,33 @@ def login() -> flask.Response:
         return ans
 
     try:
-        result, user_id = user_repository.check_password(
+        user_id = UserRepository.check_password(
             username=payload.username,
             password=payload.password,
         )
-        if not result:
-            ans = jsonify({"error": "invalid username or password"})
-            ans.status_code = 403
-            return ans
         response = UserLoginOut(
             access_token=create_token(user_id=user_id, ttl=configs.JWT_TTL),
             ttl=configs.JWT_TTL,
         )
         return jsonify(response.model_dump())
 
-    except Exception as e:
-        logger.error("failed check password", username=payload.username, error=e)
-        ans = jsonify({"error": "internal error"})
+    except InvalidUserPasswordError:
+        ans = jsonify({"error": "invalid username or password"})
+        ans.status_code = 403
+        return ans
+
+
+def getme() -> flask.Response:
+    user_id = flask.g.get("user_id")
+    if not isinstance(user_id, int):
+        ans = jsonify(
+            {"error": "internal_error"}
+        )  # since token must be parsed in middleware, it is server error not user error
         ans.status_code = 500
         return ans
+    user_name = UserRepository.get_username_by_id(user_id)
+    response = GetMeOut(
+        id=user_id,
+        username=user_name,
+    )
+    return jsonify(response.model_dump())

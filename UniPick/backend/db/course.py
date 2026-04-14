@@ -9,21 +9,19 @@ from sqlalchemy import (
     Column,
     DateTime,
     Integer,
-    MetaData,
     String,
     Table,
     text,
 )
 
-from db.engine import ENGINE
+from db.engine import ENGINE, METADATA
 
 logger = structlog.getLogger()
 
 
-metadata = MetaData()
 course = Table(
     "course",
-    metadata,
+    METADATA,
     Column("id", Integer, primary_key=True),
     Column("semester", String(255), nullable=False),
     Column("univercity_update_date", String(255), nullable=False),
@@ -36,14 +34,18 @@ course = Table(
     Column("exam_date", String(255), nullable=True),
     Column("course_times", JSON, nullable=False),
     Column("units", Integer, nullable=False),
-    Column("prerequisite/corequisite", String(255), nullable=False),
+    Column("prerequisite_corequisite", String(255), nullable=False),
     Column("visible", Boolean, default=True),
-    Column("created_at", DateTime, default=datetime.datetime.now),
+    Column(
+        "created_at",
+        DateTime,
+        default=lambda: datetime.datetime.now(datetime.timezone.utc),
+    ),
     Column(
         "updated_at",
         DateTime,
-        default=datetime.datetime.now,
-        onupdate=datetime.datetime.now,
+        default=lambda: datetime.datetime.now(datetime.timezone.utc),
+        onupdate=lambda: datetime.datetime.now(datetime.timezone.utc),
     ),
 )
 

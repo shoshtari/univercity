@@ -1,5 +1,8 @@
 import pytest
 from flask.testing import FlaskClient
+from werkzeug.test import (
+    TestResponse,  # can import from flask but mypy complain. this is what flask's test client uses
+)
 
 
 class TestAuth:
@@ -7,41 +10,56 @@ class TestAuth:
     def setup(self, client: FlaskClient) -> None:
         self.client = client
 
-    def create_user(self, username: str, password: str) -> int:
+    def _sign_up(self, username: str, password: str) -> TestResponse:
 
-        result = self.client.post(
+        return self.client.post(
             "/auth/signup",
             json={
                 "username": username,
                 "password": password,
             },
         )
-        assert result.status_code == 201, result.json
-        assert result.json is not None
-        user_id = result.json.get("id")
-        assert user_id is not None, result.json
-        assert isinstance(user_id, int), user_id
-        return user_id
 
-    def login(self, username: str, password: str) -> str:
+    def _login(self, username: str, password: str) -> TestResponse:
 
-        result = self.client.post(
+        return self.client.post(
             "/auth/login",
             json={
                 "username": username,
                 "password": password,
             },
         )
-        assert result.status_code == 200, result.json
-        assert result.json is not None
-        access_token = result.json.get("access_token")
-        assert access_token is not None, result.json
-        assert isinstance(access_token, str), access_token
-        return access_token
+
+    def _getme(self, access_token: str) -> TestResponse:
+        return self.client.get(
+            "/auth/getme",
+            headers={
+                "Authorization": f"Bearer {access_token}",
+                "Content-Type": "Application/Json",
+            },
+        )
 
     def test_login_success(self) -> None:
         username = "ali"
         password = "12345678"
-        user_id = self.create_user(username=username, password=password)
-        access_token = self.login(username=username, password=password)
-        print(user_id, access_token)
+
+        result = self._sign_up(username=username, password=password)
+        assert result.status_code == 201, result.json
+        assert result.json is not None
+        user_id = result.json.get("id")
+        assert isinstance(user_id, int), user_id
+
+        result = self._login(username=username, password=password)
+        assert result.status_code == 200, result.json
+        assert result.json is not None
+        access_token = result.json.get("access_token")
+        assert isinstance(access_token, str), access_token
+
+        result = self._getme(access_token=access_token)
+        assert result.status_code == 200, result.text
+        assert result.json is not None
+        user_id2 = result.json.get("id")
+        assert user_id2 == user_id, (user_id2, user_id)
+
+        username = result.json.get("username")
+        assert username == username, username

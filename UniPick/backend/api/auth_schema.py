@@ -23,3 +23,8 @@ class UserLoginIn(BaseModel):
 class UserLoginOut(BaseModel):
     access_token: str
     ttl: int
+
+
+class GetMeOut(BaseModel):
+    id: int
+    username: str

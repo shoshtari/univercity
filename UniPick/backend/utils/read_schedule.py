@@ -268,7 +268,7 @@ class ScheduleReader:
         df = df.reset_index(drop=True)
 
         column_mapping = {
-            "زاينمه*/زاين شيپ": "prerequisite/corequisite",
+            "زاينمه*/زاين شيپ": "prerequisite_corequisite",
             "ناحتما خيرات": "exam_date",
             "شيارگ": "major",
             "سﻼك": "class",

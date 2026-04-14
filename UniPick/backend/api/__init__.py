@@ -1,4 +1,4 @@
-from api.auth import login, signup
+from api.auth import getme, login, signup
 from api.healthcheck import liveness
 
-__all__ = ("liveness", "login", "signup")
+__all__ = ("liveness", "login", "signup", "getme")

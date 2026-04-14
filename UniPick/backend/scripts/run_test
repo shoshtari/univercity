@@ -1,0 +1,19 @@
+#!/bin/bash
+# This code check py files and when one of them changes, it rerun th tests
+
+source venv/bin/activate
+TEST=$1
+function calc_md5(){
+	md5=$(cat $(find . -name "*.py" | grep -v venv) | md5sum | awk '{print $1}')
+	echo $md5
+}
+
+while [[ true ]]; do
+	new_md5=$(calc_md5)
+	if [[ $old_md5 != $new_md5 ]]; then
+		clear
+		pytest 
+	fi
+	old_md5=$new_md5
+	sleep 0.1
+done
