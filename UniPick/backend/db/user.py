@@ -15,11 +15,12 @@ from sqlalchemy import (
 
 import common.configs as configs
 from common.errors import InvalidUserPasswordError, UserNotFoundError
-from db.engine import ENGINE, METADATA
+from db.engine import METADATA, get_engine
 
 logger = structlog.getLogger()
 
-DEFAULT_HASH = b"$2b$12$ZkuEY3P4fsEsDmRXbN1LI.zmh0A/Avu6WCHDnCRldr.K3GR6o270O"  # in order to use for avoiding side channel time attack on check password
+# in order to use for avoiding side channel time attack on check password
+DEFAULT_HASH = b"$2b$12$ZkuEY3P4fsEsDmRXbN1LI.zmh0A/Avu6WCHDnCRldr.K3GR6o270O"
 
 user = Table(
     "user",
@@ -45,7 +46,7 @@ class UserRepository:
 
     @staticmethod
     def migrate() -> None:
-        user.create(ENGINE, checkfirst=True)
+        user.create(get_engine(), checkfirst=True)
         logger.info("user table migration done")
 
     @classmethod
@@ -61,7 +62,7 @@ class UserRepository:
             .returning(user.c.id)
         )
 
-        with ENGINE.begin() as conn:
+        with get_engine().begin() as conn:
             result = conn.execute(stmt)
             user_id: int = result.scalar_one()
 
@@ -72,7 +73,7 @@ class UserRepository:
     def check_password(cls, username: str, password: str) -> int:
         stmt = select(user.c.password, user.c.id).where(user.c.username == username)
 
-        with ENGINE.connect() as conn:
+        with get_engine().connect() as conn:
             result = conn.execute(stmt).fetchone()
 
         stored_hash = DEFAULT_HASH
@@ -89,7 +90,7 @@ class UserRepository:
     def get_username_by_id(cls, user_id: int) -> str:
         stmt = select(user.c.username).where(user.c.id == user_id)
 
-        with ENGINE.connect() as conn:
+        with get_engine().connect() as conn:
             result = conn.execute(stmt).fetchone()
 
         if result is None:

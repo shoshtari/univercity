@@ -19,9 +19,8 @@ def test_engine() -> Engine:
 @pytest.fixture(autouse=True)
 def override_engine(monkeypatch: pytest.MonkeyPatch, test_engine: Engine) -> None:
     monkeypatch.setattr("db.engine.ENGINE", test_engine)
-    monkeypatch.setattr("db.course.ENGINE", test_engine)
-    monkeypatch.setattr("db.user.ENGINE", test_engine)
     monkeypatch.setattr("common.configs.JWT_ENCRYPT_KEY", "a" * 32)
+    monkeypatch.setattr("common.configs.BCRYPT_ROUNDS", 4)
     migrate()
 
 

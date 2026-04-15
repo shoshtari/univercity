@@ -1,3 +1,7 @@
+"""
+just a simple test to check there is no syntax error or such
+"""
+
 from flask.testing import FlaskClient
 
 

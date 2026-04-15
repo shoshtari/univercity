@@ -1,0 +1,16 @@
+
+#! /bin/bash
+
+# Running profile
+python -m cProfile -o profile.prof main.py add-pdf ./schedule.pdf
+## to see results
+python -m pstats profile.prof 
+### inside pstat
+sort cumulative
+stats 20
+## or visualize
+snakeviz profile.prof # visualize
+
+# Getting test coverage stats
+pytest --cov=. --cov-report=term-missing
+

@@ -12,13 +12,15 @@ from api.auth_schema import (
     UserSignupIn,
     UserSignupOut,
 )
-from common.errors import InvalidUserPasswordError
+from common.errors import InvalidUserPasswordError, UserNotFoundError
 from db import UserRepository
+from server.middleware import public_endpoint
 from utils.jwt_wrapper import create_token
 
 logger = structlog.getLogger()
 
 
+@public_endpoint
 def signup() -> flask.Response | tuple[flask.Response, int]:
     try:
         payload = UserSignupIn.model_validate(request.get_json())
@@ -49,6 +51,7 @@ def signup() -> flask.Response | tuple[flask.Response, int]:
     return jsonify(response.model_dump()), 201
 
 
+@public_endpoint
 def login() -> flask.Response:
     try:
         payload = UserLoginIn.model_validate(request.get_json())
@@ -74,8 +77,8 @@ def login() -> flask.Response:
         return jsonify(response.model_dump())
 
     except InvalidUserPasswordError:
-        ans = jsonify({"error": "invalid username or password"})
-        ans.status_code = 403
+        ans = jsonify({"error": "invalid_username_or_password"})
+        ans.status_code = 401
         return ans
 
 
@@ -87,7 +90,12 @@ def getme() -> flask.Response:
         )  # since token must be parsed in middleware, it is server error not user error
         ans.status_code = 500
         return ans
-    user_name = UserRepository.get_username_by_id(user_id)
+    try:
+        user_name = UserRepository.get_username_by_id(user_id)
+    except UserNotFoundError:
+        ans = jsonify({"error": "user_not_found"})
+        ans.status_code = 404
+        return ans
     response = GetMeOut(
         id=user_id,
         username=user_name,

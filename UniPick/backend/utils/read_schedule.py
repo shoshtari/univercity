@@ -1,40 +1,21 @@
 import re
-from typing import Optional, Sequence, cast
+from typing import Any, Optional, Sequence, cast
 
+import camelot
 import jdatetime
 import pandas as pd
 import pdfplumber
 import structlog
 from rich.progress import track
 
+import common.configs as configs
+
 logger = structlog.getLogger()
 
 
 class ScheduleReader:
-    @staticmethod
-    def _substitute(text: str, pairs: Sequence[tuple[str, str]]) -> str:
-        """
-        for each pair, it substitue the first element with second in text
-        it is used for simultainous multiple substitutions
-        """
-        substitutes: list[tuple[int, str]] = []
-        for pair in pairs:
-            bef, aft = pair
-            for i in range(text.count(bef)):
-                substitutes.append(
-                    (
-                        text.find(
-                            bef,
-                            substitutes[-1][0] if i > 0 else 0,
-                        ),
-                        aft,
-                    )
-                )
-
-        text_list = list(text)
-        for ind, char in substitutes:
-            text_list[ind] = char
-        return "".join(text_list)
+    IN_PARANTHESIS_REGEX = re.compile(r"\([^)]*\)")
+    TIME_REGEX = re.compile(r"\d+:\d+")
 
     def _reverse_row(self, line: Optional[str]) -> Optional[str]:
         """
@@ -46,12 +27,9 @@ class ScheduleReader:
         parts = line.split()
         parts_out = []
         for part in reversed(parts):
-            if part.isnumeric() or re.match(r"\d+:\d+", part):
-                pass
-
-            else:
+            if not (part.isnumeric() or self.TIME_REGEX.match(part)):
                 part = part[::-1]
-                part = self._substitute(part, (("(", ")"), (")", "(")))
+                part = part.translate(str.maketrans("(){}", ")(}{"))
             parts_out.append(part)
         return " ".join(parts_out)
 
@@ -94,49 +72,53 @@ class ScheduleReader:
             )
             raise
 
-    def _read_metadata(self, page: pdfplumber.page.Page) -> tuple[str, str]:
+    def _read_metadata(self, pdf_path: str) -> tuple[str, str]:
         """
         return semester and update_date
         """
-        title = page.extract_text_simple().split("\n")[0].strip()
-        title_rev = self._reverse_row(title)
-        if title_rev is None:
-            logger.critical("title became none", title=title)
-            raise ValueError("title is none")
-        title = title_rev
-        title = title.replace("ي", "ی")
+        return "S", "S"
+        with pdfplumber.open(pdf_path) as pdf:
+            page = pdf.pages[0]
 
-        results = re.findall(r"\([^)]*\)", title)
-        results = [i.replace("(", "").replace(")", "") for i in results]
-        if len(results) != 2:
-            logger.critical(
-                "expected title to have semester and update date in parantheses",
-                title=title,
-                results_length=len(results),
-            )
-            raise ValueError("missing or malformed metadata")
-        if "نیمسال" not in results[0]:
-            logger.critical(
-                "expected title to have semester and update date in parantheses",
-                title=title,
-                results_length=len(results),
-            )
-            raise ValueError("missing semester metadata")
-        if "به روز رسانی درتاریخ: " not in results[1]:
-            logger.critical(
-                "expected title to have semester and update date in parantheses",
-                title=title,
-                results_length=len(results),
-            )
-            raise ValueError("missing update_date metadata")
+            title = page.extract_text_simple().split("\n")[0].strip()
+            title_rev = self._reverse_row(title)
+            if title_rev is None:
+                logger.critical("title became none", title=title)
+                raise ValueError("title is none")
+            title = title_rev
+            title = title.replace("ي", "ی")
 
-        semester = results[0].replace("نیمسال", "").strip()
-        update_date = results[1].replace("به روز رسانی درتاریخ: ", "").strip()
-        return semester, update_date
+            results = self.IN_PARANTHESIS_REGEX.findall(title)
+            results = [i.replace("(", "").replace(")", "") for i in results]
+            if len(results) != 2:
+                logger.critical(
+                    "expected title to have semester and update date in parantheses",
+                    title=title,
+                    results_length=len(results),
+                )
+                raise ValueError("missing or malformed metadata")
+            if "نیمسال" not in results[0]:
+                logger.critical(
+                    "expected title to have semester and update date in parantheses",
+                    title=title,
+                    results_length=len(results),
+                )
+                raise ValueError("missing semester metadata")
+            if "به روز رسانی درتاریخ: " not in results[1]:
+                logger.critical(
+                    "expected title to have semester and update date in parantheses",
+                    title=title,
+                    results_length=len(results),
+                )
+                raise ValueError("missing update_date metadata")
 
-    def _read_tables(
+            semester = results[0].replace("نیمسال", "").strip()
+            update_date = results[1].replace("به روز رسانی درتاریخ: ", "").strip()
+            return semester, update_date
+
+    def _read_tables_from_page_pdfplumber(
         self, page: pdfplumber.page.Page, logger: structlog.BoundLogger
-    ) -> tuple[list[list[str | None]], list[str | None] | None]:
+    ) -> tuple[list[list[Any]], list[str | None]]:
         """
         return table read rows and headers which could be None
         """
@@ -148,10 +130,10 @@ class ScheduleReader:
         tables = page.extract_tables(table_settings=table_settings)
         if not tables:
             logger.warning("no tables found")
-            return [], None
+            return [], []
 
         data = []
-        header = None
+        header = []
 
         for table_num, table in enumerate(tables):
             if not table:
@@ -180,7 +162,41 @@ class ScheduleReader:
                     logger.critical("Row length mismatch on page", table_num=table_num)
                     raise ValueError("row length mismatch")
             data.extend(table)
+        if not header:
+            logger.critical("cant fill header", data_length=len(data))
+            raise ValueError("cant find header in tables")
         return data, header
+
+    def _read_data_with_pdfplumber(
+        self, pdf_path: str
+    ) -> tuple[list[list[Any]], list[Optional[str]]]:
+
+        all_data = []
+        header: list[str | None] = []
+        with pdfplumber.open(
+            pdf_path
+        ) as pdf:  # we are less optimized for openning pdf twice by pdfplumber but this is cleaner
+            for page_num, page in track(
+                enumerate(pdf.pages, 1),
+                total=len(pdf.pages),
+                description="Processing PDF pages...",
+                transient=True,
+            ):
+                logger.debug(f"Processing page {page_num}...")
+                page_data, header = self._read_tables_from_page_pdfplumber(
+                    page, logger.new(page_num=page_num)
+                )
+                all_data.extend(page_data)
+        return all_data, header
+
+    def _read_data_with_camelot(
+        self, pdf_path: str
+    ) -> tuple[list[list[Any]], list[Optional[str]]]:
+        tables = camelot.read_pdf(pdf_path, pages="1-end", flavor="lattice")  # type: ignore[attr-defined]
+        # remove first three rows (title, header, start-end)
+        df = pd.concat([table.df.iloc[3:] for table in tables], ignore_index=True)
+        header = tables[0].df.iloc[1].tolist()
+        return df.values.tolist(), header
 
     @staticmethod
     def _normalize_occurance_times(df: pd.DataFrame) -> pd.DataFrame:
@@ -226,7 +242,10 @@ class ScheduleReader:
 
     @staticmethod
     def _normalize_header(header: Sequence[Optional[str]]) -> list[str]:
-        header = [col.strip() if col is not None else None for col in header]
+        header = [
+            col.strip() if col else None for col in header
+        ]  # no empty or none header
+        # since pdfplumber return None and camelot return '' this works for both
 
         output: list[str] = []
         for i in range(len(header)):
@@ -271,7 +290,7 @@ class ScheduleReader:
             "زاينمه*/زاين شيپ": "prerequisite_corequisite",
             "ناحتما خيرات": "exam_date",
             "شيارگ": "major",
-            "سﻼك": "class",
+            "سﻼك": "classroom",
             "هﺒنشراهچ شروع": "Wednesday Start",
             "هﺒنشراهچ پایان": "Wednesday End",
             "هﺒنش هس شروع": "Tuesday Start",
@@ -317,30 +336,24 @@ class ScheduleReader:
             pandas DataFrame containing the course schedule
             semester of the schedule
         """
-        all_data = []
-        header = None
 
-        with pdfplumber.open(pdf_path) as pdf:
-            for page_num, page in track(
-                enumerate(pdf.pages, 1),
-                total=len(pdf.pages),
-                description="Processing PDF pages...",
-                transient=True,
-            ):
-                logger.debug(f"Processing page {page_num}...")
-                if page_num == 1:
-                    semester, update_date = self._read_metadata(page)
-                page_data, header = self._read_tables(
-                    page, logger.new(page_num=page_num)
-                )
-                all_data.extend(page_data)
-        if not all_data:
+        semester, update_date = self._read_metadata(pdf_path)
+
+        match configs.PDF_ENGINE:
+            case "pdfplumber":
+                data, header = self._read_data_with_pdfplumber(pdf_path=pdf_path)
+            case "camelot":
+                data, header = self._read_data_with_camelot(pdf_path=pdf_path)
+            case _:
+                raise ValueError(f"unknown pdf engine {configs.PDF_ENGINE}")
+        if not data:
             raise ValueError("No data found in the PDF")
 
         if header is None:
             raise ValueError("No header found in the PDF")
+
         normalized_header = self._normalize_header(header)
-        df = pd.DataFrame(all_data, columns=normalized_header)
+        df = pd.DataFrame(data, columns=normalized_header)
         df = self._normalize_dataframe(
             df=df, semester=semester, update_date=update_date, header=normalized_header
         )
