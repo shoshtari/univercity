@@ -29,6 +29,6 @@ class Course:
     code: str
     instructor: str
     group: str
-    course_times: list[CourseTime]
+    courseTimes: list[CourseTime]
     units: int
     exam_date: str

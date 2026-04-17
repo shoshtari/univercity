@@ -10,7 +10,7 @@ import {
 
 import { useMemo, useState } from "react";
 
-function CourseSelector({ courses, selectedCourses, onSelect }) {
+function CourseSelector({ courses, selectedCourses,setPendingCourse, onSelect }) {
   const [query, setQuery] = useState("");
 
   const filtered = useMemo(() => {
@@ -32,33 +32,49 @@ function CourseSelector({ courses, selectedCourses, onSelect }) {
       }}
     >
       <CardContent sx={{ flex: 1, minHeight: 0, overflow: "auto" }}>
-        <Typography variant="h6" gutterBottom>
-          Courses
+        <Typography variant="h6" gutterBottom align="right">
+          دروس
         </Typography>
 
         <TextField
           fullWidth
-          placeholder="Search course..."
+          placeholder="جستجو در میان دروس..."
+          align="right"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          sx={{ mb: 2 }}
+          sx={{
+            mb: 2,
+            "& input": {
+              textAlign: "right",
+              direction: "rtl",
+            },
+          }}
         />
 
         <List>
           {filtered.map((course) => {
-            const color = selectedCourses.some((i) => i.code === course.code)
+            const color = selectedCourses.some((i) => i.id === course.id)
               ? "action.selected"
               : "transparent";
 
+            let secondRow = "";
+            if (course.instructor != null) {
+              secondRow += course.instructor + " - ";
+            }
+            secondRow += "گروه " + course.group;
+
             return (
               <ListItemButton
-                key={course.code}
+                key={course.id}
                 onClick={() => onSelect(course)}
+				onMouseEnter={() => (setPendingCourse(course))}
+				onMouseLeave={() => (setPendingCourse(null))}
                 sx={{ backgroundColor: color }}
               >
                 <ListItemText
-                  primary={`${course.code} – ${course.name}`}
-                  secondary={course.days.join(", ") + " @ " + course.startHour}
+                  align="right"
+                  primary={`${course.name} - ${course.code}`}
+                  secondary={`${secondRow}`}
                 />
               </ListItemButton>
             );

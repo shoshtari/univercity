@@ -3,55 +3,75 @@ import { useEffect, useState } from "react";
 import getCourses from "./api/courses";
 import CourseSelector from "./components/CourseSelector";
 import DashboardLayout from "./components/DashboardLayout";
+import { useSnackbar } from "notistack";
 import Login from "./components/Login";
 import SchedulePanel from "./components/SchedulePanel";
 import TopBar from "./components/TopBar";
+import { useAuth } from "./hooks/useAuth";
+import { useSchedule } from "./hooks/useSchedule";
 
 function App({ darkMode, setDarkMode }) {
-  const [selectedCourses, setSelectedCourses] = useState([]);
-
-  const [user, setUser] = useState(() => {
-    const saved = localStorage.getItem("user");
-    return saved ? JSON.parse(saved) : null;
-  });
-
-  useEffect(() => {
-    localStorage.setItem("user", JSON.stringify(user));
-  }, [user]);
+  const auth = useAuth();
+	const schedule = useSchedule();
+  const { enqueueSnackbar } = useSnackbar();
 
   const [courses, setCourses] = useState([]);
+
   useEffect(() => {
+    if (!auth.isAuthenticated) {
+      return;
+    }
     let cancelled = false;
 
     (async () => {
-      const data = await getCourses();
+      const data = await getCourses(auth.accessKey);
+      if (!data.ok) {
+        enqueueSnackbar("Failed to fetch courses: " + data.error.message, {
+          variant: "error",
+        });
+        return;
+      }
       if (!cancelled) {
-        setCourses(data);
+        setCourses(data.data);
       }
     })();
 
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [enqueueSnackbar, auth.isAuthenticated]);
 
-  function toggleCourse(course) {
-    setSelectedCourses((prev) =>
-      prev.some((i) => i.code === course.code)
-        ? prev.filter((c) => c.code !== course.code)
-        : [...prev, course],
-    );
+  async function doLogin(username, password) {
+    const result = await auth.login(username, password);
+    if (result.ok) {
+      enqueueSnackbar("Login successful!", { variant: "success" });
+    } else {
+      enqueueSnackbar("Login failed: " + result.error.message, {
+        variant: "error",
+      });
+    }
   }
 
-  if (!user) {
+
+  if (!auth.isAuthenticated) {
     return (
-      <Login onLogin={setUser} darkMode={darkMode} setDarkMode={setDarkMode} />
+      <Login
+        doLogin={doLogin}
+        darkMode={darkMode}
+        setDarkMode={setDarkMode}
+        enqueueSnackbar={enqueueSnackbar}
+      />
     );
   }
 
   return (
     <Box sx={{ height: "100vh", display: "flex", flexDirection: "column" }}>
-      <TopBar user={user} darkMode={darkMode} setDarkMode={setDarkMode} />
+      <TopBar
+        user={auth.user}
+        darkMode={darkMode}
+        setDarkMode={setDarkMode}
+        doLogout={auth.logout}
+      />
 
       <Box
         sx={{
@@ -61,14 +81,21 @@ function App({ darkMode, setDarkMode }) {
         }}
       >
         <DashboardLayout
-          left={
+          right={
             <CourseSelector
               courses={courses}
-              onSelect={toggleCourse}
-              selectedCourses={selectedCourses}
+              onSelect={schedule.toggleCourse}
+              selectedCourses={schedule.selectedCourses}
+              setPendingCourse={schedule.setPendingCourse}
             />
           }
-          right={<SchedulePanel courses={selectedCourses} />}
+          left={
+            <SchedulePanel
+              courses={schedule.selectedCourses}
+              pendingCourse={schedule.pendingCourse}
+              toggleCourse={schedule.toggleCourse}
+            />
+          }
         />
       </Box>
     </Box>

@@ -1,12 +1,16 @@
 from typing import Callable, ParamSpec, TypeVar
+import common.configs as configs
 
 import jwt
+import structlog
 from flask import Flask, Response, g, jsonify, request
 
 from utils.jwt_wrapper import parse_token
 
 P = ParamSpec("P")
 R = TypeVar("R")
+
+logger = structlog.getLogger()
 
 
 def public_endpoint(func: Callable[P, R]) -> Callable[P, R]:
@@ -29,6 +33,8 @@ def register_middlewares(app: Flask) -> None:
         view_func = app.view_functions.get(endpoint)
         if view_func and getattr(view_func, "_is_public", False):
             return None
+        if request.method == "OPTIONS":
+            return None
 
         auth = request.headers.get("Authorization")
         if not auth or not auth.startswith("Bearer "):
@@ -45,5 +51,14 @@ def register_middlewares(app: Flask) -> None:
 
         g.user_id = user_id
         return None
+
+    @app.after_request
+    def handle_cors(response: Response) -> Response:
+        response.headers.add("access-control-allow-origin", configs.CORS_ORIGIN)
+        response.headers.add("access-control-allow-credentials", "true")
+        response.headers.add(
+            "access-control-allow-headers", "authorization,content-type"
+        )
+        return response
 
     return None

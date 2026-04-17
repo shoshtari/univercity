@@ -1,7 +1,7 @@
 import re
+import time
 from typing import Any, Optional, Sequence, cast
 
-import camelot
 import jdatetime
 import pandas as pd
 import pdfplumber
@@ -13,6 +13,26 @@ import common.configs as configs
 logger = structlog.getLogger()
 
 
+def is_ltr(text: str) -> bool:
+    if text.isnumeric():
+        return True
+
+    if text[0] == "(" and text[-1] == ")":
+        text = text[1: len(text) - 1]
+
+    return all(
+        [
+            (
+                ord("a") <= ord(i) <= ord("z")
+                or ord("A") <= ord(i) <= ord("Z")
+                or ord("0") <= ord(i) <= ord("9")
+                or i in ("!@#$%^&*")
+            )
+            for i in text
+        ]
+    )
+
+
 class ScheduleReader:
     IN_PARANTHESIS_REGEX = re.compile(r"\([^)]*\)")
     TIME_REGEX = re.compile(r"\d+:\d+")
@@ -21,13 +41,38 @@ class ScheduleReader:
         """
         since we read pdf from left to right but its text is rtl, we need to reverse it except numbers and special symbols
         """
-        if not line:
+        if not line or not isinstance(line, str) or self.TIME_REGEX.match(line):
+
             return line
+
+        # handle empty () in some lines (add paranthesis to line before)
+        line_parts = line.split("\n")
+        if "( )" in line_parts and line_parts.index("( )") > 0:
+            ind = line_parts.index("( )") - 1
+            line_parts[ind] = f"({line_parts[ind]})"
+            line_parts.pop(ind + 1)
+            line = "\n".join(line_parts)
+
+        # handle mixed parts (ltr follow rtl without space
+        tmp = ""
+        for i in range(len(line) - 1):
+            tmp += line[i]
+            if not line[i].strip() or not line[i + 1].strip():
+                continue
+            is_ltr1 = is_ltr(line[i].strip())
+            is_ltr2 = is_ltr(line[i + 1].strip())
+            if is_ltr1 != is_ltr2:
+                tmp += " "
+        tmp += line[-1]
+        line = tmp.strip()
+
+        # reverse lines since it has been read reversed (at least by pdfplumber)
+        line = " ".join(line.split("\n")[::-1])
 
         parts = line.split()
         parts_out = []
         for part in reversed(parts):
-            if not (part.isnumeric() or self.TIME_REGEX.match(part)):
+            if not (is_ltr(part) or self.TIME_REGEX.match(part)):
                 part = part[::-1]
                 part = part.translate(str.maketrans("(){}", ")(}{"))
             parts_out.append(part)
@@ -35,18 +80,24 @@ class ScheduleReader:
 
     @staticmethod
     def _parse_exam_date(date_str: str) -> Optional[str]:
-        if not date_str or date_str == "امتحان كتﺒي ندارد":
+        if (
+            not date_str
+            or date_str == "امتحان کتبی ندارد"
+            or not isinstance(date_str, str)
+        ):
             return None
 
         parsed_date = date_str.replace("ﺻﺒﺢ", "")
+        parsed_date = parsed_date.replace("ﺻبﺢ", "")
         parsed_date = parsed_date.replace("ﻋﺼر", "")
         parsed_date = parsed_date.replace("عصر", "")
+        parsed_date = parsed_date.replace("ﻋصر", "")
         parsed_date = parsed_date.strip()
         month_map = {
             "فروردين": "01",
             "ارديبهشت": "02",
             "خرداد": "03",
-            "تير": "04",
+            "تیر": "04",
             "مرداد": "05",
             "شهريور": "06",
             "مهر": "07",
@@ -62,7 +113,8 @@ class ScheduleReader:
                 break
 
         try:
-            parsed_date = jdatetime.datetime.strptime(parsed_date, "%d %m %Y").date()
+            parsed_date = jdatetime.datetime.strptime(
+                parsed_date, "%d %m %Y").date()
             return cast(str, parsed_date.isoformat())
         except ValueError:
             logger.critical(
@@ -76,11 +128,10 @@ class ScheduleReader:
         """
         return semester and update_date
         """
-        return "S", "S"
         with pdfplumber.open(pdf_path) as pdf:
             page = pdf.pages[0]
 
-            title = page.extract_text_simple().split("\n")[0].strip()
+            title = page.extract_text().split("\n")[0].strip()
             title_rev = self._reverse_row(title)
             if title_rev is None:
                 logger.critical("title became none", title=title)
@@ -113,7 +164,8 @@ class ScheduleReader:
                 raise ValueError("missing update_date metadata")
 
             semester = results[0].replace("نیمسال", "").strip()
-            update_date = results[1].replace("به روز رسانی درتاریخ: ", "").strip()
+            update_date = results[1].replace(
+                "به روز رسانی درتاریخ: ", "").strip()
             return semester, update_date
 
     def _read_tables_from_page_pdfplumber(
@@ -139,9 +191,11 @@ class ScheduleReader:
             if not table:
                 continue
 
-            logger.debug("found table", table_num=table_num, table_length=len(table))
+            logger.debug("found table", table_num=table_num,
+                         table_length=len(table))
             if len(table) <= 2:
-                logger.critical("table counts are too low", table_count=len(table))
+                logger.critical("table counts are too low",
+                                table_count=len(table))
                 raise ValueError("table counts are too low")
 
             if table_num == 0:
@@ -159,7 +213,8 @@ class ScheduleReader:
             table = table[3:]  # title, header, start - end
             for row in table:
                 if len(row) != len(header):
-                    logger.critical("Row length mismatch on page", table_num=table_num)
+                    logger.critical(
+                        "Row length mismatch on page", table_num=table_num)
                     raise ValueError("row length mismatch")
             data.extend(table)
         if not header:
@@ -192,9 +247,15 @@ class ScheduleReader:
     def _read_data_with_camelot(
         self, pdf_path: str
     ) -> tuple[list[list[Any]], list[Optional[str]]]:
-        tables = camelot.read_pdf(pdf_path, pages="1-end", flavor="lattice")  # type: ignore[attr-defined]
+
+        import camelot
+        tables = camelot.read_pdf(  # type: ignore[attr-defined]
+            pdf_path, pages="1-end", flavor="lattice", parallel=True
+        )
+
         # remove first three rows (title, header, start-end)
-        df = pd.concat([table.df.iloc[3:] for table in tables], ignore_index=True)
+        df = pd.concat([table.df.iloc[3:]
+                       for table in tables], ignore_index=True)
         header = tables[0].df.iloc[1].tolist()
         return df.values.tolist(), header
 
@@ -222,7 +283,9 @@ class ScheduleReader:
                 start_time = row[weekday + start_suffix]
                 end_time = row[weekday + end_suffix]
 
-                if not start_time and not end_time:
+                if (not start_time or not isinstance(start_time, str)) and (
+                    not end_time or not isinstance(end_time, str)
+                ):
                     continue
 
                 ans.append(
@@ -254,7 +317,8 @@ class ScheduleReader:
                 output.append(val)
             else:
                 if i == 0 or not output:
-                    logger.critical("got empty header at first col", header=header)
+                    logger.critical(
+                        "got empty header at first col", header=header)
                     raise ValueError("empty header at start")
 
                 before = output[i - 1]
@@ -283,6 +347,8 @@ class ScheduleReader:
         header: list[str],
     ) -> pd.DataFrame:
 
+        # df = df[df.apply(lambda row: not all(x == '' for x in row), axis=1)]
+        df = df.replace("", None)
         df = df.dropna(how="all")  # Remove completely empty rows
         df = df.reset_index(drop=True)
 
@@ -312,13 +378,34 @@ class ScheduleReader:
         try:
             headers_eng = [column_mapping[col] for col in header]
         except KeyError as e:
-            logger.critical("unknown column in header", column=str(e), header=header)
+            logger.critical("unknown column in header",
+                            column=str(e), header=header)
             raise
 
         headers_eng.reverse()
         df = df[headers_eng]  # Reorder
         for col in df.columns:
             df[col] = df[col].apply(self._reverse_row)
+            df[col] = df[col].apply(
+                lambda val: val.replace(
+                    "ي", "ی") if isinstance(val, str) else val
+            )
+            df[col] = df[col].apply(
+                lambda val: val.replace(
+                    "ﺒ", "ب") if isinstance(val, str) else val
+            )
+            df[col] = df[col].apply(
+                lambda val: val.replace(
+                    "ﺼ", "ص") if isinstance(val, str) else val
+            )
+            df[col] = df[col].apply(
+                lambda val: val.replace(
+                    "ﻋ", "ع") if isinstance(val, str) else val
+            )
+            df[col] = df[col].apply(
+                lambda val: val.replace(
+                    "ك", "ک") if isinstance(val, str) else val
+            )
         df = self._normalize_occurance_times(df)
         df["exam_date"] = df["exam_date"].apply(self._parse_exam_date)
         df["semester"] = semester
@@ -339,13 +426,16 @@ class ScheduleReader:
 
         semester, update_date = self._read_metadata(pdf_path)
 
+        start = time.time()
         match configs.PDF_ENGINE:
             case "pdfplumber":
-                data, header = self._read_data_with_pdfplumber(pdf_path=pdf_path)
+                data, header = self._read_data_with_pdfplumber(
+                    pdf_path=pdf_path)
             case "camelot":
                 data, header = self._read_data_with_camelot(pdf_path=pdf_path)
             case _:
                 raise ValueError(f"unknown pdf engine {configs.PDF_ENGINE}")
+        logger.debug("pdf_parsing_time", duration=time.time() - start)
         if not data:
             raise ValueError("No data found in the PDF")
 

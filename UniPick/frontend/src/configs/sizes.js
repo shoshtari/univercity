@@ -1,8 +1,11 @@
-export const DashboardLeftWidth = "20%";
-export const DashboardRightWidth = "80%";
+export const DashboardLeftWidth = "75%";
+export const DashboardRightWidth = "25%";
 
-export const ScheduleTableFirstColWidth = 80;
-export const ScheduleTableOtherColWidth = 60;
-export const ScheduleTableRowHeight = "75px";
 
 export const LoginCardWidth = 380;
+
+export const ScheduleCellMarginX = 0.2;
+
+export const ScheduleTableHeaderColumnWidth = "80px";
+export const ScheduleTableHeaderRowHeight = "40px";
+export const ScheduleTableRowHeight = "100px";

@@ -1,6 +1,35 @@
-const BASE_URL = import.meta.env.VITE_API_URL ?? "http://localhost:3000";
+import { BASE_URL } from "../configs/api";
 
-async function request(path, options = {}) {
+class ApiError extends Error {
+  constructor(status, message, details) {
+    super(message);
+    this.status = status;
+    this.details = details;
+  }
+}
+
+class ApiResult {
+  constructor({ok, data = null, error = null}) {
+    this.ok = ok;
+    this.data = data;
+    this.error = error;
+    if (this.ok && this.error !== null) {
+      throw new Error("ok result cannot have error");
+    }
+    if (!this.ok && this.error === null) {
+      throw new Error("error result must have error");
+    }
+  }
+}
+export function ApiResultOk(data) {
+  return new ApiResult({ ok: true, data, error: null });
+}
+
+export function ApiResultErr(error) {
+  return new ApiResult({ ok: false, data: null, error });
+}
+
+export async function request(path, options = {}) {
   const response = await fetch(`${BASE_URL}${path}`, {
     credentials: "include",
     headers: {
@@ -11,14 +40,9 @@ async function request(path, options = {}) {
   });
 
   if (!response.ok) {
-    const error = await response.json().catch(() => ({}));
-    throw {
-      status: response.status,
-      message: error.message || "Request failed",
-    };
+    const body = await response.json().catch(() => ({}));
+    throw new ApiError(response.status, body.error, body.details);
   }
 
   return response.json();
 }
-
-export default request;

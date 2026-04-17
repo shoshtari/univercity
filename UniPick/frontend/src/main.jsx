@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 
 import CssBaseline from "@mui/material/CssBaseline";
+	  import { SnackbarProvider } from "notistack";
 import { ThemeProvider } from "@mui/material/styles";
 import { darkTheme, lightTheme } from "./theme";
 
@@ -20,7 +21,9 @@ function Root() {
   return (
     <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
       <CssBaseline />
+	<SnackbarProvider maxSnack={3} anchorOrigin={{ vertical: "top", horizontal: "center" }}>
       <App darkMode={darkMode} setDarkMode={setDarkMode} />
+	  </SnackbarProvider>
     </ThemeProvider>
   );
 }

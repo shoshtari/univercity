@@ -1,4 +1,6 @@
 import datetime
+from cachetools import cached, TTLCache
+
 import json
 
 import pandas as pd
@@ -30,13 +32,13 @@ course = Table(
     Column("name", String(255), nullable=False),
     Column("code", String(255), nullable=False),
     Column("group", String(255), nullable=False),
-    Column("instructor", String(255), nullable=False),
-    Column("classroom", String(255), nullable=False),
-    Column("major", String(255), nullable=False),
+    Column("instructor", String(255), nullable=True),
+    Column("classroom", String(255), nullable=True),
+    Column("major", String(255), nullable=True),
     Column("exam_date", String(255), nullable=True),
     Column("course_times", JSON, nullable=False),
     Column("units", Integer, nullable=False),
-    Column("prerequisite_corequisite", String(255), nullable=False),
+    Column("prerequisite_corequisite", String(255), nullable=True),
     Column("visible", Boolean, default=True),
     Column(
         "created_at",
@@ -107,6 +109,7 @@ class CourseRepository:
         logger.warning("table flushed", rows=result.rowcount)
 
     @staticmethod
+    @cached(TTLCache(maxsize=1, ttl=1)) # since we want to make sure that the cache is synced with the database, we set the ttl to 1 second
     def get_visible_courses() -> list[dto.Course]:
         stmt = select(
             course.c.id,
@@ -126,7 +129,7 @@ class CourseRepository:
                     id=row[0],
                     name=row[1],
                     code=row[2],
-                    course_times=dto.CourseTime.parse_json(row[3]),
+                    courseTimes=dto.CourseTime.parse_json(row[3]),
                     group=row[4],
                     instructor=row[5],
                     units=row[6],

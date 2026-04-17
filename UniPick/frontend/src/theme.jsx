@@ -1,6 +1,18 @@
 import { createTheme } from "@mui/material/styles";
 
 const baseTheme = {
+  typography: {
+    fontFamily: [
+      "Vazirmatn",
+      "-apple-system",
+      "BlinkMacSystemFont",
+      "Segoe UI",
+      "Roboto",
+      "Helvetica",
+      "Arial",
+      "sans-serif",
+    ].join(","),
+  },
   shape: {
     borderRadius: 8,
   },
@@ -12,7 +24,6 @@ const baseTheme = {
         },
       },
     },
-
     MuiPaper: {
       styleOverrides: {
         root: {
@@ -20,28 +31,10 @@ const baseTheme = {
         },
       },
     },
-
     MuiButton: {
       styleOverrides: {
         root: {
-          textTransform: "none",
           transition: "background-color 0.3s ease, color 0.3s ease",
-        },
-      },
-    },
-
-    MuiTableRow: {
-      styleOverrides: {
-        root: {
-          transition: "background-color 0.2s ease",
-        },
-      },
-    },
-
-    MuiListItemButton: {
-      styleOverrides: {
-        root: {
-          transition: "background-color 0.2s ease",
         },
       },
     },
@@ -55,6 +48,9 @@ export const lightTheme = createTheme({
 
     primary: {
       main: "#1976d2",
+    },
+    secondary: {
+      main: "rgb(222, 214, 255)",
     },
 
     background: {
@@ -85,6 +81,9 @@ export const darkTheme = createTheme({
 
     primary: {
       main: "#90caf9",
+    },
+    secondary: {
+      main: "rgb(81, 96, 120)",
     },
 
     background: {

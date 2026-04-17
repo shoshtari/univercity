@@ -1,30 +1,68 @@
+import { MOCK_APIS } from "../configs/api";
+import {request} from "./client";
+import {ApiResultOk, ApiResultErr } from "./result";
+
 const MOCK_COURSES = [
   {
+    id: "1",
     name: "Algorithms",
     code: "CS301",
-    days: ["Mon", "Wed"],
-    startHour: 10,
-    endHour: 11.5,
+    instructor: "Dr. Ahmad",
+    group: "01",
+    courseTimes: [
+      { weekday: "Tuesday", start: "10:00:00", end: "11:30:00" },
+      { weekday: "Thursday", start: "10:00:00", end: "11:30:00" },
+    ],
+    units: 1,
+    examData: "1405-04-14",
   },
   {
+    id: "2",
     name: "Databases",
-    code: "CS305",
-    days: ["Tue", "Thu"],
-    startHour: 9,
-    endHour: 10.5,
+    code: "CS401",
+    instructor: "Dr. Reza",
+    group: "01",
+    courseTimes: [
+      { weekday: "Monday", start: "09:00:00", end: "10:30:00" },
+      { weekday: "Wednesday", start: "09:00:00", end: "10:30:00" },
+    ],
+    units: 2,
+    examData: "1405-04-14",
   },
   {
+    id: "3",
     name: "Operating Systems",
-    code: "CS401",
-    days: ["Mon", "Wed"],
-    startHour: 11,
-    endHour: 12.5,
+    code: "CS501",
+    instructor: "Dr. Ali",
+    group: "01",
+    courseTimes: [
+      { weekday: "Monday", start: "11:00:00", end: "12:30:00" },
+      { weekday: "Wednesday", start: "11:00:00", end: "12:30:00" },
+    ],
+    units: 1,
+    examData: "1405-04-14",
   },
 ];
-async function getCourses() {
-  await new Promise((r) => setTimeout(r, 300));
-  return MOCK_COURSES.map((c) => {
-    return c;
-  }); // TODO: this is mocked, implement the api call
+async function getCourses(accessToken) {
+  if (MOCK_APIS) {
+    await new Promise((r) => setTimeout(r, 300));
+    const courses = MOCK_COURSES.map((c) => {
+      return c;
+    });
+    return new ApiResultOk(courses);
+  }
+
+  try {
+    const result = await request("/courses", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    return new ApiResultOk(result.courses);
+  } catch (err) {
+    return new ApiResultErr(err);
+  }
 }
 export default getCourses;
