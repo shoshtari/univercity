@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import { getOpacity, getLeftAndWidth} from "./helpers";
+import { getOpacity, getLeftAndWidth } from "./helpers";
 
 function ScheduleTableCell({ course, toggleCourse, start, end, state }) {
   const { left, width } = getLeftAndWidth(start, end);
@@ -8,7 +8,7 @@ function ScheduleTableCell({ course, toggleCourse, start, end, state }) {
   return (
     <Box
       onClick={() => {
-        toggleCourse(course);
+          toggleCourse(course);
       }}
       sx={{
         position: "absolute",

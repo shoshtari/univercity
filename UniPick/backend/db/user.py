@@ -44,11 +44,6 @@ user = Table(
 
 class UserRepository:
 
-    @staticmethod
-    def migrate() -> None:
-        user.create(get_engine(), checkfirst=True)
-        logger.info("user table migration done")
-
     @classmethod
     def create(cls, username: str, password: str) -> int:
         hashed_password = bcrypt.hashpw(

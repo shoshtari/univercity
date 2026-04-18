@@ -16,8 +16,8 @@ class UserSignupOut(BaseModel):
 
 
 class UserLoginIn(BaseModel):
-    username: str
-    password: str
+    username: str = Field(min_length=3, max_length=255)
+    password: str = Field(min_length=8, max_length=128)
 
 
 class UserLoginOut(BaseModel):

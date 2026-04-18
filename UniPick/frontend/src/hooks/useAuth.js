@@ -9,7 +9,6 @@ export function useAuth() {
   });
 
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (accessKey) {
@@ -26,7 +25,6 @@ export function useAuth() {
     }
 
     let cancelled = false;
-    setLoading(true);
 
     (async () => {
       const result = await getMe(accessKey);
@@ -39,7 +37,6 @@ export function useAuth() {
         setUser(result.data.username);
       }
 
-      setLoading(false);
     })();
 
     return () => {
@@ -48,7 +45,6 @@ export function useAuth() {
   }, [accessKey]);
 
   const login = useCallback(async (username, password) => {
-    setLoading(true);
 
     const result = await apiLogin(username, password);
 
@@ -56,7 +52,6 @@ export function useAuth() {
       setAccessKey(result.data.access_token);
     }
 
-    setLoading(false);
     return result;
   }, []);
 
@@ -68,7 +63,6 @@ export function useAuth() {
   return {
     user,
     accessKey,
-    loading,
     login,
     logout,
     isAuthenticated: Boolean(user),

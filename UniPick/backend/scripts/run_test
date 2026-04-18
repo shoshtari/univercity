@@ -12,7 +12,7 @@ while [[ true ]]; do
 	new_md5=$(calc_md5)
 	if [[ $old_md5 != $new_md5 ]]; then
 		clear
-		pytest 
+		pytest -vv --sw
 	fi
 	old_md5=$new_md5
 	sleep 0.1

@@ -38,6 +38,7 @@ def create_and_run_app() -> None:
         case "waitress":
 
             from waitress import serve
+
             serve(
                 app,
                 host=configs.WEBSERVER_HOST,

@@ -48,7 +48,7 @@ def signup() -> flask.Response | tuple[flask.Response, int]:
         username=payload.username,
     )
 
-    return jsonify(response.model_dump()), 201
+    return flask.Response(response=response.model_dump_json(), status=201, content_type="application/json")
 
 
 @public_endpoint
@@ -74,7 +74,7 @@ def login() -> flask.Response:
             access_token=create_token(user_id=user_id, ttl=configs.JWT_TTL),
             ttl=configs.JWT_TTL,
         )
-        return jsonify(response.model_dump())
+        return flask.Response(response=response.model_dump_json(), status=200, content_type="application/json")
 
     except InvalidUserPasswordError:
         ans = jsonify({"error": "invalid_username_or_password"})
@@ -100,4 +100,4 @@ def getme() -> flask.Response:
         id=user_id,
         username=user_name,
     )
-    return jsonify(response.model_dump())
+    return flask.Response(response=response.model_dump_json(), status=200, content_type="application/json")

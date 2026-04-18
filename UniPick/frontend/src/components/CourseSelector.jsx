@@ -21,6 +21,7 @@ function CourseSelector({ courses, selectedCourses,setPendingCourse, onSelect })
     );
   }, [courses, query]);
 
+
   return (
     <Card
       sx={{

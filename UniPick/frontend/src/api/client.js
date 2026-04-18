@@ -8,28 +8,7 @@ class ApiError extends Error {
   }
 }
 
-class ApiResult {
-  constructor({ok, data = null, error = null}) {
-    this.ok = ok;
-    this.data = data;
-    this.error = error;
-    if (this.ok && this.error !== null) {
-      throw new Error("ok result cannot have error");
-    }
-    if (!this.ok && this.error === null) {
-      throw new Error("error result must have error");
-    }
-  }
-}
-export function ApiResultOk(data) {
-  return new ApiResult({ ok: true, data, error: null });
-}
-
-export function ApiResultErr(error) {
-  return new ApiResult({ ok: false, data: null, error });
-}
-
-export async function request(path, options = {}) {
+export async function request({ path, options = {}, parse_response = true }) {
   const response = await fetch(`${BASE_URL}${path}`, {
     credentials: "include",
     headers: {
@@ -44,5 +23,9 @@ export async function request(path, options = {}) {
     throw new ApiError(response.status, body.error, body.details);
   }
 
-  return response.json();
+  if (parse_response) {
+    return response.json();
+  } else {
+    return response;
+  }
 }

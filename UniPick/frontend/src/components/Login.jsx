@@ -16,6 +16,7 @@ function Login({ doLogin, darkMode, setDarkMode, enqueueSnackbar }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
+
   async function handleSubmit(e) {
     e.preventDefault();
     if (!username.trim() || !password) {
@@ -60,7 +61,7 @@ function Login({ doLogin, darkMode, setDarkMode, enqueueSnackbar }) {
     >
       <Card sx={{ width: LoginCardWidth }}>
         <CardContent>
-          <Box display="flex" justifycontent="space-between">
+          <Box display="flex" justifyContent="space-between">
             <Typography variant="h5">UniPick</Typography>
             <ThemeIcon darkMode={darkMode} setDarkMode={setDarkMode} />
           </Box>

@@ -59,7 +59,6 @@ function ScheduleTable({ courses, pendingCourse, toggleCourse }) {
         <DayRow
           key={day}
           day={day}
-          rowIndex={rowIndex}
           courses={dayCourses[DAY_MAP[day]] || []}
           pendingCourse={pendingCourse}
           toggleCourse={toggleCourse}
@@ -83,7 +82,7 @@ function DayRow({ day, courses, pendingCourse, toggleCourse }) {
         {courses.map((i) => {
           return (
             <ScheduleTableCell
-              key={`${i.course.id}}`}
+              key={`${i.course.id}`}
               course={i.course}
               toggleCourse={toggleCourse}
               start={i.start}
@@ -97,7 +96,7 @@ function DayRow({ day, courses, pendingCourse, toggleCourse }) {
           .map((time, idx) => {
             const start = timeToHour(time.start);
             const end = timeToHour(time.end);
-            if (courses.some((c) => c.id === pendingCourse.id)) return null; // don't show pending course if it's already selected
+            if (courses.some((c) => c.course.id === pendingCourse.id)) return null; // don't show pending course if it's already selected
 
             return (
               <ScheduleTableCell

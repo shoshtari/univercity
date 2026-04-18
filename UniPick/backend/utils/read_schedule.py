@@ -18,7 +18,7 @@ def is_ltr(text: str) -> bool:
         return True
 
     if text[0] == "(" and text[-1] == ")":
-        text = text[1: len(text) - 1]
+        text = text[1 : len(text) - 1]
 
     return all(
         [
@@ -113,8 +113,7 @@ class ScheduleReader:
                 break
 
         try:
-            parsed_date = jdatetime.datetime.strptime(
-                parsed_date, "%d %m %Y").date()
+            parsed_date = jdatetime.datetime.strptime(parsed_date, "%d %m %Y").date()
             return cast(str, parsed_date.isoformat())
         except ValueError:
             logger.critical(
@@ -164,8 +163,7 @@ class ScheduleReader:
                 raise ValueError("missing update_date metadata")
 
             semester = results[0].replace("نیمسال", "").strip()
-            update_date = results[1].replace(
-                "به روز رسانی درتاریخ: ", "").strip()
+            update_date = results[1].replace("به روز رسانی درتاریخ: ", "").strip()
             return semester, update_date
 
     def _read_tables_from_page_pdfplumber(
@@ -191,11 +189,9 @@ class ScheduleReader:
             if not table:
                 continue
 
-            logger.debug("found table", table_num=table_num,
-                         table_length=len(table))
+            logger.debug("found table", table_num=table_num, table_length=len(table))
             if len(table) <= 2:
-                logger.critical("table counts are too low",
-                                table_count=len(table))
+                logger.critical("table counts are too low", table_count=len(table))
                 raise ValueError("table counts are too low")
 
             if table_num == 0:
@@ -213,8 +209,7 @@ class ScheduleReader:
             table = table[3:]  # title, header, start - end
             for row in table:
                 if len(row) != len(header):
-                    logger.critical(
-                        "Row length mismatch on page", table_num=table_num)
+                    logger.critical("Row length mismatch on page", table_num=table_num)
                     raise ValueError("row length mismatch")
             data.extend(table)
         if not header:
@@ -249,13 +244,13 @@ class ScheduleReader:
     ) -> tuple[list[list[Any]], list[Optional[str]]]:
 
         import camelot
+
         tables = camelot.read_pdf(  # type: ignore[attr-defined]
             pdf_path, pages="1-end", flavor="lattice", parallel=True
         )
 
         # remove first three rows (title, header, start-end)
-        df = pd.concat([table.df.iloc[3:]
-                       for table in tables], ignore_index=True)
+        df = pd.concat([table.df.iloc[3:] for table in tables], ignore_index=True)
         header = tables[0].df.iloc[1].tolist()
         return df.values.tolist(), header
 
@@ -317,8 +312,7 @@ class ScheduleReader:
                 output.append(val)
             else:
                 if i == 0 or not output:
-                    logger.critical(
-                        "got empty header at first col", header=header)
+                    logger.critical("got empty header at first col", header=header)
                     raise ValueError("empty header at start")
 
                 before = output[i - 1]
@@ -378,8 +372,7 @@ class ScheduleReader:
         try:
             headers_eng = [column_mapping[col] for col in header]
         except KeyError as e:
-            logger.critical("unknown column in header",
-                            column=str(e), header=header)
+            logger.critical("unknown column in header", column=str(e), header=header)
             raise
 
         headers_eng.reverse()
@@ -387,24 +380,19 @@ class ScheduleReader:
         for col in df.columns:
             df[col] = df[col].apply(self._reverse_row)
             df[col] = df[col].apply(
-                lambda val: val.replace(
-                    "ي", "ی") if isinstance(val, str) else val
+                lambda val: val.replace("ي", "ی") if isinstance(val, str) else val
             )
             df[col] = df[col].apply(
-                lambda val: val.replace(
-                    "ﺒ", "ب") if isinstance(val, str) else val
+                lambda val: val.replace("ﺒ", "ب") if isinstance(val, str) else val
             )
             df[col] = df[col].apply(
-                lambda val: val.replace(
-                    "ﺼ", "ص") if isinstance(val, str) else val
+                lambda val: val.replace("ﺼ", "ص") if isinstance(val, str) else val
             )
             df[col] = df[col].apply(
-                lambda val: val.replace(
-                    "ﻋ", "ع") if isinstance(val, str) else val
+                lambda val: val.replace("ﻋ", "ع") if isinstance(val, str) else val
             )
             df[col] = df[col].apply(
-                lambda val: val.replace(
-                    "ك", "ک") if isinstance(val, str) else val
+                lambda val: val.replace("ك", "ک") if isinstance(val, str) else val
             )
         df = self._normalize_occurance_times(df)
         df["exam_date"] = df["exam_date"].apply(self._parse_exam_date)
@@ -429,8 +417,7 @@ class ScheduleReader:
         start = time.time()
         match configs.PDF_ENGINE:
             case "pdfplumber":
-                data, header = self._read_data_with_pdfplumber(
-                    pdf_path=pdf_path)
+                data, header = self._read_data_with_pdfplumber(pdf_path=pdf_path)
             case "camelot":
                 data, header = self._read_data_with_camelot(pdf_path=pdf_path)
             case _:

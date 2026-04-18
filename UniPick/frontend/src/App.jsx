@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import { useEffect, useState } from "react";
-import getCourses from "./api/courses";
+import { getCourses } from "./api/courses";
 import CourseSelector from "./components/CourseSelector";
 import DashboardLayout from "./components/DashboardLayout";
 import { useSnackbar } from "notistack";
@@ -12,10 +12,14 @@ import { useSchedule } from "./hooks/useSchedule";
 
 function App({ darkMode, setDarkMode }) {
   const auth = useAuth();
-	const schedule = useSchedule();
   const { enqueueSnackbar } = useSnackbar();
 
   const [courses, setCourses] = useState([]);
+  const schedule = useSchedule(auth.accessKey, courses);
+
+  useEffect(() => {
+    schedule.syncUserCoursesWithBackend();
+  }, [auth.accessKey, courses]);
 
   useEffect(() => {
     if (!auth.isAuthenticated) {
@@ -24,22 +28,22 @@ function App({ darkMode, setDarkMode }) {
     let cancelled = false;
 
     (async () => {
-      const data = await getCourses(auth.accessKey);
-      if (!data.ok) {
-        enqueueSnackbar("Failed to fetch courses: " + data.error.message, {
+      const result = await schedule.getCourses();
+      if (!result.ok) {
+        enqueueSnackbar("Failed to fetch courses: " + result.error.message, {
           variant: "error",
         });
         return;
       }
       if (!cancelled) {
-        setCourses(data.data);
+        setCourses(result.data);
       }
     })();
 
     return () => {
       cancelled = true;
     };
-  }, [enqueueSnackbar, auth.isAuthenticated]);
+  }, [enqueueSnackbar, auth.isAuthenticated, auth.accessKey]);
 
   async function doLogin(username, password) {
     const result = await auth.login(username, password);
@@ -52,6 +56,14 @@ function App({ darkMode, setDarkMode }) {
     }
   }
 
+  async function toggleCourse(course) {
+    const result = await schedule.toggleCourse(course);
+    if (!result.ok) {
+      enqueueSnackbar(`failed to toggle course ${course.name}`, {
+        variant: "error",
+      });
+    }
+  }
 
   if (!auth.isAuthenticated) {
     return (
@@ -84,7 +96,7 @@ function App({ darkMode, setDarkMode }) {
           right={
             <CourseSelector
               courses={courses}
-              onSelect={schedule.toggleCourse}
+              onSelect={toggleCourse}
               selectedCourses={schedule.selectedCourses}
               setPendingCourse={schedule.setPendingCourse}
             />
@@ -93,7 +105,7 @@ function App({ darkMode, setDarkMode }) {
             <SchedulePanel
               courses={schedule.selectedCourses}
               pendingCourse={schedule.pendingCourse}
-              toggleCourse={schedule.toggleCourse}
+              toggleCourse={toggleCourse}
             />
           }
         />

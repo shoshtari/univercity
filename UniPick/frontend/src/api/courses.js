@@ -1,6 +1,6 @@
 import { MOCK_APIS } from "../configs/api";
-import {request} from "./client";
-import {ApiResultOk, ApiResultErr } from "./result";
+import { request } from "./client";
+import { ApiResultOk, ApiResultErr } from "./result";
 
 const MOCK_COURSES = [
   {
@@ -43,7 +43,8 @@ const MOCK_COURSES = [
     examData: "1405-04-14",
   },
 ];
-async function getCourses(accessToken) {
+
+export async function getCourses(accessToken) {
   if (MOCK_APIS) {
     await new Promise((r) => setTimeout(r, 300));
     const courses = MOCK_COURSES.map((c) => {
@@ -53,10 +54,13 @@ async function getCourses(accessToken) {
   }
 
   try {
-    const result = await request("/courses", {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
+    const result = await request({
+      path: "/courses/all",
+      options: {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
       },
     });
 
@@ -65,4 +69,54 @@ async function getCourses(accessToken) {
     return new ApiResultErr(err);
   }
 }
-export default getCourses;
+
+export async function toggleCourse({ accessToken, course_id, change }) {
+  if (MOCK_APIS) {
+    await new Promise((r) => setTimeout(r, 300));
+    return new ApiResultOk(null);
+  }
+
+  try {
+    await request({
+      path: `/courses/${course_id}`,
+      options: {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          change: change,
+        }),
+      },
+      parse_response: false,
+    });
+
+    return new ApiResultOk(null);
+  } catch (err) {
+    return new ApiResultErr(err);
+  }
+}
+
+export async function getUserCourses(accessToken) {
+  if (MOCK_APIS) {
+    await new Promise((r) => setTimeout(r, 300));
+    return new ApiResultOk([]);
+  }
+
+  try {
+    const result = await request({
+      path: "/courses/my",
+      options: {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    });
+
+    return new ApiResultOk(result.course_ids);
+  } catch (err) {
+    return new ApiResultErr(err);
+  }
+}

@@ -1,10 +1,10 @@
 import structlog
 
-from db import CourseRepository, UserRepository
+from db import migrate as db_migrate
 
 logger = structlog.getLogger()
 
 
 def migrate() -> None:
-    CourseRepository().migrate()
-    UserRepository().migrate()
+    db_migrate()
+    logger.info("migrate done successfully")

@@ -1,10 +1,9 @@
 import datetime
-from cachetools import cached, TTLCache
-
 import json
 
 import pandas as pd
 import structlog
+from cachetools import TTLCache, cached
 from sqlalchemy import (
     JSON,
     Boolean,
@@ -55,10 +54,6 @@ course = Table(
 
 
 class CourseRepository:
-    @staticmethod
-    def migrate() -> None:
-        course.create(get_engine(), checkfirst=True)
-        logger.info("course table migration done")
 
     @classmethod
     def insert_from_dataframe(cls, df: pd.DataFrame) -> None:
@@ -109,7 +104,9 @@ class CourseRepository:
         logger.warning("table flushed", rows=result.rowcount)
 
     @staticmethod
-    @cached(TTLCache(maxsize=1, ttl=1)) # since we want to make sure that the cache is synced with the database, we set the ttl to 1 second
+    @cached(
+        TTLCache(maxsize=1, ttl=1)
+    )  # since we want to make sure that the cache is synced with the database, we set the ttl to 1 second
     def get_visible_courses() -> list[dto.Course]:
         stmt = select(
             course.c.id,

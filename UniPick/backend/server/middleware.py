@@ -1,10 +1,10 @@
 from typing import Callable, ParamSpec, TypeVar
-import common.configs as configs
 
 import jwt
 import structlog
 from flask import Flask, Response, g, jsonify, request
 
+import common.configs as configs
 from utils.jwt_wrapper import parse_token
 
 P = ParamSpec("P")

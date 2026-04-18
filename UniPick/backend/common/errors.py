@@ -4,3 +4,7 @@ class InvalidUserPasswordError(Exception):
 
 class UserNotFoundError(Exception):
     pass
+
+
+class CourseNotFoundError(Exception):
+    pass
