@@ -1,0 +1,26 @@
+#! /bin/bash
+
+ROOT_DIR="${1:-.}"
+
+echo "PROJECT TREE"
+echo "============"
+echo
+echo "FILES"
+echo "====="
+echo
+
+find "$ROOT_DIR" \
+  -type f \
+  \( -name "*.jsx" -o -name "*.js" -o -name "*.txt" \) \
+  ! -path "*/.git/*" \
+  ! -path "*/node_modules/*" \
+| sort \
+| while read -r file; do
+    echo "----------------------------------------"
+    echo "FILE: $file"
+    echo "----------------------------------------"
+    echo
+    sed 's/^/    /' "$file"
+    echo
+    echo
+done

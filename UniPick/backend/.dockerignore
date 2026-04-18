@@ -1,0 +1,13 @@
+.coverage
+.gitignore
+.mypy_cache
+.pytest_cache
+.ruff_cache
+.vscode
+Dockerfile
+requirements-dev.txt
+schedule.pdf
+tests
+typings
+unipick.egg-info
+venv
