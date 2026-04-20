@@ -4,8 +4,8 @@ import jwt
 import structlog
 from flask import Flask, Response, g, jsonify, request
 
-import common.configs as configs
-from utils.jwt_wrapper import parse_token
+from common.configs import settings
+from utils.jwt_wrapper import JWTHandler
 
 P = ParamSpec("P")
 R = TypeVar("R")
@@ -21,7 +21,7 @@ def public_endpoint(func: Callable[P, R]) -> Callable[P, R]:
     return func
 
 
-def register_middlewares(app: Flask) -> None:
+def register_middlewares(app: Flask, jwt_handler: JWTHandler) -> None:
 
     @app.before_request
     def authenticate() -> None | tuple[Response, int]:
@@ -43,7 +43,7 @@ def register_middlewares(app: Flask) -> None:
         token = auth.removeprefix("Bearer ").strip()
 
         try:
-            user_id = parse_token(token)
+            user_id = jwt_handler.parse_token(token)
         except jwt.ExpiredSignatureError:
             return jsonify({"error": "token_expired"}), 401
         except jwt.InvalidTokenError:
@@ -54,7 +54,7 @@ def register_middlewares(app: Flask) -> None:
 
     @app.after_request
     def handle_cors(response: Response) -> Response:
-        response.headers.add("access-control-allow-origin", configs.CORS_ORIGIN)
+        response.headers.add("access-control-allow-origin", settings.CorsOrigin)
         response.headers.add("access-control-allow-credentials", "true")
         response.headers.add(
             "access-control-allow-headers", "authorization,content-type"

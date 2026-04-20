@@ -9,6 +9,7 @@ from sqlalchemy import (
     Boolean,
     Column,
     DateTime,
+    Engine,
     Integer,
     String,
     Table,
@@ -17,7 +18,7 @@ from sqlalchemy import (
 )
 
 import db.course_dto as dto
-from db.engine import METADATA, get_engine
+from db.engine import METADATA
 
 logger = structlog.getLogger()
 
@@ -54,9 +55,10 @@ course = Table(
 
 
 class CourseRepository:
+    def __init__(self, engine: Engine):
+        self.engine = engine
 
-    @classmethod
-    def insert_from_dataframe(cls, df: pd.DataFrame) -> None:
+    def insert_from_dataframe(self, df: pd.DataFrame) -> None:
         table_columns = set(
             [
                 i.name
@@ -74,9 +76,9 @@ class CourseRepository:
             )
             raise ValueError("dataframe has invalid columns")
         df["course_times"] = df["course_times"].apply(json.dumps)
-        # df.to_sql("course", get_engine(), if_exists="append", index=False)
+        # df.to_sql("course", self.engine, if_exists="append", index=False)
         # since at least for now, the load is not that huge, we can iterate
-        with get_engine().begin() as conn:
+        with self.engine.begin() as conn:
             for _, row in df.iterrows():
                 stmt = course.insert().values(
                     semester=row.semester,
@@ -97,17 +99,15 @@ class CourseRepository:
                 conn.execute(stmt)
         logger.info("dataframe inserted into course table", rows=len(df))
 
-    @staticmethod
-    def flush() -> None:
-        with get_engine().begin() as conn:
+    def flush(self) -> None:
+        with self.engine.begin() as conn:
             result = conn.execute(text("DELETE FROM course"))
         logger.warning("table flushed", rows=result.rowcount)
 
-    @staticmethod
     @cached(
         TTLCache(maxsize=1, ttl=1)
     )  # since we want to make sure that the cache is synced with the database, we set the ttl to 1 second
-    def get_visible_courses() -> list[dto.Course]:
+    def get_visible_courses(self) -> list[dto.Course]:
         stmt = select(
             course.c.id,
             course.c.name,
@@ -119,7 +119,7 @@ class CourseRepository:
             course.c.exam_date,
         ).where(course.c.visible == True)
 
-        with get_engine().connect() as conn:
+        with self.engine.connect() as conn:
             query_result = conn.execute(stmt).all()
             output = [
                 dto.Course(

@@ -6,6 +6,7 @@ import structlog
 from sqlalchemy import (
     Column,
     DateTime,
+    Engine,
     Integer,
     String,
     Table,
@@ -13,9 +14,8 @@ from sqlalchemy import (
     select,
 )
 
-import common.configs as configs
 from common.errors import InvalidUserPasswordError, UserNotFoundError
-from db.engine import METADATA, get_engine
+from db.engine import METADATA
 
 logger = structlog.getLogger()
 
@@ -44,11 +44,14 @@ user = Table(
 
 class UserRepository:
 
-    @classmethod
-    def create(cls, username: str, password: str) -> int:
+    def __init__(self, engine: Engine, bcrypt_rounds: int) -> None:
+        self.engine = engine
+        self.bcrypt_rounds = bcrypt_rounds
+
+    def create(self, username: str, password: str) -> int:
         hashed_password = bcrypt.hashpw(
             password.encode("utf-8"),
-            bcrypt.gensalt(rounds=configs.BCRYPT_ROUNDS),
+            bcrypt.gensalt(rounds=self.bcrypt_rounds),
         ).decode("utf-8")
 
         stmt = (
@@ -57,18 +60,17 @@ class UserRepository:
             .returning(user.c.id)
         )
 
-        with get_engine().begin() as conn:
+        with self.engine.begin() as conn:
             result = conn.execute(stmt)
             user_id: int = result.scalar_one()
 
         logger.info("user created", username=username, user_id=user_id)
         return user_id
 
-    @classmethod
-    def check_password(cls, username: str, password: str) -> int:
+    def check_password(self, username: str, password: str) -> int:
         stmt = select(user.c.password, user.c.id).where(user.c.username == username)
 
-        with get_engine().connect() as conn:
+        with self.engine.connect() as conn:
             result = conn.execute(stmt).fetchone()
 
         stored_hash = DEFAULT_HASH
@@ -81,11 +83,10 @@ class UserRepository:
 
         return cast(int, result.id)
 
-    @classmethod
-    def get_username_by_id(cls, user_id: int) -> str:
+    def get_username_by_id(self, user_id: int) -> str:
         stmt = select(user.c.username).where(user.c.id == user_id)
 
-        with get_engine().connect() as conn:
+        with self.engine.connect() as conn:
             result = conn.execute(stmt).fetchone()
 
         if result is None:

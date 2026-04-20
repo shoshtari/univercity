@@ -3,22 +3,26 @@ from typing import Optional, cast
 
 import jwt
 
-import common.configs as configs
 
+class JWTHandler:
+    def __init__(
+        self, encrypt_key: str, decrypt_key: str, algorithm: str, ttl: int
+    ) -> None:
+        self.encrypt_key = encrypt_key
+        self.decrypt_key = decrypt_key
+        self.algorithm = algorithm
+        self.ttl = ttl
 
-def create_token(user_id: int, ttl: Optional[int] = None) -> str:
-    if ttl is None:
-        ttl = configs.JWT_TTL
-    iat = int(datetime.datetime.now().timestamp())
-    return jwt.encode(
-        {"user_id": user_id, "iat": iat, "exp": configs.JWT_TTL + iat},
-        key=configs.JWT_ENCRYPT_KEY,
-        algorithm=configs.JWT_ALGORITHM,
-    )
+    def create_token(self, user_id: int, ttl: Optional[int] = None) -> str:
+        if ttl is None:
+            ttl = self.ttl
+        iat = int(datetime.datetime.now().timestamp())
+        return jwt.encode(
+            {"user_id": user_id, "iat": iat, "exp": iat + ttl},
+            key=self.encrypt_key,
+            algorithm=self.algorithm,
+        )
 
-
-def parse_token(token: str) -> int:
-    payload = jwt.decode(
-        token, key=configs.JWT_DECRYPT_KEY, algorithms=[configs.JWT_ALGORITHM]
-    )
-    return cast(int, payload["user_id"])
+    def parse_token(self, token: str) -> int:
+        payload = jwt.decode(token, key=self.decrypt_key, algorithms=[self.algorithm])
+        return cast(int, payload["user_id"])

@@ -1,24 +1,29 @@
-import os
+from pydantic import Field
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
-# TODO: use env vars for all of these
-DATABASE_URL = "sqlite:////tmp/unipick.db"
-WEBSERVER_HOST = "0.0.0.0"
-WEBSERVER_PORT = 8000
-WEBSERVER_THREADS = 40
-WEBSERVER_CONNECTION_LIMIT = 100
 
-JWT_ENCRYPT_KEY = os.environ.get(
-    "JWT_ENCRYPT_KEY", "a" * 32
-)  # in order for tests to run ok, #TODO: add reevaluate environ func and handle tests by setting env var in test setup
-JWT_DECRYPT_KEY = os.environ.get("JWT_DECRYPT_KEY", JWT_ENCRYPT_KEY)
-JWT_ALGORITHM = "HS256"
-JWT_TTL = 24 * 60 * 3600
+class Settings(BaseSettings):
+    DatabaseUrl: str = Field("sqlite:////tmp/unipick.db")
 
-BCRYPT_ROUNDS = 12
+    WebserverHost: str = Field("0.0.0.0")
+    WebserverPort: int = Field(8000)
+    WebserverThreads: int = Field(4)
+    WebserverConnectionLimit: int = Field(100)
 
-PDF_ENGINE = "pdfplumber"  # either "camelot" or "pdfplumber"
+    JwtEncryptKey: str = Field("a" * 32)
+    JwtDecryptKey: str = Field("a" * 32)
+    JwtAlgorithm: str = Field("HS256")
+    JwtTTL: int = Field(24 * 60 * 3600)
+    BcryptRounds: int = Field(12)
+    PDFEngine: str = Field("pdfplumber")
+    RunHeavyTests: bool = Field(False)
+    WSGIServer: str = Field("flask")
+    CorsOrigin: str = Field("http://localhost:5173")
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        case_sensitive=True,
+    )
 
-RUN_HEAVY_TESTS = False
-WSGI_SERVER = "flask"  #  either "waitress" or "flask" use flask only for development
 
-CORS_ORIGIN = "http://localhost:5173"
+settings = Settings()

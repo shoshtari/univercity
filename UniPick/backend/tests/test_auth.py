@@ -4,13 +4,21 @@ from werkzeug.test import (
     TestResponse,  # can import from flask but mypy complain. this is what flask's test client uses
 )
 
-from utils.jwt_wrapper import create_token
+from common.configs import Settings
+from utils.jwt_wrapper import JWTHandler
 
 
 class TestAuth:
     @pytest.fixture(autouse=True)
     def setup(self, client: FlaskClient) -> None:
+        settings: Settings = client.settings
         self.client = client
+        self.jwt_handler = JWTHandler(
+            encrypt_key=settings.JwtEncryptKey,
+            decrypt_key=settings.JwtDecryptKey,
+            algorithm=settings.JwtAlgorithm,
+            ttl=settings.JwtTTL,
+        )
 
     def _sign_up(self, username: str, password: str) -> TestResponse:
 
@@ -145,8 +153,8 @@ class TestAuth:
         user_id = result.json.get("id")
         assert isinstance(user_id, int), user_id
 
-        monkeypatch.setattr("common.configs.JWT_ENCRYPT_KEY", "b" * 32)
-        access_token = create_token(user_id=user_id)
+        self.jwt_handler.encrypt_key = "b" * 32
+        access_token = self.jwt_handler.create_token(user_id=user_id)
         result = self._getme(access_token=access_token)
         assert result.status_code == 401, result.text
         assert result.json is not None
@@ -162,15 +170,15 @@ class TestAuth:
         user_id = result.json.get("id")
         assert isinstance(user_id, int), user_id
 
-        monkeypatch.setattr("common.configs.JWT_TTL", -100)
-        access_token = create_token(user_id=user_id)
+        self.jwt_handler.ttl = -100
+        access_token = self.jwt_handler.create_token(user_id=user_id)
         result = self._getme(access_token=access_token)
         assert result.status_code == 401, result.text
         assert result.json is not None
         assert result.json.get("error") == "token_expired", result.json
 
     def test_getme_user_not_exist(self, monkeypatch: pytest.MonkeyPatch) -> None:
-        access_token = create_token(user_id=1)
+        access_token = self.jwt_handler.create_token(user_id=1)
         result = self._getme(access_token=access_token)
         assert result.status_code == 404, result.text
         assert result.json is not None

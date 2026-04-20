@@ -3,16 +3,21 @@ import time
 import pandas as pd
 import pytest
 import structlog
+from flask.testing import FlaskClient
 
-from utils.read_schedule import schedule_reader
+from utils import ScheduleReader
 
 logger = structlog.getLogger()
 
 
 class TestSchedulePDFParser:
+    @pytest.fixture(autouse=True)
+    def setup(self, client: FlaskClient) -> None:
+        self.schedule_reader = ScheduleReader(client.settings.PDFEngine)
+
     def _run_parse_pdf(self) -> tuple[pd.DataFrame, float]:
         start_time = time.time()
-        df = schedule_reader.read_schedule_pdf("./tests/schedule-test.pdf")
+        df = self.schedule_reader.read_schedule_pdf("./tests/schedule-test.pdf")
         eclapsed_time = time.time() - start_time
         return df, eclapsed_time
 
@@ -33,13 +38,13 @@ class TestSchedulePDFParser:
             "univercity_update_date",
         }
 
-        monkeypatch.setattr("common.configs.PDF_ENGINE", "camelot")
+        self.schedule_reader.pdf_engine = "camelot"
         df, eclapsed = self._run_parse_pdf()
         assert len(df) == row_count
         assert set(df.columns) == columns
         logger.info("parsed pdf", engine="camelot", eclapsed_time=eclapsed)
 
-        monkeypatch.setattr("common.configs.PDF_ENGINE", "pdfplumber")
+        self.schedule_reader.pdf_engine = "pdfplumber"
         df, eclapsed = self._run_parse_pdf()
         assert len(df) == row_count
         assert set(df.columns) == columns

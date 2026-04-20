@@ -7,18 +7,35 @@ from werkzeug.test import (
     TestResponse,  # can import from flask but mypy complain. this is what flask's test client uses
 )
 
-import commands
-from db import UserRepository
-from utils.jwt_wrapper import create_token
+from common.configs import Settings
+from db import CourseRepository, UserRepository
+from utils import ScheduleReader
+from utils.jwt_wrapper import JWTHandler
 
 
 class TestCourse:
     @pytest.fixture(autouse=True)
     def setup(self, client: FlaskClient) -> None:
-        user_id = UserRepository.create(username="a", password="a")
+        settings: Settings = client.settings
+
+        self.user_repository = UserRepository(
+            client.db_engine, bcrypt_rounds=settings.BcryptRounds
+        )
+        course_repository = CourseRepository(client.db_engine)
+
+        schedule_reader = ScheduleReader(settings.PDFEngine)
+        df = schedule_reader.read_schedule_pdf("./tests/schedule-test.pdf")
+        course_repository.insert_from_dataframe(df=df)
+
+        user_id = self.user_repository.create(username="a", password="a")
         self.client = client
-        self.token = create_token(user_id=user_id)
-        commands.add_pdf("./tests/schedule-test.pdf")
+        self.jwt_handler = JWTHandler(
+            encrypt_key=settings.JwtEncryptKey,
+            decrypt_key=settings.JwtDecryptKey,
+            algorithm=settings.JwtAlgorithm,
+            ttl=settings.JwtTTL,
+        )
+        self.token = self.jwt_handler.create_token(user_id=user_id)
 
     def _get_user_course(self, token: Optional[str] = None) -> TestResponse:
         if token is None:
@@ -82,7 +99,7 @@ class TestCourse:
         assert result.status_code == 200, result.text
         assert len(result.json["course_ids"]) == 1, result.json
 
-        other_token = create_token(user_id=10)
+        other_token = self.jwt_handler.create_token(user_id=10)
         result = self._get_user_course(token=other_token)
         assert result.status_code == 200, result.text
         assert len(result.json["course_ids"]) == 0, result.json

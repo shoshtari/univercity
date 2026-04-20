@@ -8,8 +8,6 @@ import pdfplumber
 import structlog
 from rich.progress import track
 
-import common.configs as configs
-
 logger = structlog.getLogger()
 
 
@@ -36,6 +34,9 @@ def is_ltr(text: str) -> bool:
 class ScheduleReader:
     IN_PARANTHESIS_REGEX = re.compile(r"\([^)]*\)")
     TIME_REGEX = re.compile(r"\d+:\d+")
+
+    def __init__(self, pdf_engine: str):
+        self.pdf_engine = pdf_engine
 
     def _reverse_row(self, line: Optional[str]) -> Optional[str]:
         """
@@ -415,13 +416,13 @@ class ScheduleReader:
         semester, update_date = self._read_metadata(pdf_path)
 
         start = time.time()
-        match configs.PDF_ENGINE:
+        match self.pdf_engine:
             case "pdfplumber":
                 data, header = self._read_data_with_pdfplumber(pdf_path=pdf_path)
             case "camelot":
                 data, header = self._read_data_with_camelot(pdf_path=pdf_path)
             case _:
-                raise ValueError(f"unknown pdf engine {configs.PDF_ENGINE}")
+                raise ValueError(f"unknown pdf engine {self.pdf_engine}")
         logger.debug("pdf_parsing_time", duration=time.time() - start)
         if not data:
             raise ValueError("No data found in the PDF")
@@ -435,6 +436,3 @@ class ScheduleReader:
             df=df, semester=semester, update_date=update_date, header=normalized_header
         )
         return df
-
-
-schedule_reader = ScheduleReader()
