@@ -7,7 +7,7 @@ from werkzeug.test import (
     TestResponse,  # can import from flask but mypy complain. this is what flask's test client uses
 )
 
-from common.configs import Settings
+from common.configs import load_settings
 from db import CourseRepository, UserRepository
 from utils import ScheduleReader
 from utils.jwt_wrapper import JWTHandler
@@ -16,24 +16,24 @@ from utils.jwt_wrapper import JWTHandler
 class TestCourse:
     @pytest.fixture(autouse=True)
     def setup(self, client: FlaskClient) -> None:
-        settings: Settings = client.settings
+        settings: load_settings = client.settings
 
         self.user_repository = UserRepository(
-            client.db_engine, bcrypt_rounds=settings.BcryptRounds
+            client.db_engine, bcrypt_rounds=settings.BCRYPT_ROUNDS
         )
         course_repository = CourseRepository(client.db_engine)
 
-        schedule_reader = ScheduleReader(settings.PDFEngine)
+        schedule_reader = ScheduleReader(settings.PDF_ENGINE)
         df = schedule_reader.read_schedule_pdf("./tests/schedule-test.pdf")
         course_repository.insert_from_dataframe(df=df)
 
         user_id = self.user_repository.create(username="a", password="a")
         self.client = client
         self.jwt_handler = JWTHandler(
-            encrypt_key=settings.JwtEncryptKey,
-            decrypt_key=settings.JwtDecryptKey,
-            algorithm=settings.JwtAlgorithm,
-            ttl=settings.JwtTTL,
+            encrypt_key=settings.JWT.ENCRYPT_KEY,
+            decrypt_key=settings.JWT.DECRYPT_KEY,
+            algorithm=settings.JWT.ALGORITHM,
+            ttl=settings.JWT.TTL,
         )
         self.token = self.jwt_handler.create_token(user_id=user_id)
 
@@ -93,7 +93,7 @@ class TestCourse:
         assert len(result.json["course_ids"]) == 1, result.json
 
         result = self._toggle_course(1, "add")
-        assert result.status_code == 208, result.text
+        assert result.status_code == 204, result.text
 
         result = self._get_user_course()
         assert result.status_code == 200, result.text
@@ -112,7 +112,7 @@ class TestCourse:
         assert len(result.json["course_ids"]) == 0, result.json
 
         result = self._toggle_course(1, "remove")
-        assert result.status_code == 208, result.text
+        assert result.status_code == 204, result.text
 
     def test_invalid_input_toggle_course(self) -> None:
         # non existend course

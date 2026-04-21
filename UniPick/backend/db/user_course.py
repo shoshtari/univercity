@@ -30,11 +30,6 @@ user_course = Table(
         DateTime,
         default=lambda: datetime.datetime.now(datetime.timezone.utc),
     ),
-    Column(
-        "deleted_at",
-        DateTime,
-        nullable=True,
-    ),
 )
 
 
@@ -67,9 +62,7 @@ class UserCourseRepository:
 
     def get_by_user_id(self, user_id: int) -> list[int]:
 
-        stmt = select(user_course.c.course_id).where(
-            user_course.c.user_id == user_id, user_course.c.deleted_at == None
-        )
+        stmt = select(user_course.c.course_id).where(user_course.c.user_id == user_id)
 
         with self.engine.connect() as conn:
             result = conn.execute(stmt).fetchall()

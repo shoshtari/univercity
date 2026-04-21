@@ -2,7 +2,6 @@ import flask
 import structlog
 from flask import jsonify, request
 from flask.views import MethodView
-from pydantic import ValidationError
 from sqlalchemy.exc import IntegrityError
 
 from api.auth_schema import (
@@ -14,30 +13,19 @@ from api.auth_schema import (
 )
 from common.errors import InvalidUserPasswordError, UserNotFoundError
 from db import UserRepository
-from server.middleware import public_endpoint
 from utils.jwt_wrapper import JWTHandler
 
 logger = structlog.getLogger()
 
 
 class SignupView(MethodView):
-    decorators = [public_endpoint]
+    is_public = True
 
     def __init__(self, user_repository: UserRepository):
         self.user_repository = user_repository
 
     def post(self) -> flask.Response | tuple[flask.Response, int]:
-        try:
-            payload = UserSignupIn.model_validate(request.get_json())
-        except ValidationError as e:
-            ans = jsonify(
-                {
-                    "error": "validation_error",
-                    "details": e.errors(),
-                }
-            )
-            ans.status = 400
-            return ans
+        payload = UserSignupIn.model_validate(request.get_json())
 
         try:
             user_id = self.user_repository.create(
@@ -61,24 +49,14 @@ class SignupView(MethodView):
 
 
 class LoginView(MethodView):
+    is_public = True
+
     def __init__(self, user_repository: UserRepository, jwt_handler: JWTHandler):
         self.user_repository = user_repository
         self.jwt_handler = jwt_handler
 
-    decorators = [public_endpoint]
-
     def post(self) -> flask.Response:
-        try:
-            payload = UserLoginIn.model_validate(request.get_json())
-        except ValidationError as e:
-            ans = jsonify(
-                {
-                    "error": "validation_error",
-                    "details": e.errors(),
-                }
-            )
-            ans.status = 400
-            return ans
+        payload = UserLoginIn.model_validate(request.get_json())
 
         try:
             user_id = self.user_repository.check_password(

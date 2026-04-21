@@ -25,4 +25,6 @@ class JWTHandler:
 
     def parse_token(self, token: str) -> int:
         payload = jwt.decode(token, key=self.decrypt_key, algorithms=[self.algorithm])
+        if not isinstance(payload.get("user_id"), int):
+            raise jwt.InvalidTokenError("Invalid user_id in token")
         return cast(int, payload["user_id"])

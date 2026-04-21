@@ -24,6 +24,10 @@ strict = true
 exclude = "^(venv|tests)/"
 mypy_path = "typings"
 
+[tool.pytest]
+strict = true
+console_output_style = "progress"
+
 [[tool.mypy.overrides]]
 module = "jdatetime.*"
 ignore_missing_imports = true

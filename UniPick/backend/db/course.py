@@ -76,27 +76,28 @@ class CourseRepository:
             )
             raise ValueError("dataframe has invalid columns")
         df["course_times"] = df["course_times"].apply(json.dumps)
-        # df.to_sql("course", self.engine, if_exists="append", index=False)
         # since at least for now, the load is not that huge, we can iterate
+        rows = [
+            {
+                "semester": row.semester,
+                "univercity_update_date": row.univercity_update_date,
+                "name": row["name"],
+                "code": row.code,
+                "group": row.group,
+                "instructor": row.instructor,
+                "classroom": row.classroom,
+                "major": row.major,
+                "exam_date": row.exam_date,
+                "course_times": row.course_times,
+                "units": row.units,
+                "prerequisite_corequisite": row.prerequisite_corequisite,
+            }
+            for _, row in df.iterrows()
+        ]
+        stmt = course.insert()
         with self.engine.begin() as conn:
-            for _, row in df.iterrows():
-                stmt = course.insert().values(
-                    semester=row.semester,
-                    univercity_update_date=row.univercity_update_date,
-                    name=row[
-                        "name"
-                    ],  # cant use getattr since it conflicts and return index
-                    code=row.code,
-                    group=row.group,
-                    instructor=row.instructor,
-                    classroom=row.classroom,
-                    major=row.major,
-                    exam_date=row.exam_date,
-                    course_times=row.course_times,
-                    units=row.units,
-                    prerequisite_corequisite=row.prerequisite_corequisite,
-                )
-                conn.execute(stmt)
+            conn.execute(stmt, rows)
+
         logger.info("dataframe inserted into course table", rows=len(df))
 
     def flush(self) -> None:
@@ -106,7 +107,7 @@ class CourseRepository:
 
     @cached(
         TTLCache(maxsize=1, ttl=1)
-    )  # since we want to make sure that the cache is synced with the database, we set the ttl to 1 second
+    )  # since we want to make sure that the cache is synced with the database, we set the ttl to 1 second. its main goal is to avoid high spike.
     def get_visible_courses(self) -> list[dto.Course]:
         stmt = select(
             course.c.id,

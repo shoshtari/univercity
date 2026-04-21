@@ -1,13 +1,14 @@
 import structlog
 
-from common.configs import settings
+from common.configs import load_settings
 from db import CourseRepository, create_engine
 
 logger = structlog.getLogger()
 
 
 def flush() -> None:
-    engine = create_engine(settings.DatabaseUrl)
+    settings = load_settings()
+    engine = create_engine(settings.DATABASE_URL)
 
     course_repo = CourseRepository(engine=engine)
     course_repo.flush()

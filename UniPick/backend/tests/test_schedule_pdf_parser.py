@@ -13,7 +13,7 @@ logger = structlog.getLogger()
 class TestSchedulePDFParser:
     @pytest.fixture(autouse=True)
     def setup(self, client: FlaskClient) -> None:
-        self.schedule_reader = ScheduleReader(client.settings.PDFEngine)
+        self.schedule_reader = ScheduleReader(client.settings.PDF_ENGINE)
 
     def _run_parse_pdf(self) -> tuple[pd.DataFrame, float]:
         start_time = time.time()

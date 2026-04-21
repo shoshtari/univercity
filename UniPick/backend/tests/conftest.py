@@ -3,7 +3,7 @@ from flask.testing import FlaskClient
 from sqlalchemy import Engine, create_engine, text
 from sqlalchemy.pool import StaticPool
 
-from common.configs import settings
+from common.configs import load_settings
 from server.app import create_app
 
 
@@ -26,6 +26,7 @@ def client(monkeypatch) -> FlaskClient:
         "db.create_engine",
         lambda _: engine,
     )
+    settings = load_settings()
 
     app = create_app(settings)
     app.config["TESTING"] = True

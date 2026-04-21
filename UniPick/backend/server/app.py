@@ -1,59 +1,62 @@
 import structlog
-from flask import Flask
+from flask import Flask, Response, jsonify
 from flask_compress import Compress
+from flask_cors import CORS
+from pydantic import ValidationError
 
-import db
-from common.configs import Settings, settings
+from common.configs import Settings, load_settings
+from common.initialize import init_dependency
 from server.middleware import register_middlewares
 from server.routes import register_routes
-from utils.jwt_wrapper import JWTHandler
 
 logger = structlog.get_logger()
+
+
+def handle_validation_error(e: ValidationError) -> tuple[Response, int]:
+    response = {
+        "error": "validation_error",
+        "details": e.errors(),
+    }
+    return jsonify(response), 400
 
 
 def create_app(settings: Settings) -> Flask:
     app = Flask(__name__)
     Compress(app)
+    CORS(app, supports_credentials=True, origins=settings.CORS_ORIGINS)
 
-    db_engine = db.create_engine(settings.DatabaseUrl)
-    db.migrate(db_engine)
-    user_repository = db.UserRepository(db_engine, bcrypt_rounds=settings.BcryptRounds)
-    course_repository = db.CourseRepository(db_engine)
-    user_course_repository = db.UserCourseRepository(db_engine)
-    jwt_handler = JWTHandler(
-        encrypt_key=settings.JwtEncryptKey,
-        decrypt_key=settings.JwtDecryptKey,
-        algorithm=settings.JwtAlgorithm,
-        ttl=settings.JwtTTL,
-    )
+    deps = init_dependency(settings)
 
-    register_middlewares(app=app, jwt_handler=jwt_handler)
+    register_middlewares(app=app, jwt_handler=deps.jwt_handler, settings=settings)
     register_routes(
         app=app,
-        user_repository=user_repository,
-        course_repository=course_repository,
-        user_course_repository=user_course_repository,
-        jwt_handler=jwt_handler,
+        user_repository=deps.user_repository,
+        course_repository=deps.course_repository,
+        user_course_repository=deps.user_course_repository,
+        jwt_handler=deps.jwt_handler,
     )
+
+    app.register_error_handler(ValidationError, handle_validation_error)
 
     return app
 
 
 def create_and_run_app() -> None:
+    settings = load_settings()
 
     app = create_app(settings)
 
     logger.info(
         "Starting UniPick backend server",
-        host=settings.WebserverHost,
-        port=settings.WebserverPort,
-        wsgi_server=settings.WSGIServer,
+        host=settings.WEBSERVER.HOST,
+        port=settings.WEBSERVER.PORT,
+        wsgi_server=settings.WEBSERVER.WSGI,
     )
-    match settings.WSGIServer:
+    match settings.WEBSERVER.WSGI:
         case "flask":
             app.run(
-                host=settings.WebserverHost,
-                port=settings.WebserverPort,
+                host=settings.WEBSERVER.HOST,
+                port=settings.WEBSERVER.PORT,
                 debug=True,
             )
         case "waitress":
@@ -62,10 +65,10 @@ def create_and_run_app() -> None:
 
             serve(
                 app,
-                host=settings.WebserverHost,
-                port=settings.WebserverPort,
-                threads=settings.WebserverThreads,
-                connection_limit=settings.WebserverConnectionLimit,
+                host=settings.WEBSERVER.HOST,
+                port=settings.WEBSERVER.PORT,
+                threads=settings.WEBSERVER.THREADS,
+                connection_limit=settings.WEBSERVER.CONNECTION_LIMIT,
             )
         case _:
-            raise ValueError(f"Invalid WSGI server: {settings.WSGIServer}")
+            raise ValueError(f"Invalid WSGI server: {settings.WEBSERVER.WSGI}")

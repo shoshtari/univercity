@@ -4,7 +4,7 @@ import jwt
 import structlog
 from flask import Flask, Response, g, jsonify, request
 
-from common.configs import settings
+from common.configs import Settings
 from utils.jwt_wrapper import JWTHandler
 
 P = ParamSpec("P")
@@ -21,7 +21,9 @@ def public_endpoint(func: Callable[P, R]) -> Callable[P, R]:
     return func
 
 
-def register_middlewares(app: Flask, jwt_handler: JWTHandler) -> None:
+def register_middlewares(
+    app: Flask, settings: Settings, jwt_handler: JWTHandler
+) -> None:
 
     @app.before_request
     def authenticate() -> None | tuple[Response, int]:
@@ -31,9 +33,15 @@ def register_middlewares(app: Flask, jwt_handler: JWTHandler) -> None:
             return None
 
         view_func = app.view_functions.get(endpoint)
+        view_class = getattr(view_func, "view_class", None)
+
+        if request.method == "OPTIONS":
+            return None
+
         if view_func and getattr(view_func, "_is_public", False):
             return None
-        if request.method == "OPTIONS":
+
+        if view_class and getattr(view_class, "is_public", False):
             return None
 
         auth = request.headers.get("Authorization")
@@ -51,14 +59,5 @@ def register_middlewares(app: Flask, jwt_handler: JWTHandler) -> None:
 
         g.user_id = user_id
         return None
-
-    @app.after_request
-    def handle_cors(response: Response) -> Response:
-        response.headers.add("access-control-allow-origin", settings.CorsOrigin)
-        response.headers.add("access-control-allow-credentials", "true")
-        response.headers.add(
-            "access-control-allow-headers", "authorization,content-type"
-        )
-        return response
 
     return None

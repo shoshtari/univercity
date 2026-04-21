@@ -4,20 +4,20 @@ from werkzeug.test import (
     TestResponse,  # can import from flask but mypy complain. this is what flask's test client uses
 )
 
-from common.configs import Settings
+from common.configs import load_settings
 from utils.jwt_wrapper import JWTHandler
 
 
 class TestAuth:
     @pytest.fixture(autouse=True)
     def setup(self, client: FlaskClient) -> None:
-        settings: Settings = client.settings
+        settings: load_settings = client.settings
         self.client = client
         self.jwt_handler = JWTHandler(
-            encrypt_key=settings.JwtEncryptKey,
-            decrypt_key=settings.JwtDecryptKey,
-            algorithm=settings.JwtAlgorithm,
-            ttl=settings.JwtTTL,
+            encrypt_key=settings.JWT.ENCRYPT_KEY,
+            decrypt_key=settings.JWT.DECRYPT_KEY,
+            algorithm=settings.JWT.ALGORITHM,
+            ttl=settings.JWT.TTL,
         )
 
     def _sign_up(self, username: str, password: str) -> TestResponse:
@@ -71,8 +71,7 @@ class TestAuth:
         user_id2 = result.json.get("id")
         assert user_id2 == user_id, (user_id2, user_id)
 
-        username = result.json.get("username")
-        assert username == username, username
+        assert result.json.get("username") == username, result.json
 
     def test_duplicate_username(self) -> None:
         username = "ali"

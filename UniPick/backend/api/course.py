@@ -1,7 +1,6 @@
 import flask
 import structlog
 from flask.views import MethodView
-from pydantic import ValidationError
 
 from api.course_schema import GetCoursesOut, ToggleCourseIn, UserCourseOut
 from common.errors import CourseNotFoundError
@@ -29,19 +28,9 @@ class ToggleCourseView(MethodView):
         self.user_course_repository = user_course_repository
 
     def post(self, course_id_str: str) -> flask.Response:
-        try:
-            req_data = flask.request.get_json()
-            req_data["id"] = course_id_str
-            payload: ToggleCourseIn = ToggleCourseIn.model_validate(req_data)
-        except ValidationError as e:
-            ans = flask.jsonify(
-                {
-                    "error": "validation_error",
-                    "details": e.errors(),
-                }
-            )
-            ans.status = 400
-            return ans
+        req_data = flask.request.get_json()
+        req_data["id"] = course_id_str
+        payload: ToggleCourseIn = ToggleCourseIn.model_validate(req_data)
         logger_api = logger.new(api="toggle_course", payload=payload)
 
         user_id = flask.g.get("user_id")
@@ -84,7 +73,7 @@ class ToggleCourseView(MethodView):
             ans.status = 404
             return ans
 
-        status_code = 200 if nrows else 208
+        status_code = 200 if nrows else 204
         response = flask.Response(status=status_code)
         return response
 

@@ -39,5 +39,11 @@ def migrate() -> None:
     commands.migrate()
 
 
+@app.command()
+def shell() -> None:
+    """Give a shell with initialized dependencies"""
+    commands.shell()
+
+
 if __name__ == "__main__":
     app()
