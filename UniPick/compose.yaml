@@ -3,10 +3,21 @@ services:
     image: registry.hamdocker.ir/morteza2/unipick-frontend:v0.0.2
     ports:
       - "8081:80"
+    environment: 
+      # BACKEND_URL: http://89.42.199.72:8000
+      BACKEND_URL: http://localhost:8000
+
   backend:
     image: registry.hamdocker.ir/morteza2/unipick-backend:v0.0.2
     environment:
-      CorsOrigin: "http://localhost:8081"
+      JWT__ENCRYPT_KEY: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+      JWT__DECRYPT_KEY: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+      CORS_ORIGINS: '["http://localhost:8081"]'
+      DATABASE_URL: sqlite:////app/sqlite/app.db
 
     ports:
       - "8000:8000"
+    volumes:
+      - sqlite_data:/app/sqlite
+volumes:
+  sqlite_data:

@@ -14,3 +14,4 @@ bcrypt==5.0.0
 PyJWT==2.12.1
 pydantic-settings==2.13.1
 flask-cors==6.0.2
+ipython==9.10.0
