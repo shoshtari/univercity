@@ -33,12 +33,12 @@ function Login({ doLogin, darkMode, setDarkMode, enqueueSnackbar }) {
           enqueueSnackbar("Signup successful! You can now log in.", {
             variant: "success",
           });
+        	await doLogin(username, password);
         } else {
           enqueueSnackbar(result.error.message, {
             variant: "error",
           });
         }
-        await doLogin(username, password);
 
         break;
       }
@@ -61,7 +61,7 @@ function Login({ doLogin, darkMode, setDarkMode, enqueueSnackbar }) {
     >
       <Card sx={{ width: LoginCardWidth }}>
         <CardContent>
-          <Box display="flex" justifyContent="space-between">
+          <Box display="flex" >
             <Typography variant="h5">UniPick</Typography>
             <ThemeIcon darkMode={darkMode} setDarkMode={setDarkMode} />
           </Box>

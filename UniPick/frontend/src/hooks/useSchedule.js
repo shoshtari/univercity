@@ -29,16 +29,17 @@ export function useSchedule(accessToken, courses) {
   }
 
   async function toggleCourse(course) {
-
-	  let setChange ;
-    let change = new Promise((resolve, _) => {setChange = resolve});
+    let setChange;
+    let change = new Promise((resolve, _) => {
+      setChange = resolve;
+    });
 
     const toggleFunc = (prev) => {
       if (prev.some((i) => i.id === course.id)) {
-		  setChange("remove");
+        setChange("remove");
         return prev.filter((c) => c.id !== course.id);
       }
-		setChange("add");
+      setChange("add");
       return [...prev, course];
     };
 

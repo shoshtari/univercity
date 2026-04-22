@@ -1,7 +1,12 @@
 import { Box } from "@mui/material";
 import { useMemo } from "react";
 import ScheduleTableCell from "./ScheduleTableCell";
-import {ScheduleTableHeaderColumnWidth, ScheduleTableRowHeight, ScheduleTableHeaderRowHeight} from "../../configs/sizes";
+import { getOpacity, getLeftAndWidth } from "./helpers";
+import {
+  ScheduleTableHeaderColumnWidth,
+  ScheduleTableRowHeight,
+  ScheduleTableHeaderRowHeight,
+} from "../../configs/sizes";
 import {
   DAYS,
   TOTAL_HOURS,
@@ -80,6 +85,7 @@ function DayRow({ day, courses, pendingCourse, toggleCourse }) {
         }}
       >
         {courses.map((i) => {
+          const { left, width } = getLeftAndWidth(i.start, i.end);
           return (
             <ScheduleTableCell
               key={`${i.course.id}`}
@@ -87,7 +93,21 @@ function DayRow({ day, courses, pendingCourse, toggleCourse }) {
               toggleCourse={toggleCourse}
               start={i.start}
               end={i.end}
-              state="selected"
+              styleOverrides={{
+                position: "absolute",
+                left: `${left}%`,
+                width: `${width}%`,
+                top: 6,
+                bottom: 6,
+                  clamp: 2,
+                opacity: 0.85,
+                cursor: "pointer",
+                "&:hover": {
+                  opacity: 1,
+                  zIndex: 2,
+                  boxShadow: 3,
+                },
+              }}
             />
           );
         })}
@@ -96,8 +116,10 @@ function DayRow({ day, courses, pendingCourse, toggleCourse }) {
           .map((time, idx) => {
             const start = timeToHour(time.start);
             const end = timeToHour(time.end);
-            if (courses.some((c) => c.course.id === pendingCourse.id)) return null; // don't show pending course if it's already selected
+            if (courses.some((c) => c.course.id === pendingCourse.id))
+              return null; // don't show pending course if it's already selected
 
+            const { left, width } = getLeftAndWidth(start, end);
             return (
               <ScheduleTableCell
                 key={`${pendingCourse.id}-${idx}`}
@@ -105,13 +127,20 @@ function DayRow({ day, courses, pendingCourse, toggleCourse }) {
                 toggleCourse={toggleCourse}
                 start={start}
                 end={end}
-                state="pending"
+                styleOverrides={{
+                  position: "absolute",
+                  left: `${left}%`,
+                  width: `${width}%`,
+                  top: 6,
+                  bottom: 6,
+                  opacity: 0.5,
+                  clamp: 2,
+                }}
               />
             );
           })}
       </Box>
 
-      {/* Day label */}
       <Box
         sx={{
           borderTop: "1px solid #eee",

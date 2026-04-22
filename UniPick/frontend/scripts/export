@@ -11,7 +11,7 @@ echo
 
 find "$ROOT_DIR" \
   -type f \
-  \( -name "*.jsx" -o -name "*.js" -o -name "*.txt" \) \
+  \( -name "*.jsx" -o -name "*.js" -o -name "*.txt" -o -name "*.sh" -o -name "Dockerfile" \) \
   ! -path "*/.git/*" \
   ! -path "*/node_modules/*" \
 | sort \

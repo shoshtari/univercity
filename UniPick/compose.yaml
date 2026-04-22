@@ -1,0 +1,12 @@
+services:
+  frontend:
+    image: registry.hamdocker.ir/morteza2/unipick-frontend:v0.0.2
+    ports:
+      - "8081:80"
+  backend:
+    image: registry.hamdocker.ir/morteza2/unipick-backend:v0.0.2
+    environment:
+      CorsOrigin: "http://localhost:8081"
+
+    ports:
+      - "8000:8000"

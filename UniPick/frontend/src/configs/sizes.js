@@ -9,3 +9,5 @@ export const ScheduleCellMarginX = 0.2;
 export const ScheduleTableHeaderColumnWidth = "80px";
 export const ScheduleTableHeaderRowHeight = "40px";
 export const ScheduleTableRowHeight = "100px";
+
+export const ExamTableRowHeight = "80px";
