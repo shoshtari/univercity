@@ -12,9 +12,8 @@ import { useSchedule } from "./hooks/useSchedule";
 import { BASE_URL } from "./configs/api";
 
 function App({ darkMode, setDarkMode }) {
-  // possible values are 'login', 'schedule'
-  // const [viewState, setViewState] = useState("schedule");
-  const [viewState, setViewState] = useState("exam");
+  // possible values are 'exam', 'schedule'
+  const [viewState, setViewState] = useState("schedule");
   const auth = useAuth(setViewState);
   const { enqueueSnackbar } = useSnackbar();
 
