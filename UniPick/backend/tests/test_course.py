@@ -23,9 +23,9 @@ class TestCourse:
         )
         course_repository = CourseRepository(client.db_engine)
 
-        schedule_reader = ScheduleReader(settings.PDF_ENGINE)
-        df = schedule_reader.read_schedule_pdf("./tests/schedule-test.pdf")
-        course_repository.insert_from_dataframe(df=df)
+        schedule_reader = ScheduleReader()
+        courses = schedule_reader.read_schedule_pdf("./tests/schedule-test.pdf")
+        course_repository.insert_from_dataframe(data=courses)
 
         user_id = self.user_repository.create(username="a", password="a")
         self.client = client
@@ -82,6 +82,11 @@ class TestCourse:
             ],
             "units": 3,
             "exam_date": "1405-04-14",
+            "major": "قدرت",
+            "classroom": "207",
+            "prerequisite_corequisite": None,
+            "semester": "4042",
+            "update_date": "24 بهمن 1404",
         }
 
     def test_toggle_course(self) -> None:

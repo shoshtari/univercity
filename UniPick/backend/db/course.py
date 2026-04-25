@@ -1,7 +1,6 @@
 import datetime
 import json
 
-import pandas as pd
 import structlog
 from cachetools import TTLCache, cached
 from sqlalchemy import (
@@ -58,47 +57,31 @@ class CourseRepository:
     def __init__(self, engine: Engine):
         self.engine = engine
 
-    def insert_from_dataframe(self, df: pd.DataFrame) -> None:
-        table_columns = set(
-            [
-                i.name
-                for i in course.columns
-                if i.name not in ("id", "created_at", "updated_at", "visible")
-            ]
-        )
-        df_columns = set(df.columns)
-
-        if table_columns != df_columns:
-            logger.error(
-                "dataframe has different columns than table",
-                extra_columns=df_columns - table_columns,
-                lacking_columns=table_columns - df_columns,
-            )
-            raise ValueError("dataframe has invalid columns")
-        df["course_times"] = df["course_times"].apply(json.dumps)
-        # since at least for now, the load is not that huge, we can iterate
+    def insert_from_dataframe(self, data: list[dto.Course]) -> None:
         rows = [
             {
                 "semester": row.semester,
-                "univercity_update_date": row.univercity_update_date,
-                "name": row["name"],
+                "univercity_update_date": row.update_date,
+                "name": row.name,
                 "code": row.code,
                 "group": row.group,
                 "instructor": row.instructor,
                 "classroom": row.classroom,
                 "major": row.major,
                 "exam_date": row.exam_date,
-                "course_times": row.course_times,
+                "course_times": json.dumps(
+                    row.courseTimes, default=lambda o: (o.__dict__)
+                ),
                 "units": row.units,
                 "prerequisite_corequisite": row.prerequisite_corequisite,
             }
-            for _, row in df.iterrows()
+            for row in data
         ]
         stmt = course.insert()
         with self.engine.begin() as conn:
             conn.execute(stmt, rows)
 
-        logger.info("dataframe inserted into course table", rows=len(df))
+        logger.info("dataframe inserted into course table", rows=len(data))
 
     def flush(self) -> None:
         with self.engine.begin() as conn:
@@ -118,6 +101,11 @@ class CourseRepository:
             course.c.instructor,
             course.c.units,
             course.c.exam_date,
+            course.c.major,
+            course.c.classroom,
+            course.c.prerequisite_corequisite,
+            course.c.semester,
+            course.c.univercity_update_date,
         ).where(course.c.visible == True)
 
         with self.engine.connect() as conn:
@@ -132,6 +120,11 @@ class CourseRepository:
                     instructor=row[5],
                     units=row[6],
                     exam_date=row[7],
+                    major=row[8],
+                    classroom=row[9],
+                    prerequisite_corequisite=row[10],
+                    semester=row[11],
+                    update_date=row[12],
                 )
                 for row in query_result
             ]

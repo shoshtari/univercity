@@ -13,9 +13,9 @@ def add_pdf(pdf_path: str) -> None:
     engine = create_engine(settings.DATABASE_URL)
 
     course_repo = CourseRepository(engine)
-    schedule_reader = ScheduleReader(settings.PDF_ENGINE)
+    schedule_reader = ScheduleReader()
 
-    df = schedule_reader.read_schedule_pdf(pdf_path)
-    logger.info("parsed pdf and got df", df_length=len(df))
-    course_repo.insert_from_dataframe(df=df)
-    logger.info("inserted df to db")
+    courses = schedule_reader.read_schedule_pdf(pdf_path)
+    logger.info("parsed pdf and got courses", data_length=len(courses))
+    course_repo.insert_from_dataframe(data=courses)
+    logger.info("inserted courses to db")

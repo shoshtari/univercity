@@ -3,12 +3,23 @@ import time
 from typing import Any, Optional, Sequence, cast
 
 import jdatetime
-import pandas as pd
 import pdfplumber
 import structlog
 from rich.progress import track
 
+from db.course_dto import Course, CourseTime
+
 logger = structlog.getLogger()
+
+WEEKDAYS = (
+    "Saturday",
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+)
+START_SUFFIX = " Start"
+END_SUFFIX = " End"
 
 
 def is_ltr(text: str) -> bool:
@@ -34,9 +45,6 @@ def is_ltr(text: str) -> bool:
 class ScheduleReader:
     IN_PARANTHESIS_REGEX = re.compile(r"\([^)]*\)")
     TIME_REGEX = re.compile(r"\d+:\d+")
-
-    def __init__(self, pdf_engine: str):
-        self.pdf_engine = pdf_engine
 
     def _reverse_row(self, line: Optional[str]) -> Optional[str]:
         """
@@ -240,71 +248,38 @@ class ScheduleReader:
                 all_data.extend(page_data)
         return all_data, header
 
-    def _read_data_with_camelot(
-        self, pdf_path: str
-    ) -> tuple[list[list[Any]], list[Optional[str]]]:
-
-        import camelot
-
-        tables = camelot.read_pdf(  # type: ignore[attr-defined]
-            pdf_path, pages="1-end", flavor="lattice", parallel=True
-        )
-
-        # remove first three rows (title, header, start-end)
-        df = pd.concat([table.df.iloc[3:] for table in tables], ignore_index=True)
-        header = tables[0].df.iloc[1].tolist()
-        return df.values.tolist(), header
-
     @staticmethod
-    def _normalize_occurance_times(df: pd.DataFrame) -> pd.DataFrame:
+    def _normalize_occurance_times(
+        row: list[Any], headers: list[str]
+    ) -> list[CourseTime]:
         """
         the occurance times in pdf are formatted into 10 columns (weekdays * 2) which determine start and end
         the code logic expect a list of objects with three fields 'weekday', 'start' and end
         this code converts it
         """
-        start_suffix = " Start"
-        end_suffix = " End"
 
-        weekdays = (
-            "Saturday",
-            "Sunday",
-            "Monday",
-            "Tuesday",
-            "Wednesday",
-        )
+        class_times = []
+        for weekday in WEEKDAYS:
+            start_index = headers.index(weekday + START_SUFFIX)
+            end_index = headers.index(weekday + END_SUFFIX)
+            start_time = row[start_index]
+            end_time = row[end_index]
 
-        def occurance_func(row: pd.Series) -> list[dict[str, str]]:
-            ans = []
-            for weekday in weekdays:
-                start_time = row[weekday + start_suffix]
-                end_time = row[weekday + end_suffix]
+            if (not start_time or not isinstance(start_time, str)) and (
+                not end_time or not isinstance(end_time, str)
+            ):
+                continue
 
-                if (not start_time or not isinstance(start_time, str)) and (
-                    not end_time or not isinstance(end_time, str)
-                ):
-                    continue
-
-                ans.append(
-                    {
-                        "weekday": weekday,
-                        "start": start_time,
-                        "end": end_time,
-                    }
-                )
-            return ans
-
-        df["course_times"] = df.apply(occurance_func, axis=1)
-        drop_columns = [i + start_suffix for i in weekdays]
-        drop_columns.extend([i + end_suffix for i in weekdays])
-        df.drop(columns=drop_columns, inplace=True)
-        return df
+            class_times.append(
+                CourseTime(weekday=weekday, start=start_time, end=end_time)
+            )
+        return class_times
 
     @staticmethod
     def _normalize_header(header: Sequence[Optional[str]]) -> list[str]:
         header = [
             col.strip() if col else None for col in header
         ]  # no empty or none header
-        # since pdfplumber return None and camelot return '' this works for both
 
         output: list[str] = []
         for i in range(len(header)):
@@ -336,16 +311,11 @@ class ScheduleReader:
 
     def _normalize_dataframe(
         self,
-        df: pd.DataFrame,
+        data: list[list[Any]],
         semester: str,
         update_date: str,
         header: list[str],
-    ) -> pd.DataFrame:
-
-        # df = df[df.apply(lambda row: not all(x == '' for x in row), axis=1)]
-        df = df.replace("", None)
-        df = df.dropna(how="all")  # Remove completely empty rows
-        df = df.reset_index(drop=True)
+    ) -> list[Course]:
 
         column_mapping = {
             "زاينمه*/زاين شيپ": "prerequisite_corequisite",
@@ -369,39 +339,51 @@ class ScheduleReader:
             "سرد مان": "name",
         }
 
-        df.rename(columns=column_mapping, inplace=True)
         try:
-            headers_eng = [column_mapping[col] for col in header]
+            cleansed_header = [column_mapping[i] for i in header]
         except KeyError as e:
-            logger.critical("unknown column in header", column=str(e), header=header)
+            logger.critical("unknown column in header", error=str(e), header=header)
             raise
 
-        headers_eng.reverse()
-        df = df[headers_eng]  # Reorder
-        for col in df.columns:
-            df[col] = df[col].apply(self._reverse_row)
-            df[col] = df[col].apply(
-                lambda val: val.replace("ي", "ی") if isinstance(val, str) else val
-            )
-            df[col] = df[col].apply(
-                lambda val: val.replace("ﺒ", "ب") if isinstance(val, str) else val
-            )
-            df[col] = df[col].apply(
-                lambda val: val.replace("ﺼ", "ص") if isinstance(val, str) else val
-            )
-            df[col] = df[col].apply(
-                lambda val: val.replace("ﻋ", "ع") if isinstance(val, str) else val
-            )
-            df[col] = df[col].apply(
-                lambda val: val.replace("ك", "ک") if isinstance(val, str) else val
-            )
-        df = self._normalize_occurance_times(df)
-        df["exam_date"] = df["exam_date"].apply(self._parse_exam_date)
-        df["semester"] = semester
-        df["univercity_update_date"] = update_date
-        return df
+        exam_date_index = cleansed_header.index("exam_date")
+        cleansed_data = []
+        for row in data:
+            cleansed_row = []
+            for i, cell in enumerate(row):
+                if cell == "":
+                    cell = None
+                cell = self._reverse_row(cell)
+                if isinstance(cell, str):
+                    cell = cell.translate(str.maketrans("يﺒﺼﻋك", "یبصعک"))
+                if i == exam_date_index:
+                    cell = self._parse_exam_date(cell)
 
-    def read_schedule_pdf(self, pdf_path: str) -> pd.DataFrame:
+                cleansed_row.append(cell)
+            if any([i is not None for i in cleansed_row]):
+                if len(header) != len(cleansed_row):
+                    logger.error(
+                        "header length mismatch",
+                        header_length=len(header),
+                        row_length=len(cleansed_row),
+                    )
+                    raise ValueError("got row with different size than header")
+
+                kwargs = dict(zip(cleansed_header, cleansed_row))
+                for weekday in WEEKDAYS:
+                    del kwargs[weekday + START_SUFFIX]
+                    del kwargs[weekday + END_SUFFIX]
+                kwargs["courseTimes"] = self._normalize_occurance_times(
+                    row=cleansed_row, headers=cleansed_header
+                )
+                kwargs["id"] = None
+                kwargs["semester"] = semester
+                kwargs["update_date"] = update_date
+
+                cleansed_data.append(Course(**kwargs))
+
+        return cleansed_data
+
+    def read_schedule_pdf(self, pdf_path: str) -> list[Course]:
         """
         Read a PDF file containing a course schedule table and return a DataFrame.
 
@@ -409,20 +391,13 @@ class ScheduleReader:
             pdf_path: Path to the PDF file
 
         Returns:
-            pandas DataFrame containing the course schedule
-            semester of the schedule
+            list of courses in the PDF file
         """
 
         semester, update_date = self._read_metadata(pdf_path)
 
         start = time.time()
-        match self.pdf_engine:
-            case "pdfplumber":
-                data, header = self._read_data_with_pdfplumber(pdf_path=pdf_path)
-            case "camelot":
-                data, header = self._read_data_with_camelot(pdf_path=pdf_path)
-            case _:
-                raise ValueError(f"unknown pdf engine {self.pdf_engine}")
+        data, header = self._read_data_with_pdfplumber(pdf_path=pdf_path)
         logger.debug("pdf_parsing_time", duration=time.time() - start)
         if not data:
             raise ValueError("No data found in the PDF")
@@ -431,8 +406,10 @@ class ScheduleReader:
             raise ValueError("No header found in the PDF")
 
         normalized_header = self._normalize_header(header)
-        df = pd.DataFrame(data, columns=normalized_header)
-        df = self._normalize_dataframe(
-            df=df, semester=semester, update_date=update_date, header=normalized_header
+        ans = self._normalize_dataframe(
+            data=data,
+            semester=semester,
+            update_date=update_date,
+            header=normalized_header,
         )
-        return df
+        return ans

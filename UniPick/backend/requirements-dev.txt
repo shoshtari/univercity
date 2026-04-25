@@ -6,8 +6,6 @@ ipython==9.10.0
 jdatetime==5.2.0
 mypy==1.20.0
 mypy_extensions==1.1.0
-pandas==3.0.1
-pandas-stubs==3.0.0.260204
 pdfplumber==0.11.9
 PyJWT==2.12.1
 pytest==9.0.3

@@ -1,6 +1,7 @@
 import datetime
 import json
 from dataclasses import dataclass
+from typing import Optional
 
 
 @dataclass
@@ -32,3 +33,8 @@ class Course:
     courseTimes: list[CourseTime]
     units: int
     exam_date: str
+    major: str
+    classroom: str
+    prerequisite_corequisite: Optional[str]
+    semester: str
+    update_date: str

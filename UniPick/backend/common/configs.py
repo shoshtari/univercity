@@ -24,7 +24,6 @@ class Settings(BaseSettings):
     WEBSERVER: WebserverSettings = Field(default_factory=lambda _: WebserverSettings())
 
     BCRYPT_ROUNDS: int = 12
-    PDF_ENGINE: str = Field("pdfplumber", pattern="pdfplumber|camelot")
     CORS_ORIGINS: list[str] = Field(["http://localhost:5173"])
 
     model_config = SettingsConfigDict(
