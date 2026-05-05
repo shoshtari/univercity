@@ -1,0 +1,367 @@
+
+\def \Subject {آشنایی با محاسبات انجام شده در فرآیند آموزش }
+\def \Session { یک}
+% \setcounter{chapter}{\Session-1}
+\renewcommand{\chaptername}{سوال}
+\chapter{\Subject}
+این سوال به روابط ریاضی مورد استفاده در یک شبکه عصبی پیچشی می‌پردازد.
+\section{انجام یک مرحله آموزش کامل}
+\subsection{مقادیر اولیه}
+با استفاده از کد داده شده، اطلاعات شبکه مطابق زیر است:
+\begin{latin}
+	~\\
+	$
+	X_1 = \begin{bmatrix}
+		-2 & 0 & -1 \\
+		-2 & -2 & 0 \\
+		0 & -2 & -1
+	\end{bmatrix}
+	\quad 
+	X_2 = \begin{bmatrix}
+		0 & 0 & 0 \\
+		0 & 0 & 2 \\
+		0 & 0 & 0
+	\end{bmatrix}
+	\\\\\\
+	W_{conv1} = \begin{bmatrix}
+		-1 & 0 \\
+		1 & 2
+	\end{bmatrix}
+	\quad 
+	W_{conv2} = \begin{bmatrix}
+		1 & 1 \\
+		0 & 2
+	\end{bmatrix}
+	\quad
+	W_{linear} =
+	\begin{bmatrix}
+		2 &
+		-2 &
+		-4 &
+		3
+	\end{bmatrix}
+	\\
+	bias_{conv} = -1 
+	\quad 
+	bias_{linear} = 1
+	$
+\end{latin}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{images/q1_arch.jpg}
+	\caption{
+		معماری مدل
+	}
+	\label{fig:q2_two_layer}
+\end{figure}
+\subsection{انتشار رو به جلو}
+برای بخش 
+\lr{padding}
+داریم:
+\begin{latin}
+	~\\
+	$
+		X_{{padded}_1} = \begin{bmatrix}
+-2 & -2 & -2 & 0 & -2 \\
+0 & -2 & 0 & -1 & 0 \\
+-2 & -2 & -2 & 0 & -2 \\
+-2 & 0 & -2 & -1 & -2 \\
+-2 & -2 & -2 & 0 & -2 
+	\end{bmatrix}
+	\quad 
+	X_{{padded}_2} = \begin{bmatrix}
+		0 & 0 & 0 & 2& 0 \\
+		0 & 0 & 0 & 0& 0 \\
+		0 & 0 & 0 & 2& 0 \\
+		0 & 0 & 0 & 0& 0 \\
+		0 & 0 & 0 & 2& 0 
+	\end{bmatrix}
+	$
+\end{latin}
+سپس برای 
+\lr{convolution }
+داریم:
+\begin{latin}
+	~\\
+	$
+	z_1 = X_{{padded}_1} * W_1 = \begin{bmatrix}
+		-2 & 0 & 0 & -1 \\
+		-6 & -4 & -2 & -3 \\
+		0 & -2 & -2  & -5 \\
+		-4 & -6 & 0 & -3
+	\end{bmatrix}
+	\quad 
+	z_2 = \begin{bmatrix}
+		0 & 0 & 2 & 2 \\
+		0 & 0 & 4 & 0 \\
+		0 & 0 &  2 & 2 \\
+		0 & 0 & 4 & 0
+	\end{bmatrix}
+	\\
+	\Rightarrow
+	z = z_1 + z_2 + bias = \begin{bmatrix}
+		-3 & -1 & 1 & 0  \\
+		-7 & -5 & 1 & -4 \\
+		-1 & -3 & -1  & -4 \\
+		-5 & -7 & 3 & -4
+	\end{bmatrix}
+	$
+\end{latin}
+بعد از این مرحله باید 
+\lr{max pooling}
+انجام شود:
+\begin{latin}
+	$
+	z_{pooled} = \begin{bmatrix}
+		-1 & 1 \\
+		-1 & 3
+	\end{bmatrix}
+$
+\end{latin}
+سپس اعمال تابع 
+\lr{leaky ReLU}
+با شیب 
+$0.1$
+
+و سپس 
+\lr{flat}
+کردن را داریم:
+\begin{latin}
+	~\\
+$
+	a_1 = \begin{bmatrix}
+		-0.1 & 1 \\
+		-0.1 & 3
+	\end{bmatrix}
+	\Rightarrow
+	a_{1_{flat}} = \begin{bmatrix}
+		-0.1 \\
+		1 \\
+		-0.1 \\
+		3
+	\end{bmatrix}
+	$
+\end{latin}
+حال باید لایه خطی نهایی را اعمال کرد و مقدار بایاس را به آن اضافه نمود:
+\begin{latin}
+	~\\
+	$
+z_2 = 		\begin{bmatrix}
+	2 &
+	-2 &
+	-4 &
+	3
+\end{bmatrix} * \begin{bmatrix}
+-0.1 \\
+1 \\
+-0.1 \\
+3
+\end{bmatrix}
+= 7.2
+\qquad 
+a_2 = z_2 + bias = 8.2
+	$
+\end{latin}
+پس یعنی خروجی شبکه برای این ورودی مقدار $8.2$ است.
+\subsection{انتشار رو به عقب}
+
+اول باید مقدار خطا حساب شود. با توجه به اینکه در سوال آمده است برای خطا از میانگین مجذور استفاده شود، مقدار برچسب برابر 
+$-1$
+ و ضریب یادگیری برابر 
+ $0.1$
+ است، داریم:
+ 
+ \begin{latin}
+ 	~\\
+ 	$
+ 	error_{mse} = \cfrac{1}{n} \sum\limits_{i = 1}^n (y_i - \hat{y}_i)^2 
+ 	= 
+ 	9.2^2 = 84.64
+ 	$
+ \end{latin}
+ حال باید با استفاده از قاعده زنجیری، مقدار گرادیان خطا نسبت به هر پارامتر را یافت. (درموقع محاسبه مشتق و گذر از لایه 
+ \lr{pooling}
+ یک وضعیت تساوی پیش آمد. با مشورت با هوش مصنوعی، مقدار گرادیان فقط به اولین بیشینه اختصاص داده شد.
+ )
+ (برای کانولوشن از نماد $*$ استفاده شده است.)
+ \begin{latin}
+ 	~\\
+ 	$
+ 	\cfrac{\partial E }{\partial a_2} = 2(8.2 - (-1)) = 18.4
+ 	\cfrac{\partial E}{\partial bias_{linear}} = \cfrac{\partial E}{\partial a_2} * \cfrac{\partial a_2}{\partial bias_{linear}}  = 18.4
+ 	\\
+ 	\cfrac{\partial E}{\partial W_{linear}} =
+ 	\cfrac{\partial E}{\partial a_2} * \cfrac{\partial a_2}{\partial W_{linear}}
+ 	= 
+ 	18.4 * a_{1_{flat}}^T = \begin{bmatrix}
+ 		-1.84 &
+ 		18.4 &
+ 		-1.84 &
+ 		55.2
+ 	\end{bmatrix}
+ 	\\
+ 	\cfrac{\partial E}{\partial a_{1_{flat}}} = 
+ 	\cfrac{\partial E}{\partial a_2} *
+ 	\cfrac{\partial a_2}{\partial z_2} *
+ 	\cfrac{\partial z_2}{\partial a_{1_{flat}}} = 
+ 	18.4 * 1 * 	
+ 	W_{linear}^T = 	\begin{bmatrix}
+ 		36.8 \\
+ 		-36.8 \\
+ 		-73.6 \\
+ 		55.2
+ 	\end{bmatrix}
+ 	\Rightarrow 
+ 	\cfrac{\partial E}{\partial a} = \begin{bmatrix}
+ 		36.8 &
+-36.8 \\
+-73.6 &
+55.2
+ 	\end{bmatrix}
+ 	\\
+ 	\Rightarrow
+ 	\cfrac{\partial E}{\partial z_{pooled}} = \begin{bmatrix}
+ 		3.68 & -36.8 \\
+ 		-7.36 & 55.2
+ 	\end{bmatrix}
+ 	\\
+ 	\cfrac{\partial E}{\partial z} = 
+ 	\cfrac{\partial E}{\partial z_{pooled}} *
+ 	\cfrac{\partial z_{pooled}}{\partial z} = \begin{bmatrix}
+ 		0 & 3.68 & -36.8 & 0 \\
+ 		0 & 0 & 0 & 0 \\
+ 		-7.36 & 0 & 0 & 0 \\
+ 		0 & 0 & 55.2 & 0 
+ 	\end{bmatrix} 
+ 	\\
+ 	\cfrac{\partial E}{\partial bias_{conv}} = 
+ 	\cfrac{\partial E}{\partial z} * 
+ 	\cfrac{\partial z}{\partial bias_{conv}} = 
+ 	sum
+ 	 \begin{bmatrix}
+ 		0 & 3.68 & -36.8 & 0 \\
+ 		0 & 0 & 0 & 0 \\
+ 		-7.36 & 0 & 0 & 0 \\
+ 		0 & 0 & 55.2 & 0 
+ 	\end{bmatrix} 
+ 	= 14.72
+ 	\\
+ 	 	\cfrac{\partial E}{\partial z_1} = 
+ 	\cfrac{\partial E}{\partial z} * 
+ 	\cfrac{\partial z}{\partial z_1} 
+ 	= 
+ 	\cfrac{\partial z}{\partial z} 
+ 	\Rightarrow 
+ 	\cfrac{\partial E}{\partial z_1}  = 
+ 	\cfrac{\partial E}{\partial z_2} = 
+ 	\cfrac{\partial E}{\partial z} = 
+ 	 \begin{bmatrix}
+ 		0 & 3.68 & -36.8 & 0 \\
+ 		0 & 0 & 0 & 0 \\
+ 		-7.36 & 0 & 0 & 0 \\
+ 		0 & 0 & 55.2 & 0 
+ 	\end{bmatrix}   
+ 	\\
+ 	\cfrac{\partial E}{\partial W_{conv1}} = 
+ 	\cfrac{\partial E}{\partial z_1} * 
+ 	\cfrac{\partial z_1}{\partial W_{conv1}} = \cfrac{\partial E}{\partial z_1} *  X_{{padded}_1} 
+ 	 =  \begin{bmatrix}
+ 	 	-29.44 & -47.84 \\
+ 	 	-103.04 & 36.8
+ 	 \end{bmatrix}
+ 	 \\
+ 	\cfrac{\partial E}{\partial W_{conv2}} = 
+ 	\cfrac{\partial E}{\partial z_2} * 
+ 	\cfrac{\partial z_2}{\partial W_{conv2}} = \cfrac{\partial E}{\partial z_2} *  X_{{padded}_2} 
+ 	 =  \begin{bmatrix}
+ 	 	0 & -73.6 \\
+ 	 	0 & 110.4
+ 	 \end{bmatrix}
+ 	$
+ \end{latin}
+ حال با توجه به اینکه ضریب یادگیری برابر 
+ $0.1$
+ است، باید مقدار گرادیان‌ها را در 
+ $0.1$
+ ضرب کرد و با مقدار قبلی پارامتر جمع کرد تا به مقدار جدید رسید. پس داریم:
+ 
+ \begin{latin}
+ 	~\\
+ 	$
+ 	bias_{linear} = 1 - 0.1 * 18.4 = 1 - 1.84 = -0.84 \\
+ 	W_{linear} = \begin{bmatrix}
+ 		2 & -2  & -4 & 3
+ 	\end{bmatrix} 
+ 	- 
+ 	0.1 \begin{bmatrix}
+ 		 		-1.84 &
+ 		18.4 &
+ 		-1.84 &
+ 		55.2
+ 	\end{bmatrix}
+ 	= 
+ 	 \begin{bmatrix}
+ 		2.184 & 
+ 		-3.84 &
+ 		-3.816 &
+ 		-2.52
+ 	\end{bmatrix}
+ 	\\
+ 	bias_{conv} = -1 - 0.1 * 14.72 = -2.472
+ 	\\
+ 	W_{conv1} = \begin{bmatrix}
+ 		-1 & 0 \\
+ 		1 & 2
+ 	\end{bmatrix}
+ 	- 
+ 	0.1 
+ 	 \begin{bmatrix}
+ 		-29.44 & -47.84 \\
+ 		-103.04 & 36.8
+ 	\end{bmatrix}
+ 	= 
+ 	 \begin{bmatrix}
+ 		1.944 & 4.784 \\
+ 		11.304 & -1.68
+ 	\end{bmatrix}
+ 	\\
+ 	W_{conv2} = 
+ 	 \begin{bmatrix}
+ 		1 & 1 \\
+ 		0 & 2
+ 	\end{bmatrix}
+ 	- 
+ 	0.1
+ 	  \begin{bmatrix}
+ 		0 & -73.6 \\
+ 		0 & 110.4
+ 	\end{bmatrix}
+ 	=
+ 	  \begin{bmatrix}
+ 		1 & 8.36 \\
+ 		0 & -9.04
+ 	\end{bmatrix}
+ 	$
+ \end{latin}
+ \section{مقایسه انواع \lr{pooling}}
+ اگر از 
+ \lr{average pooling}
+ استفاده می‌شد، 
+ در انتشار رو به جلو، هنگام بدست آوردن 
+ $z_{pooled}$
+ از روی 
+ $z$
+ به جای اینکه بیشینه درنظر گرفته شود، میانگین حساب می‌شود و در انتشار رو به عقب، به جای این‌که یک ماسک بولین
+ \LTRfootnote{boolean}
+ درنظر گرفته شود که مقادیر بیشینه در یک مربع دو در دو در آن یک هستند،‌مقدار گرادیان بر تعداد درایه‌های پنجره (در اینجا ۴) تقسیم 
+ شده و مشتق 
+ $z$
+ بدست می‌آید.
+ \section{تغییر تعداد کانال}
+ در اینجا در لایه کانولوشن عملا فقط یک ویژگی حساب می‌شود و لایه فقط یک هسته 
+ \LTRfootnote{kernel}
+  دارد. برای تعداد کانال خروجی بیشتر، یعنی لایه کانولوشن باید ویژگی‌های بیشتری را بیابد، پس باید چندین هسته داشته باشد. هر هسته به اندازه کانال‌های ورودی * ابعاد فیلتر باید پارامتر داشته باشد.
+ 
+ برای مثال، اگر بخواهیم خروجی لایه کانولوشن دو کاناله باشد، باید ۲ * ۲ * ۲ پارامتر جدید برای پارامترهای کانولوشن و ۱ پارامتر جدید برای بایاس هسته جدید معرفی کرد. هر هسته بین پارامترهای خود و کانال‌های ورودی عمل کانولوشن را انجام می‌دهد و سپس خروجی کانال‌های مختلف ورودی  و مقدار  \lr{bias}  را باهم جمع می‌کند. چون دو هسته موجود است، خروجی لایه یک خروجی دو کاناله با ابعاد ۴ در ۴ است. 
+ 
