@@ -1,0 +1,2 @@
+- [] q1: Make a table of pos tag schema
+- [] q1: Make a table of chunk tag schema

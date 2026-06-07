@@ -1,0 +1,61 @@
+
+\def \Subject {برچسب‌گذاری دنباله}
+\def \Session { یک}
+% \setcounter{chapter}{\Session-1}
+\renewcommand{\chaptername}{سوال}
+\chapter{\Subject}
+\section{بررسی پایگاه داده}
+\begin{enumerate}
+\item 
+
+یکی از سطرهای مجموعه داده 
+\LTRfootnote{Dataset}
+در جدول 
+\ref{tab:q1_datasample}
+آمده است. می‌توان دید علاوه بر 
+\lr{NER Tag}
+مجموعه داده دو ستون دیگر به اسم‌های 
+\lr{pos tag}
+و 
+\lr{chunk tag }
+نیز دارد. 
+\item 
+\lr{pos tag}
+عملا نقش گرامری هر توکن را مشخص می‌کند. برای مثال
+\lr{NNP}
+یک اسم مشخصه 
+\LTRfootnote{Proper noun}
+است. اهمیت این برچسب در 
+\lr{NER}
+از این رو است که ما به دنبال تشخیص کلاس اسامی (و به طور خاص اسامی مشخصه) هستیم. پس می‌توان افعال را درنظر نگرفت و اگر یک کلمه فعل بود از آن صرفنظر کرد. 
+
+\lr{chunk tag}
+عملا تعمیم 
+\lr{pos tag}
+است. یعنی سعی می‌کند جمله را بجای در سطح توکن در سطح عبارت
+\LTRfootnote{phrase}
+بسنجد. و توکن‌ها را باهم دسته می‌کند. 
+
+  \begin{table}[ht]
+	\centering
+	\caption{سطر اول مجموعه داده آموزش}
+	\label{tab:q1_datasample}
+	\begin{latin}
+\footnotesize
+
+\begin{tabular}{llllllllll}
+	\toprule
+	\textbf{Token}  & EU & rejects & German & call & to & boycott & British & lamb & . \\
+	\midrule
+	\textbf{Pos Tag} & NNP & VBZ & JJ & NN & TO & VB & JJ & NN & . \\
+	\textbf{Chunk Tag}& B-NP & B-VP & B-NP & I-NP & B-VP & I-VP & B-NP & I-NP & O \\
+	\textbf{NER Tag} & B-ORG & O & B-MISC & O & O & O & B-MISC & O & O \\
+	\bottomrule
+\end{tabular}
+	\end{latin}
+	
+	
+\end{table}
+
+\end{enumerate}
+	
