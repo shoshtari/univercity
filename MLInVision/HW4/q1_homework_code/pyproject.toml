@@ -9,6 +9,17 @@ dependencies = [
     "ipykernel>=7.2.0",
     "jupyter>=1.1.1",
     "matplotlib>=3.10.9",
+    "pytest>=9.0.3",
+    "pyyaml>=6.0.0",
+    "scikit-learn>=1.6.0",
     "torch>=2.12.0",
     "torchvision>=0.27.0",
+]
+
+[tool.setuptools]
+packages = [
+    "models",
+    "data",
+    "scripts",
+    "utils",
 ]

@@ -89,4 +89,18 @@ class Conll2003Dataset(Dataset):
         return len(self.samples)
 
     def __getitem__(self, index):
-        return self.samples[index][1]
+        entry = self.samples[index][1]
+        tokens = entry["tokens"]
+        pos_tags = entry["pos_tags"]
+        chunk_tags = entry["chunk_tags"]
+        ner_tags = entry["ner_tags"]
+
+        ans = (
+            tokens,
+            {
+                "pos_tags": pos_tags,
+                "chunk_tags": chunk_tags,
+                "ner_tags": ner_tags,
+            },
+        )
+        return ans
