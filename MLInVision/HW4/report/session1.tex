@@ -1,0 +1,201 @@
+
+\def \Subject {برچسب‌گذاری دنباله}
+\def \Session { یک}
+% \setcounter{chapter}{\Session-1}
+\renewcommand{\chaptername}{سوال}
+\chapter{\Subject}
+\section{بررسی پایگاه داده}
+\begin{enumerate}
+\item 
+
+یکی از سطرهای مجموعه داده 
+\LTRfootnote{Dataset}
+در جدول 
+\ref{tab:q1_datasample}
+آمده است. می‌توان دید علاوه بر 
+\lr{NER Tag}
+مجموعه داده دو ستون دیگر به اسم‌های 
+\lr{pos tag}
+و 
+\lr{chunk tag }
+نیز دارد. 
+\item 
+\lr{pos tag}
+عملا نقش گرامری هر توکن را مشخص می‌کند. برای مثال
+\lr{NNP}
+یک اسم مشخصه 
+\LTRfootnote{Proper noun}
+است. اهمیت این برچسب در 
+\lr{NER}
+از این رو است که ما به دنبال تشخیص کلاس اسامی (و به طور خاص اسامی مشخصه) هستیم. پس می‌توان افعال را درنظر نگرفت و اگر یک کلمه فعل بود از آن صرفنظر کرد. 
+
+\lr{chunk tag}
+عملا تعمیم 
+\lr{pos tag}
+است. یعنی سعی می‌کند جمله را بجای در سطح توکن در سطح عبارت
+\LTRfootnote{phrase}
+بسنجد. و توکن‌ها را باهم دسته می‌کند. 
+
+  \begin{table}[H]
+	\centering
+	\caption{سطر اول مجموعه داده آموزش}
+	\label{tab:q1_datasample}
+	\begin{latin}
+\footnotesize
+
+\begin{tabular}{llllllllll}
+	\toprule
+	\textbf{Token}  & EU & rejects & German & call & to & boycott & British & lamb & . \\
+	\midrule
+	\textbf{Pos Tag} & NNP & VBZ & JJ & NN & TO & VB & JJ & NN & . \\
+	\textbf{Chunk Tag}& B-NP & B-VP & B-NP & I-NP & B-VP & I-VP & B-NP & I-NP & O \\
+	\textbf{NER Tag} & B-ORG & O & B-MISC & O & O & O & B-MISC & O & O \\
+	\bottomrule
+\end{tabular}
+	\end{latin}
+	
+	
+\end{table}
+
+\item 
+کد مربوط به 
+\lr{vocab}
+پیاده‌سازی شد. این کد به ترتیب توکن‌ها را بررسی می‌کند و تعداد تکرار هرکدام که به مقدار 
+\lr{cutoff}
+رسید، آن را به لیست 
+\lr{vocab}
+اضافه می‌کند.
+\item 
+~\\
+
+
+	\begin{program}[H]
+		\begin{latin}
+			\begin{minted}[frame=none]{python}
+vocab = Vocab(ds_train)
+print(f"{len(vocab) = }")
+print(f"Token 0 is '{vocab.id_to_token(0)}'")
+print("'quick' token id is ", vocab.token_to_id("quick"))
+			\end{minted}
+			\label{q1:vocab}
+		\end{latin}
+		\caption{موارد خواسته‌شده بخش «د»}
+	\end{program}
+	
+	\grayLBox{
+		len(vocab) = 4913 \\
+		Token 0 is 'to' \\
+		'quick' token id is  4813
+	}
+	
+	\end{enumerate}
+\section{بررسی \lr{collate fn}}
+\begin{enumerate}
+	\item 
+	هرچقدر بیشتر یک جمله پد شود، باعث می‌شود احتمال توجه مدل به توکن‌های معنی‌دار آن کم‌تر شود. زیرا نسبت توکن‌های معنی‌دار به طول جمله کم می‌شود. ولی پد کردن برای محاسبه اجتناب‌ناپذیر است. حال اگر در یک دسته 
+	\LTRfootnote{batch}
+	این کار انجام شود، هم محاسبه امکان‌پذیر است و هم پد کردن به میزان کم‌تری اتفاق می‌افتد.
+	\item 
+	~\\
+		\begin{program}[H]
+		\begin{latin}
+			\begin{minted}[frame=none]{python}
+dataloader = get_dataloader(ds_train)
+first_batch = next(iter(dataloader))
+tokens = [item[0] for item in first_batch]
+tokens = np.array(tokens)
+print(tokens.shape)
+			\end{minted}
+			\label{q1:batch_shape}
+		\end{latin}
+		\caption{شکل بچ اول توکن‌ها}
+	\end{program}
+	
+	\grayLBox{
+(32, 47)
+	}
+	
+\end{enumerate}
+\section{آموزش شبکه}
+\begin{enumerate}
+	\item 
+	\textbf{مدل \lr{RNN}:}
+
+\begin{figure}[H]
+	
+	\centering
+	\includegraphics[width=\textwidth]{images/q1-BiRNNTagger.png}
+	\caption{
+نمودارهای خطا و دقت مدل 
+\lr{RNN}
+ همراه با گزارش دسته‌بندی
+	}
+	\label{q1:rnn}
+\end{figure}
+
+	\item 
+	\textbf{مدل \lr{LSTM}:}
+	
+	\begin{figure}[H]
+		
+		\centering
+		\includegraphics[width=\textwidth]{images/q1-BiLSTMTagger.png}
+		\caption{
+			نمودارهای خطا و دقت مدل 
+			\lr{LSTM}
+			همراه با گزارش دسته‌بندی
+		}
+		\label{q1:lstm}
+	\end{figure}
+	
+	
+	\item 
+	\textbf{مدل \lr{GRU}:}
+	
+	\begin{figure}[H]
+		
+		\centering
+		\includegraphics[width=\textwidth]{images/q1-BiGRUTagger.png}
+		\caption{
+			نمودارهای خطا و دقت مدل 
+			\lr{GRU}
+			همراه با گزارش دسته‌بندی
+		}
+		\label{q1:gru}
+	\end{figure}
+	
+\end{enumerate}
+\subsection{مقایسه مدل‌ها}
+
+در تصویر 
+\ref{q1:compare}
+می‌توان دقت و خطای مدل‌ها را در کنار هم دید. روی داده آموزش، دقت مدل 
+\lr{RNN}
+از دو مورد دیگر بدتر است و این به دلیل این است که در مدل 
+\lr{RNN}
+روابط بلندمدت کلمات حفظ نمی‌شوند. اما دقت مدل‌های 
+\lr{GRU}
+و 
+\lr{LSTM}
+به‌هم نزدیک است که این مطابق انتظار است. مهم‌ترین آورده 
+\lr{GRU}
+نسبت به 
+\lr{LSTM}
+در سادگی محاسبات است نه در دقت. 
+
+روی داده صحت‌سنجی، می‌توان دید در دورهای اول نیز، مدل 
+\lr{RNN}
+کندتر همگرا می‌شود. 
+اما دورهای آخر، دیگر دقت افزایش پیدا نمی‌کند و هر سه مدل به نوعی اشباع شده‌اند. 
+
+	\begin{figure}[H]
+	
+	\centering
+	\includegraphics[width=\textwidth]{images/q1-combined.png}
+	\caption{
+		نمودارهای خطا و دقت مدل‌ها درکنار هم
+	}
+	\label{q1:compare}
+\end{figure}
+
+

@@ -1,0 +1,324 @@
+\def \Subject {علیت}
+\def \Session { دو}
+% \setcounter{chapter}{\Session-1}
+\renewcommand{\chaptername}{سوال}
+\chapter{\Subject}
+
+\section{سوالات تئوری}
+
+\subsection{نامساوی}
+کافیست یک مثال نقض بزنیم. حالت زیر را درنظر بگیرید:
+\begin{latin}
+	~\\
+	$
+	X \sim Bernouli(0.5)
+	Y = X
+	Z = X (xor) Y
+	$
+\end{latin}
+حال اگر پرسش احتمالی را برای 
+$Y = 1 | X$ 
+حساب کنیم داریم:
+
+\begin{latin}
+	~\\
+	$
+P(Z = 1)  = 0 \\
+P(Z = 1 | X = 1) = 0  \\
+P(Z = 1 | X = 0) = 0
+\Rightarrow min(P(Y = 1 | X = x)) \leq P(Y = 1) \leq max(P(Y = 1 | x = x')) 
+	$
+\end{latin}
+که در آن نامساوی درست است. حال اگر با مداخله حساب کنیم داریم:
+\begin{latin}
+	~\\
+	$
+	P(Z = 1 | do(Y = 0 )) = P(X = 1) = 0.5 \\
+	P(Z = 1 | do(Y = 1)) = P(X = 0) = 0.5
+	$
+\end{latin}
+که میبینیم هر دو احتمال با مداخله برابر 
+$0.5$
+می‌شود ولی مقدار
+$P(Z = 1)$
+برابر صفر است که از هردو این مقادیر کمتر است.
+
+\subsection{اثر علّی}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[
+		node distance=1.5cm,
+		var/.style={circle, draw, minimum size=0.8cm, align=center, font=\bfseries},
+		arrow/.style={-latex, thick}  % Simple, no length parameter
+		]
+		
+		% Define nodes
+		\node[var] (A) {A};
+		\node[var, right=of A] (M) {M};
+		\node[var, below=of A] (L) {L};
+		\node[var, below=of M] (T) {T};
+
+		
+		
+		% Draw arrows
+		\draw[arrow] (A) -- (M);
+		\draw[arrow] (A) -- (L);
+		\draw[arrow] (L) -- (M);
+		\draw[arrow] (L) -- (T);
+		\draw[arrow] (M) -- (T);
+
+		
+		
+	\end{tikzpicture}
+	\caption{مدل علّی ساختاری توصیف شده در سوال}
+	\label{q2:scm1}
+\end{figure}
+
+باید مقدار
+$
+E[M \mid L, A]
+$
+را در نظر گرفت، زیرا هدف ما محاسبه‌ی اثر علّی بار \lr{CPU} بر مصرف حافظه است. اگر تنها از
+$
+E[M \mid L]
+$
+استفاده کنیم، آنگاه اثر متغیر (A) نیز در این مقدار وارد می‌شود. دلیل این موضوع آن است که (A) والد مشترک (L) و (M) است؛ بنابراین هم بر مقدار بار \lr{CPU} و هم بر مصرف حافظه تأثیر می‌گذارد. در نتیجه بخشی از وابستگی مشاهده‌شده بین (L) و (M) ناشی از مسیر
+$
+L \leftarrow A \rightarrow M
+$
+است و لزوماً بیانگر اثر علّی (L) بر (M) نیست.
+
+برای حذف این اثر م باید A را معین کنیم. در این صورت مسیر پشتی بین L و M مسدود می‌شود و می‌توان اثر علّی L بر M را محاسبه کرد. به طور دقیق، اثر علّی از طریق
+$
+P(M \mid do(L=l))
+$
+تعریف می‌شود و در این مسئله با تعدیل روی A قابل محاسبه است. بنابراین برای محاسبه‌ی اثر علّی یک متغیر بر متغیر دیگر، باید ابتدا تمام علل مشترک آن‌ها را کنترل کرد و سپس اثر مداخله را بررسی نمود.
+
+\section{سوالات پیاده‌سازی}
+\subsection{پیاده‌سازی \lr{SCM}}
+مطابق صورت سوال کلاس 
+\lr{SCM}
+پیاده‌سازی شد. ساختار این کلاس به این صورت است که  موقع اضافه شدن یک متغیر، یک تابع نیز داده می‌شود که با ورودی گرفتن والدهای متغیر و تعداد داده مورد نیاز، برای آن متغیر خروجی تولید کند. 
+
+موقع نمونه‌برداری، مدل ابتدا متغیرها را به صورت توپولوژی مرتب می‌کند و سپس از گره اول شروع به ایجاد نمونه می‌کند. 
+
+هنگام مداخله نیز، مدل همه متغیرها را عینا منتقل می‌کند ولی متغیری که برای آن مداخله ثبت شده را تابع تولید آن را تغییر می‌دهد تا مقدار ثابت خروجی بدهد و والدی نیز برای آن در نظر نمی‌گیرد. 
+\subsection{تاثیر دوره آموزشی}
+موارد این سوال در نوتبوک
+\lr{subsec2}
+پیاده‌سازی شده‌اند. 
+\begin{enumerate}
+	\item 
+	گراف علّی در تصویر 
+	\ref{fig:tav_cause}
+	آمده است. 
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.95\linewidth]{images/causal_graph.png}
+		\caption{
+گراف علّی مدل سوال دوره آموزشی
+		}
+		\label{fig:tav_cause}
+	\end{figure}
+	
+	\item 
+	در تکه کد پایین ،کد محاسبه و خروجی آن نمایش داده شده‌اند. 
+	\begin{program}[H]
+		\begin{latin}
+			\begin{minted}[frame=none]{python}
+samples = s.sample(10_000)
+e1 = samples[samples["x"] == 1]["y"].mean()
+e0 = samples[samples["x"] == 0]["y"].mean()
+print(e1 - e0)
+			\end{minted}
+			\label{q2:tav1}
+		\end{latin}
+		\caption{مقدار $E[Y | X]$}
+	\end{program}
+	
+	\grayLBox{
+		6.22758964557649
+	}
+	\item 
+		در تکه کد پایین ،کد محاسبه و خروجی آن نمایش داده شده‌اند. 
+	\begin{program}[H]
+	\begin{latin}
+		\begin{minted}[frame=none]{python}
+interv_scm = s.do_operator({"x": 1})
+interv_samples = interv_scm.sample(10_000)
+e1 = interv_samples["y"].mean()
+interv_scm = s.do_operator({"x": 0})
+interv_samples = interv_scm.sample(10_000)
+e0 = interv_samples["y"].mean()
+print(e1 - e0)
+		\end{minted}
+		\label{q2:tav2}
+	\end{latin}
+	\caption{مقدار $E[Y | do(X)]$}
+\end{program}
+
+\grayLBox{
+2.9780376353445415
+}
+\item 
+این سوال به نحوی همان سوال آخر قسمت تئوری است. از آنجایی که دو متغیری که می‌خواهیم رابطه علّی بین آن‌ها را بسنجیم والد مشترک دارند، اگر فقط مقدار 
+$E[Y |X]$
+را بسنجیم، آنگاه اثر متغیر 
+\lr{u}
+نیز دخیل می‌شود. این تفاوت نیز به این دلیل است.
+\end{enumerate}
+\subsection{سیگار نکشیم}
+	\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.95\linewidth]{images/cig_causal_graph.png}
+	\caption{
+		گراف علّی مدل سوال دوره آموزشی
+	}
+	\label{fig:cig_cause}
+\end{figure}
+
+\begin{enumerate}
+	\item 
+	\textbf{ATE}
+		\begin{program}[H]
+		\begin{latin}
+			\begin{minted}[frame=none]{python}
+interv_scm = s.do_operator({"Smoking": 1})
+interv_samples = interv_scm.sample(10_000)
+e1 = interv_samples["Disease"].mean()
+interv_scm = s.do_operator({"Smoking": 0})
+interv_samples = interv_scm.sample(10_000)
+e0 = interv_samples["Disease"].mean()
+print("ATE",e1 - e0)
+			\end{minted}
+			\label{q2:cig_ate}
+		\end{latin}
+		\caption{مقدار ATE}
+	\end{program}
+	
+	\grayLBox{
+		ATE 0.09618307044069563
+	}
+		\item 
+	\textbf{ATT}
+	\begin{program}[H]
+		\begin{latin}
+			\begin{minted}[frame=none]{python}
+samples = s.sample(10_000)
+samples = samples[samples["Smoking"] == 1]
+
+e1 = samples["Disease"].mean()
+samples["Smoking"] = 0
+samples["Disease"] = eq_disease(samples, len(samples))
+e0 = samples["Disease"].mean()
+print("ATT", e1 - e0)
+			\end{minted}
+			\label{q2:cig_att}
+		\end{latin}
+		\caption{مقدار ATT}
+	\end{program}
+	
+	\grayLBox{
+ATT 0.06294287833251536
+	}
+	این مقدار از بخش قبل کمتر است. یعنی اگر یک فرد سیگاری از سیگار کشیدن دست بکشد، همچنان احتمال بروز بیماری در او به میزان قبل از سیگار کشیدن بر نمی‌گردد.
+			\item 
+	\textbf{CATE}
+	\begin{program}[H]
+		\begin{latin}
+			\begin{minted}[frame=none]{python}
+samples = s.sample(10_000)
+samples1 = samples[samples["Age"] > 55]
+samples2 = samples[samples["Age"] <= 55]
+for samples in (samples1, samples2):
+samples["Smoking"] = 1
+samples["Disease"] = eq_disease(samples, len(samples))
+e1 = samples["Disease"].mean()
+samples["Smoking"] = 0
+samples["Disease"] = eq_disease(samples, len(samples))
+e0 = samples["Disease"].mean()
+print("CATE", e1 - e0)
+			\end{minted}
+			\label{q2:cig_cate}
+		\end{latin}
+		\caption{مقدار CATE}
+	\end{program}
+	
+	\grayLBox{
+CATE 0.06257998919727491 \\
+CATE 0.042922818228705154
+	}
+	همانطور که می‌توان دید، سیگار کشیدن در افراد مسن حدودا ۵۰ درصد تاثیر بیشتری دارد.
+\end{enumerate}
+\subsection{قالب جدید وبسایت}
+\subsubsection{حالت ساده‌لوحانه}
+	\begin{program}[H]
+	\begin{latin}
+		\begin{minted}[frame=none]{python}
+for layout in df["layout"].unique():
+print(layout, df[df['layout'] == layout]['time_spent'].mean())
+		\end{minted}
+		\label{q2:web_mean}
+	\end{latin}
+	\caption{محاسبه میانگین زمان صرف‌شده در هر حالت سایت}
+\end{program}
+	\grayLBox{
+Old\_Layout 12.501732101616629 \\
+New\_Layout 9.730546737213404
+}
+
+با محاسبه مدل 
+\lr{OLS}
+می‌توان دید که حالت جدید سایت ضریب منفی دارد. اما این موضوع لزوما علت را نشان نمی‌دهد. چون داده ما بایاس دارد و افراد مسن حالت جدید را می‌بینند، این موضوع می‌تواند ناشی از این باشد که بصورت کلی افراد مسن زمان کم‌تری را در سایت می‌گذرانند. و بهتر است حالت قبل و بعد یک فرد را مقایسه کرد. 
+\footnote{برای محاسبه \lr{OLS} با استفاده از \lr{numpy} برای سینتکس از هوش مصنوعی استفاده شد.}
+
+یک فرد ناشی ممکن است از این ضریب به این نتیجه برسد که حالت جدید سایت اثر منفی دارد و تصمیم به برگرداندن حالت سایت به قبل بکند. 
+	\begin{program}[H]
+	\begin{latin}
+		\begin{minted}[frame=none]{python}
+X_layout = (df["layout"] == "New_Layout").astype(float).values
+X = np.column_stack([np.ones(len(df)), X_layout])   
+y = df["time_spent"].values
+
+beta, *_ = np.linalg.lstsq(X, y, rcond=None)
+intercept, coef_layout = beta
+
+print("coef", coef_layout)
+		\end{minted}
+		\label{q2:web_ols}
+	\end{latin}
+	\caption{محاسبه میانگین زمان صرف‌شده در هر حالت سایت}
+\end{program}
+\grayLBox{
+	-2.7711853644032156
+}
+
+\subsubsection{تشخیص بصری}
+همانطور که در شکل 
+\ref{fig:web_age}
+می‌توان دید، بین دو گروه نابرابری وجود دارد. این موضوع به ما می‌گوید که اختلاف زمان بین دو گروه می‌تواند ناشی از بایاس موجود در سن دو گروه باشد و نه به دلیل تاثیر علّی چیدمان.
+
+	\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.95\linewidth]{images/web_age.png}
+	\caption{
+توزیع سن بین دو گروه 
+	}
+	\label{fig:web_age}
+	\end{figure}
+	
+	تصویر 
+	\ref{fig:web_violin}
+	تاثیر را به خوبی نشان می‌دهد. در هر رده سنی،‌حالت جدید سایت نسبت به حالت قدیم میانگین زمان بیشتری داشته است. ولی چون به طور کلی افراد مسن‌تر زمان کم‌تری را در سایت صرف می‌کنند و افراد مسن نیز بیشتر حالت جدید سایت را می‌بینند، در بخش‌های قبل این‌طور به نظر می‌رسید که حالت جدید اثر منفی داشته است. 
+		\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.95\linewidth]{images/web_violin.png}
+		\caption{
+نمودار ویالنی زمان صرف شده به تفکیک حالت و سن
+		}
+		\label{fig:web_violin}
+\end{figure}
+
+میانگین کل جامعه، از آنجایی که سعی در خلاصه‌سازی کل توزیع در یک عدد دارد، ناگزیر بسیار نادقیق است و روابط علّی و معلولی را نیز ندارد. برای مثال در همین سوال، یک ویژگی اثر مثبت داشته است ولی چون این ویژگی در گروهی بیشتر بوده که بصورت کلی زمان کم‌تری را در سایت می‌گذراندند، اینطور به نظر می‌آید که این ویژگی باعث بدتر شدن زمان می‌شود. 

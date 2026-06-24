@@ -1,0 +1,365 @@
+
+\def \Subject {شبکه‌های بیزی}
+\def \Session { یک}
+% \setcounter{chapter}{\Session-1}
+\renewcommand{\chaptername}{سوال}
+\chapter{\Subject}
+\section{بخش اول}
+\subsection{ زیربخش اول}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[
+		node distance=1.5cm,
+		var/.style={circle, draw, minimum size=0.8cm, align=center, font=\bfseries},
+		arrow/.style={-latex, thick}  % Simple, no length parameter
+		]
+		
+		% Define nodes
+		\node[var] (W) {W};
+		\node[var, right=of W] (E) {E};
+		\node[var, below=of $(W)!0.5!(E)$] (P) {P};  % Requires calc library
+		\node[var, below=of P] (A) {A};
+		\node[var, below left=of A] (M) {M};
+		\node[var, below right=of A] (O) {O};
+		\node[var, below=of $(M)!0.5!(O)$] (H) {H};  % Requires calc library
+		
+		% Draw arrows
+		\draw[arrow] (W) -- (P);
+		\draw[arrow] (E) -- (P);
+		\draw[arrow] (P) -- (A);
+		\draw[arrow] (A) -- (M);
+		\draw[arrow] (A) -- (O);
+\draw[arrow, bend left=25] (P) to (H);  % Curved arrow
+		\draw[arrow] (M) -- (H);
+		\draw[arrow] (O) -- (H);
+		
+	\end{tikzpicture}
+	\caption{شبکه بیزی آلودگی هوا}
+	\label{fig:bayesian_network}
+\end{figure}
+\subsection{زیربخش دوم}
+با توجه به شبکه رسم شده در شکل 
+\ref{fig:bayesian_network}
+داریم:
+\begin{latin}
+	~\\
+	$
+	P(X_1, X_2, X_3, ...) = \prod\limits_{1}^{n} P(X_i | parent_i)
+	\\
+	\Rightarrow
+	P(W, E, P, A, M, O, H) = P(W) P(E) P(P | W, E) P(A | P) P(M | A) P(O | A) P(H | M, O, P)
+	$
+\end{latin}
+\subsection{زیربخش سوم}
+سوال 
+\lr{Markov Blanket}
+مربوط به متغیر 
+\lr{M}
+را می‌خواهد. پس داریم:
+\begin{latin}
+	~\\
+	$
+	MB(M) = Parents(M) + Children(M) + Spouse(M) 
+	\\
+	Parents(M) = {A} 
+	\quad 
+	Children(M) = {H}
+	\quad 
+	Spouse(M) = {P, O}
+	\\
+	\Rightarrow 
+	MB(M) = {A, H, P, D}
+	$
+\end{latin}
+\subsection{زیربخش چهارم}
+باید درستی و یا نادرستی عبارات را تعیین کرد.
+\begin{enumerate}
+	\item 
+	$
+	A \perp  W | P
+	$
+
+بله درست است. در شبکه بیزی، 
+\lr{A}
+و
+\lr{W}
+تنها از طریق 
+\lr{P}
+باهم رابطه دارند. پس اگر مقدار 
+\lr{P}
+مشخص باشد، این دو از هم مستقل خواهند بود.
+\item 
+$
+M \perp O | A
+$
+
+درست است. چون 
+\lr{A}
+تنها والد مشترک آن‌ها است، با مشخص بودن 
+\lr{A}
+دیگر متغیری وجود ندارد که بتواند هردوی متغیرهای 
+\lr{M}
+و
+\lr{O}
+را به‌هم وابسته کند. و خود متغیرها نیز با همدیگر رابطه‌ای ندارند.
+
+\item 
+$
+A \perp H | \{M, O\}
+$
+
+غلط است. زیرا 
+\lr{A}
+و
+\lr{H}
+والد مشترک 
+\lr{P}
+را نیز همچنان دارند و این مورد روی هردو آن‌ها تاثیر می‌گذارد که یعنی حتی با معلوم بودن
+\lr{M}
+و
+\lr{O}
+نیز، این دو متغیر از هم مستقل نیستند.
+\item 
+$
+M \perp E | A
+$
+درست است. مسیر دیگری بین دو متغیر 
+\lr{E}
+و
+\lr{M}
+نیست که از 
+\lr{A}
+گذر نکند.
+
+\item 
+$
+O \perp W | \{A, H\}
+$
+غلط است. زیرا با مشخص بودن 
+\lr{H}
+عملا رابطه هم‌بستگی بین والدهای آن بوجود می‌آید و 
+\lr{O}
+والد مستقیم و 
+\lr{W}
+والد غیر مستقیم آن است که مسیر رابطه بین این‌ها از 
+\lr{A}
+عبور نمی‌کند.
+\end{enumerate}
+
+\section{بخش دوم}
+باید مقایسه کرد که در هر مورد، کدام بزرگ‌تر است. 
+\begin{enumerate}
+	\item 
+	$P(w^1) \qquad p(w^1 | f^1)$
+	
+	مقدار 
+	$p(w^1)$
+	بیشتر است. زیرا 
+	$f^1$
+	باعث کم شدن احتمال 
+	$e^1$
+	می‌شود و 
+	$e^1$
+	باعث زیاد شدن 
+	$w^1$
+	می‌شود. پس با رخ دادن 
+	$f^1$ 
+	احتمال 
+	$w^1$
+	کاهش می‌یابد. 
+	
+		\item 
+	$P(f^1 | e^1) \qquad p(f^1 | e^1, h^1)$
+	
+	برابرند. تنها مسیر ارتباط 
+	$f$
+	با باقی از طریق $e$ است و با مشخص بودن 
+	$e$
+	دیگر مقدار سایر متغیرها تاثیری در احتمال 
+	$f$ 
+	نخواهد داشت. 
+	\item 
+	$P(h^1 | f^0, w^1) \qquad P(h^1 | w^1)$
+	
+	مقدار 
+	$P(h^1 | w^1)$
+	بیشتر است. زیرا می‌توان دید که احتمال 
+	$w$
+	با بالا رفتن احتمال 
+	$h$
+	زیاد می‌شود. حال اگر مقدار 
+	$w$
+	را داشته باشیم، اگر 
+	$f$
+	منفی باشد، ممکن است $f^0$ باعث مثبت شدن 
+	$w$ 
+	شود و برای همین به دلیل پدیده توضیح‌دهی، احتمال 
+	$h^1$
+	وقتی 
+	$f^0$
+	باشد کاهش می‌یابد.
+	
+	\item 
+	$p(e^1 | w^1) \qquad p(e^1 | w^1, c^1)$
+	
+	مقدار $ p(e^1 | w^1, c^1)$ بیشتر است. زیرا 
+	$c^1$
+	باعث کم شدن احتمال 
+	$d^1$
+	می‌شود و این به دلیل پدیده توضیح‌دهی باعث زیاد شدن احتمال
+	$e^1$
+	می‌شود. 
+	\item 
+	$p(w^1 | d^1, e^1) \qquad p(w^1 | d^1, e^1, h^1)$
+	
+	برابرند. زیرا همه مسیرهای رسیدن به 
+	\lr{w}
+	در هر دو حالت کاملا مشخص شده‌اند. 
+	
+	\item 
+	$p(t^1 | w^0, e^1) \qquad p(t^1 | w^0, e^1, f^1)$
+	
+	برابرند. زیرا 
+	$f$
+	نمی‌تواند بدون تغییر 
+	$e$
+	اثری روی 
+	$t$
+	بگذارد. پس با مشخص بودن 
+	$e$
+	عملا $f$ بی‌تاثیر خواهد بود.
+	
+\end{enumerate}
+
+\section{بخش سوم}
+ما n متغیر داریم که هرکدام L مقدار مختلف می‌توانند داشته باشند. 
+\subsection{زیربخش اول}
+ابتدا به ازای n های کوچک حساب می‌کنیم:
+\begin{latin}
+	~\\
+	$
+	n = 1 \Rightarrow L - 1 \\
+	n = 2 \Rightarrow L^2 - 1 \\
+	n = 3 \Rightarrow L^3 - 1 
+	$
+\end{latin}
+چون در هرمورد 
+$L^n$
+متغیر داریم. ولی چون جمع آن‌ها یک است، پس یکی از آن‌ها وابسته است و 
+$L^n - 1$
+متغیر مستقل داریم. 
+
+\subsection{زیربخش دوم}
+باید تعداد حالات مستقل خود گره را در تعداد حالات والدهای آن ضرب کرد. در بخش قبل حساب کردیم که 
+n
+متغیر، 
+$L^n  - 1$
+حالت مستقل دارند. البته در اینجا چون جمع این احتمالات ثابت نیست، منهای یک نداریم.
+خود گره نیز 
+$L - 1$
+حالت دارد 
+)
+پس درنهایت یک گره حداکثر
+$(L^k) ( L - 1)
+$
+پارامتر دارد. حال باید این عدد را در تعداد گره‌ها ضرب کرد پس درنهایت داریم:
+
+\begin{latin}
+	$
+	\text{number of parameters} = \text{number of nodes} * \text{each node parent parametrs} * \text{each node number of states} = n * (L^k) * (L - 1) 
+	$
+\end{latin}
+\subsection{زیربخش سوم}
+ایده  شبیه بخش قبل است و فقط شیوه محاسبه فرق می‌کند. پس داریم:
+\begin{latin}
+	~\\
+	$
+	\text{number of parameters} = \sum\limits_{i = 0}^n param(X_i) + param(C)
+	= \sum\limits_{i = 0}^n states(parent(X_i))states(X_i - 1) + (m - 1)
+	= m - 1 + m * (L - 1) + m * L * (L - 1) + m * l * (L - 1) + ...
+	= (m - 1) + (m * (L - 1))  + (n - 1)(m * L * (L - 1))
+	= m - 1 + ml - m + ((n - 1) (mL^2 -mL ))
+	= ml - 1 + nmL^2 - nmL - mL^2 + mL
+	= 2-nml - 1 + nmL^2 - nmL - mL^2 
+	$
+\end{latin}
+\section{بخش چهارم}
+\subsection{زیربخش اول}
+در هرمورد باید دید آیا یالی وجود دارد که با برعکس کردن آن هیچ 
+\lr{v structure}
+ای حذف نشود و هیچ 
+\lr{v structure}
+جدیدی بوجود نیاید. 
+
+در گراف سمت چپ، با تغییر هر یک از یال‌های 
+A-B
+و 
+C-B
+باعث می‌شود 
+\lr{V structure}
+مربوط به 
+A-B-C
+خراب شود. از طرف دیگر  تغییر جهت یال‌های 
+B-D
+و
+D-E
+منجر به ایجاد 
+\lr{V structure}
+های جدید می‌شود. پس هیچ گراف دیگری با گراف داده شده 
+\lr{I equivalent }
+نیست. 
+
+در گراف سمت راست، با تغییر جهت یال 
+E-D
+هیچ 
+\lr{v strucutre}
+ای حذف یا تولید نمی‌شود. پس این گراف با گراف سوال 
+\lr{I equivalent }
+است. شکل این گراف در تصویر
+\ref{q1:4-equiv}
+رسم شده است.
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[
+		node distance=1.5cm,
+		var/.style={circle, draw, minimum size=0.8cm, align=center, font=\bfseries},
+		arrow/.style={-latex, thick}  % Simple, no length parameter
+		]
+		
+		% Define nodes
+		\node[var] (A) {A};
+		\node[var, right=of A] (B) {B};
+		\node[var, right=of B] (C) {C};
+		\node[var, right=of C] (D) {D};
+		\node[var, right=of D] (E) {E};
+		
+
+		% Draw arrows
+		\draw[arrow] (A) -- (B);
+		\draw[arrow] (B) -- (C);
+		\draw[arrow] (D) -- (E);
+		\draw[arrow] (D) -- (C);
+
+		
+	\end{tikzpicture}
+	\caption{گراف معادل گراف سمت راست سوال}
+	\label{q1:4-equiv}
+\end{figure}
+\subsection{زیربخش دوم}
+دو شرط آمده در سوال بیان می‌کنند که 
+\lr{A}
+و
+\lr{B}
+نسبت به هم مستقلند و همین‌طور هر دو والد مشترک \lr{C} نیستند. این دو شرط در کنارهم باعث می‌شود تا گراف همبند نشود. زیرا \lr{C} نمی‌تواند هم به 
+\lr{A}
+و
+هم به 
+\lr{B}
+وصل باشد (فارغ از جهت) و 
+A
+و
+B
+نیز رابطه‌ای باهم ندارند.  پس \lr{A} و \lr{B} درون دو مولفه جدا از هم قرار می‌گیرند. ولی C در هرکدام از این مولفه‌ها باشد، به این معنی است که از متغیر دیگر مستقل است و این استقلال در صورت سوال نیامده است. پس نمی‌توان شبکه‌ای یافت که 
+\lr{perfect map}
+این توزیع باشد.

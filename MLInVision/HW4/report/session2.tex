@@ -1,0 +1,270 @@
+
+\def \Subject {\lr{VIT}}
+\def \Session { دو}
+% \setcounter{chapter}{\Session-1}
+\renewcommand{\chaptername}{سوال}
+\chapter{\Subject}
+
+\section{ آموزش شبکه}
+
+مطابق خواسته سوال، شبکه 
+\lr{vit}
+پیاده‌سازی شد. شبکه چند بلوک دارد. ابتدا یک بلوک برای 
+\lr{patching embedding}
+پیاده‌سازی شد. وظیفه این بلوک این است که تصویر را به 
+\lr{patch}
+تقسیم کند (هر 
+\lr{patch}
+مشابه یک کلمه در جمله است.
+)
+و بعد این 
+\lr{patch}
+ها را از یک لایه خطی عبور دهد. یک لایه کانولوشن
+\LTRfootnote{Convolution}
+که در آن سایز با گام
+\lr{stride}
+برابر است، عملا همین کار را می‌کند. 
+
+ماژول بعدی مربوط به مکانیزم 
+\lr{Attention}
+است. برای هر توکن (
+\lr{Patch}
+)
+باید مقدار توجه آن‌را با استفاده از ماتریس‌های 
+\lr{k}
+،
+\lr{q}
+و
+\lr{v}
+درآورد. این ماتریس‌ها در ابتدا جدا حساب می‌شدند، ولی پس از کمک گرفتن از هوش مصنوعی، برای بهبود سرعت، هر سه این ماتریس‌ها باهم در یک لایه  خطی بزرگ حساب می‌شوند و سپس جدا می‌شوند. خروجی این بلوک، حاصل ضرب مقدار توجه
+\LTRfootnote{Attention}
+در مقدار
+\LTRfootnote{value}
+است که از یک لایه خطی نیز گذر داده می‌شود. 
+
+سپس یک بلوک 
+\lr{MLP}
+پیاده‌سازی شده که توضیح خاصی نیاز ندارد. تنها نکته آن این است که در مقاله 
+\lr{ViT}
+استفاده از تابع فعال‌ساز
+ \lr{GELU}
+ پیشنهاد شده و تنها بین دو لایه خطی، فعالساز وجود دارد و پس از لایه خطی دوم، تابع فعال‌سازی وجود ندارد. 
+ 
+ درنهایت بلوک‌های قبل در یک ماژول 
+ \lr{Transformer}
+ سرهم می‌شوند. این بلوک 
+ \lr{Transformer}
+ فقط برای رمزگذار
+ \LTRfootnote{Encoder}
+ است.
+
+شبکه \lr{ViT} در عمل، پس از انجام 
+\lr{Patch Embedding}
+و اضافه کردن 
+\lr{CLS embedding}
+و
+\lr{Pos embedding}
+خروجی را به لایه‌های 
+\lr{transformer}
+می‌دهد و درنهایت روی بخش 
+\lr{CLS}
+یک لایه خطی اجرا می‌کند تا نتیجه طبقه‌بندی را خروجی دهد.
+
+\begin{figure}[H]
+	
+	\centering
+	\includegraphics[width=\textwidth]{images/q2-baseline.png}
+	\caption{
+		نمودار خطا و دقت مدل‌
+	}
+	\label{q2:base}
+\end{figure}
+
+\begin{table}[h]
+	\centering
+	\caption{خطا و دقت مدل روی مجموعه‌داده‌های مختلف}
+	\label{tab:baseline}
+	\begin{latin}
+\begin{tabular}{lccccccc}
+	\toprule
+	Dataset & Acc & Loss  \\
+	\midrule
+	Train      & 64.90\%          & 0.9815          \\
+	Val & 65.22\%          & 0.9931          \\
+	Test & 62.53\%          & 1.0353          \\
+	
+	\bottomrule
+\end{tabular}
+\end{latin}
+\end{table}
+
+
+\section{ بررسی حالت‌های دیگر}
+\begin{enumerate}
+
+\item 
+خواسته‌های سوال در نوتبوک 
+\lr{model\_eval}
+پیاده‌سازی شده‌اند.
+
+در گزارش، نمودارهای مدل‌های مختلف آمده است که به دلیل اینکه سوال مقایسه آن‌ها را نخواسته، و دقت نهایی در جدول 
+\ref{tab:vit-ablation}
+آمده است، صرفا نتایج جدول مقایسه می‌شوند.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.95\linewidth,height=0.72\textheight,keepaspectratio]{images/q2-embed64.png}
+	\caption{
+		نمودار خطا و دقت مدل با بُعد \lr{embedding} برابر ۶۴
+	}
+	\label{q2:embed64}
+\end{figure}
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.95\linewidth,height=0.72\textheight,keepaspectratio]{images/q2-embed256.png}
+	\caption{
+		نمودار خطا و دقت مدل با بُعد \lr{embedding} برابر ۲۵۶
+	}
+	\label{q2:embed256}
+\end{figure}
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.95\linewidth,height=0.72\textheight,keepaspectratio]{images/q2-layers2.png}
+	\caption{
+		نمودار خطا و دقت مدل با ۲ لایه‌ی \lr{Transformer}
+	}
+	\label{q2:layers2}
+\end{figure}
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.95\linewidth,height=0.72\textheight,keepaspectratio]{images/q2-layers8.png}
+	\caption{
+		نمودار خطا و دقت مدل با ۸ لایه‌ی \lr{Transformer}
+	}
+	\label{q2:layers8}
+\end{figure}
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.95\linewidth,height=0.72\textheight,keepaspectratio]{images/q2-patch2.png}
+	\caption{
+		نمودار خطا و دقت مدل با اندازه‌ی \lr{patch} برابر ۲×۲
+	}
+	\label{q2:patch2}
+\end{figure}
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.95\linewidth,height=0.72\textheight,keepaspectratio]{images/q2-patch8.png}
+	\caption{
+		نمودار خطا و دقت مدل با اندازه‌ی \lr{patch} برابر ۸×۸
+	}
+	\label{q2:patch8}
+\end{figure}
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.95\linewidth,height=0.72\textheight,keepaspectratio]{images/q2-img64.png}
+	\caption{
+		نمودار خطا و دقت مدل با اندازه‌ی تصویر ۶۴×۶۴
+	}
+	\label{q2:img64}
+\end{figure}
+
+	
+	همانطور که در جدول 
+	\ref{tab:vit-ablation}
+	می‌توان دید، بیش‌برازش زیادی در هیچ کدام از مدل‌ها رخ نداده است. مدلی که با تصاویر بزرگ‌شده و یا 
+	\lr{patch }
+	کوچک‌تر آموزش دیده شده، دقت بهتری دارد ولی زمان آموزش آن‌ها نیز به شدت بیشتر است. بطوری که اگر مدل‌های دیگر را با دورهای بیشتر آموزش داد احتمالا بتوان با همان زمان به دقت بهتری رسید. البته باید توجه داشت که احتمالا دورهای بیشتر منجر به بیش‌برازش شود و باید برای این مسئله راه‌حلی پیدا کرد.
+\begin{table}[h]
+	\centering
+	\caption{خطا، دقت و میزان زمان آموزش مدل‌های مختلف}
+	\label{tab:vit-ablation}
+	\begin{latin}
+\begin{tabular}{lccccccc}
+	\toprule
+	Experiment & Train Acc & Train Loss & Val Acc & Val Loss & Test Acc & Test Loss & Duration (s) \\
+	\midrule
+	baseline      & 64.90\%          & 0.9815          & 65.22\%          & 0.9931          & 62.53\%          & 1.0353          & 85.8  \\
+	embedding=64  & 62.04\%          & 1.0554          & 62.72\%          & 1.0513          & 60.84\%          & 1.0794          & 59.6  \\
+	embedding=256 & 61.72\%          & 1.0513          & 62.40\%          & 1.0557          & 62.10\%          & 1.0545          & 147.8 \\
+	layers=2      & 62.68\%          & 1.0315          & 63.60\%          & 1.0180          & 62.37\%          & 1.0428          & 43.2  \\
+	layers=8      & 64.12\%          & 0.9974          & 63.98\%          & 1.0041          & 62.78\%          & 1.0407          & 156.6 \\
+	patch=2x2     & 65.39\%          & 0.9706          & \textbf{65.26\%} & 0.9817          & \textbf{64.20\%} & 0.9915          & 860.4 \\
+	patch=8x8     & 58.10\%          & 1.1596          & 57.00\%          & 1.1791          & 56.48\%          & 1.2031          & 20.5  \\
+	image=64x64   & \textbf{65.52\%} & \textbf{0.9606} & 64.76\%          & \textbf{0.9783} & 63.99\%          & \textbf{0.9892} & 702.3 \\
+	\bottomrule
+\end{tabular}
+		\end{latin}
+\end{table}
+\item 
+خواسته‌های سوال در نوتبوک 
+\lr{plot\_attention}
+پیاده‌سازی شده‌اند.
+
+با دیدن تصاویر 
+\ref{q2:plot1}
+و
+\ref{q2:plot2}
+می‌توان دید که 
+\lr{head}
+اول فقط روی یک بخش خاص از تصویر (مثلا یک لبه یا یک بخش کشتی) تمرکز کرده است. ولی با میانگین گرفتن از همه 
+\lr{head}
+ها، می‌توان دید مدل به بخش‌های مختلف شکل توجه کرده است. البته همچنان در جاهایی بجای شکل روی پس‌زمینه تمرکز کرده است که این مورد خوب نیست.
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.95\linewidth,height=0.72\textheight,keepaspectratio]{images/attn_img1.png}
+	\caption{
+نقشه توجه برای شکل اول
+	}
+	\label{q2:plot1}
+\end{figure}
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.95\linewidth,height=0.72\textheight,keepaspectratio]{images/attn_img2.png}
+	\caption{
+		نقشه توجه برای شکل دوم
+	}
+	\label{q2:plot2}
+\end{figure}
+\item 
+نقشه توجه مدل 
+\lr{vitb16}
+در تصاویر 
+\ref{q2:plot3}
+و
+\ref{q2:plot4}
+آمده است. اگر این تصاویر را با تصاویر 
+\ref{q2:plot1}
+و
+\ref{q2:plot2}
+مقایسه کنیم، می‌بینیم در لایه‌های اول، نقشه توجه به نسبت پراکنده است و مدل روی بخش‌های مختلفی از تصویر  تمرکز کرده است. در مقابل مدل ما از اول روی بخش‌های اصلی تصویر تمرکز کرده است. این موضوع می‌تواند به این علت باشد که مدل 
+\lr{vitb16}
+را روی داده 
+\lr{cifar}
+آموزش ندیده است و 
+\lr{finetune}
+نشده است و در مراحل اول سعی در بررسی بخش‌های مختلف تصویر دارد. 
+
+با عمیق‌تر شدن لایه‌ها می‌توان دید که مدل به مرور، اثر بخش‌های مختلف را خنثی می‌کند و روی نقاط محدودی از تصویر تمرکز می‌کند. اگر مجدد لایه‌های آخر را باهم مقایسه کنیم، می‌توان دید که مدل \lr{finetune} شده، روی بخش‌های مختلفی از تصویر اصلی دقت می‌کند. پس احتمالا مدل مقاوم‌تری است. 
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.95\linewidth,height=0.72\textheight,keepaspectratio]{images/attn_vitb16_img1.png}
+	\caption{
+		نقشه توجه برای شکل اول با مدل \lr{vitb16}
+	}
+	\label{q2:plot3}
+\end{figure}
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.95\linewidth,height=0.72\textheight,keepaspectratio]{images/attn_vitb16_img2.png}
+	\caption{
+		نقشه توجه برای شکل دوم با مدل \lr{vitb16}
+	}
+	\label{q2:plot4}
+\end{figure}
+\end{enumerate}
