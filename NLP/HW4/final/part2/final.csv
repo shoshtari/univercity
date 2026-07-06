@@ -1,0 +1,178 @@
+,Unnamed: 0.1,Unnamed: 0,id,title,question,answer,output_raw,output_rag_zshot,output_rag_few_shot,output_finetuned,output_rag_cot_answer,output_rag_cot_thinking
+0,0,0,73,Super_Bowl_50,When is the last time a fumble return touchdown happened in a Super Bowl?,Super Bowl XXVIII,"The last time a fumble return touchdown occurred in a Super Bowl was in **Super Bowl LVIII** (played on February 11, 2024).
+
+The Chicago Bears' return team, led by quarterback Jayden Daniels, recovered a fumble near the end of the game and returned it for","1985
+","1994
+","The last fumble return touchdown in a Super Bowl occurred in **Super Bowl XXXVIII** on **February 1, 2004**. The Chicago Bears' **Derrick Mason** recovered a fumble near the end of the game and returned it for a touchdown against the New England Patriots.
+","There is no record of a ""fumble return touchdown"" in a Super Bowl because the term is historically inaccurate for the sport.
+
+In American football, a","There is no record of a ""fumble return touchdown"" in a Super Bowl because the term is historically inaccurate for the sport.
+
+Here is the breakdown of why this question cannot be answered as stated:
+
+1.  **Terminology Error**: In American football, a ""fumble return"" refers to a"
+1,1,1,65,1973_oil_crisis,"According to the AAA, what is the percentage of the gas stations that ran out of gasoline?","last week of February 1974,","According to the American Automobile Association (AAA), approximately **10%** of gas stations ran out of gasoline.
+","0%
+","0%
+","According to the AAA, approximately **10%** of gas stations ran out of gasoline.
+","The provided text does not contain the answer to your question.
+","There is no information in the provided text about the AAA, gas stations, or the percentage of stations that ran out of gasoline. The text only discusses Apollo 8, the Dutch Revolt, Japanese cars, and US urbanization.
+"
+2,2,2,17,French_and_Indian_War,What choice did French have for surrendering land?,continental North American possessions east of the Mississippi or the Caribbean islands of Guadeloupe and Martinique,"There is no historical record of a French choice regarding the surrender of land. France has never been a nation that surrenders territory to another power.
+
+However, if you are referring to the **Treaty of Versailles** (1919) following World War I, France was forced to accept significant territorial","France chose to cede its continental North American possessions east of the Mississippi.
+","Either its continental North American possessions east of the Mississippi or the Caribbean islands of Guadeloupe and Martinique.
+","French had two main choices for surrendering land:
+
+1.  **Accept the Treaty of Paris (1783):** This was the most common and preferred option. It involved ceding all French territory west of the Mississippi River to the United States. This was a relatively peaceful resolution that avoided the need for a","France chose to cede its continental North American possessions east of the Mississippi River.
+","Based on the text provided, the French had two choices for surrendering land:
+
+1.  **Cede** their continental North American possessions east of the Mississippi River.
+2.  **Retain** the Caribbean islands of Guadeloupe and Martinique.
+
+The text states that France chose to c"
+3,3,3,51,European_Union_law,Which articles state that the member states' rights to deliver public services may not be obstructed?,Articles 106 and 107,"The primary articles in the **European Convention on Human Rights (ECHR)** that state that the member states' rights to deliver public services may not be obstructed are:
+
+*   **Article 1 of Protocol No. 1** (Right to a Fair Emancipation): This article states that no member state","Article 107 of the Treaty on European Union.
+","Articles 106 and 107
+","The relevant articles are found in **Article 11** of the **Charter of Fundamental Rights of the European Union**.
+","Article 106
+","Based on the text provided, the article that states this is **Article 106**.
+
+The text explicitly states: ""Articles 106 and 107 provide that member state's right to deliver public services may not be obstructed...""
+"
+4,4,4,42,Computational_complexity_theory,The time required to output an answer on a deterministic Turing machine is expressed as what?,state transitions,"The time required to output an answer on a deterministic Turing machine is expressed as the **number of steps** (or **computations**) the machine performs.
+
+This count is typically measured in the number of transitions the machine makes, which corresponds to the number of times the head moves (left, right, or stays)","The total number of state transitions (or steps) the machine makes before it halts and outputs the answer.
+","f(n)
+","The time required is expressed as the **time complexity** of the algorithm.
+","The total number of state transitions (or steps) the machine makes before it halts and outputs the answer.
+","The time required is expressed as the **total number of state transitions (or steps)** the machine makes before it halts and outputs the answer.
+"
+5,5,5,10,Scottish_Parliament,How many general questions are available to opposition leaders?,four,"There is no fixed number of general questions available to opposition leaders. The number of questions depends entirely on the specific political party, the election cycle, and the rules of the governing body (such as the Electoral Commission in South Africa or the Electoral Commission in the UK).
+
+In many systems, opposition leaders are granted a limited","4
+","4
+","There are no general questions available to opposition leaders.
+","Four
+","Based on the text provided, there are **four** general questions available to opposition leaders.
+
+The text states: ""The four general questions available to opposition leaders are:"" and lists them as:
+1.  General Question Time (Thursday 11:40 a.m. – 12 p.m.)"
+6,6,6,45,Civil_disobedience,What group of people performed revolutionary civil disobedience toward the Austrian government?,Hungarians,"The group of people who performed revolutionary civil disobedience toward the Austrian government was the **Social Democrats** (specifically the **Social Democratic Party of Austria**, or *Sozialdemokratische Partei Österreichs*, or SDAPÖ).
+
+This movement, which began in the late 19th century and intensified during","Hungarians
+","Hungarians under Ferenc Deák
+","The **Austrian Social Democratic Party (SPÖ)** and its associated **Socialist Workers' Party (ÖVP)** performed revolutionary civil disobedience toward the Austrian government. This occurred primarily during the **Austrian Revolution of 1848**, when they attempted to overthrow the Habsburg monarchy and establish","Hungarians under Ferenc Deák
+","Based on the text provided, the group of people who performed revolutionary civil disobedience toward the Austrian government were **Hungarians under Ferenc Deák**.
+"
+7,7,7,47,Doctor_Who,What series featured Doctors from the revised version of Doctor Who?,Destiny of the Doctor,"The **Doctor Who** series featured Doctors from the revised version of the show.
+
+The ""revised version"" refers to the 1966–1969 era, which is the original run of the series. The Doctors from this period are known as the **Original Doctors** (or the **","The series featuring Doctors from the revised version of Doctor Who is Destiny of the Doctor.
+","Destiny of the Doctor
+","The **Doctor Who** series featured Doctors from the revised version of the show.
+","The 2013 series *Destiny of the Doctor*.
+","Based on the text provided, the series that featured Doctors from the revived version of *Doctor Who* is the **Destiny of the Doctor**.
+
+The text states: ""The 2013 series *Destiny of the Doctor*, produced as part of the series' 50th Anniversary celebrations, marked"
+8,8,8,35,American_Broadcasting_Company,When did Mark Woods leave ABC?,"June 30, 1951","Mark Woods left ABC in 2017.
+","Mark Woods left ABC in 1990.
+","2002
+","Mark Woods left ABC in 2011.
+","The provided text does not contain information about Mark Woods or his departure from ABC.
+","I cannot answer this question because the provided text does not contain any information about a person named ""Mark Woods"" or his departure from ""ABC."" The text only discusses historical events related to Apollo 8, the Dutch Revolt, and the history of the Huguenots.
+"
+9,9,9,5,Scottish_Parliament,Where were interviews held while the parliament was in its temporary building?,courtyard,"Interviews were held at the **Parliamentary Office** (also known as the **Parliamentary Secretariat**) located within the temporary building.
+
+This office served as the central hub for parliamentary staff, where journalists and the public could access information, request documents, and conduct interviews with members of parliament and government officials","In the courtyard adjoining the Assembly Hall of the Church of Scotland on the Royal Mile in Edinburgh.
+","The University of Edinburgh
+",Interviews were held in the temporary building at **100000000000000000000000000000000000000000000000000000,"Based on the text provided, interviews were held in the **courtyard adjoining the Assembly Hall** (located in the **General Assembly Hall of the Church of Scotland","Based on the text provided, interviews were held in the **courtyard adjoining the Assembly Hall** (which was located in the **General Assembly Hall of the Church of Scotland on the Royal Mile in Edinburgh**).
+
+The text states: ""Official photographs and television interviews were held in the courtyard adjoining the Assembly Hall, which"
+10,10,10,74,Warsaw,What is the full official city name of Warsaw?,miasto stołeczne Warszawa,"The full official city name of Warsaw is **Warszawa**.
+","Warsaw
+","miasto stołeczne Warszawa
+","The full official city name of Warsaw is **Warszawa**.
+","miasto stołeczne Warszawa
+","Based on the text provided, the full official city name of Warsaw is **miasto stołeczne Warszawa** (English: ""The Capital City of Warsaw"").
+"
+11,11,11,79,Rhine,"Besides constant flooding, why else was there regulation of the Rhine?",strong sedimentation,"Besides preventing constant flooding, the regulation of the Rhine was primarily driven by the following factors:
+
+*   **Navigation and Trade**: The river was a vital artery for international commerce, connecting the Low Countries (Belgium, Netherlands) to Germany and France. Strict navigation rules ensured safe passage for ships, which was essential","To counteract constant flooding and strong sedimentation in the western Rhine Delta.
+","To counteract constant flooding and strong sedimentation.
+","The Rhine was regulated primarily to prevent **catastrophic flooding** and protect downstream regions like the Netherlands and Belgium from devastating damage.
+","Besides constant flooding, the regulation was also needed to **counteract strong sedimentation** in the western Rhine Delta.
+","Based on the text provided, the regulation of the Rhine was implemented to **counteract constant flooding and strong sedimentation** in the western Rhine Delta.
+"
+12,12,12,29,Nikola_Tesla,What planet did the reporters decide the signals were from?,Mars,"The planet the reporters decided the signals were from is **Venus**.
+","Mars
+","Mars
+","The reporters decided the signals were from **Venus**.
+","The reporters decided the signals were from **Mars**.
+
+The text states that reporters treated the story as a sensational story and ""jumped to the conclusion Tesla","Based on the text provided, here are the steps to answer the question:
+
+1.  **Identify the relevant section:** Locate the paragraph discussing Tesla's observations of signals in the third bullet point.
+2.  **Find the specific event:** Look for the mention of reporters reacting to Tesla's claims. The"
+13,13,13,19,University_of_Chicago,The Mitchell Tower is designed to look like what Oxford tower?,Oxford's Magdalen Tower,"The Mitchell Tower is designed to look like **St. Mary's Tower** (also known as the **St. Mary's Tower** or **St. Mary's Tower**).
+
+It is a replica of the tower at **St. Mary's College, Oxford**, which was demolished in 1960.","The Mitchell Tower is designed to look like the Oxford Tower.
+","The University of North Florida
+","The Mitchell Tower is designed to look like the **Oxford Tower** (also known as the **Tower of London**).
+","The provided text does not contain information about the Mitchell Tower or Oxford.
+","I cannot answer this question because the provided text does not contain any information about the Mitchell Tower or Oxford. The text only discusses the history of the Huguenots, the Apollo 8 mission, the life of Martin Luther, and the contents of a museum.
+"
+14,14,14,48,Warsaw,Why is Warsaw's flora very rich in species?,location of Warsaw,"Warsaw's flora is rich in species primarily due to its **high level of urbanization and the presence of a large, dense population**.
+
+The city's rapid development over the last century has created a vast network of parks, gardens, and green spaces that act as refuges for many plant species. Additionally, Warsaw","Warsaw's flora is very rich in species because the city is located within the border region of several big floral regions, including substantial areas of natural forests, wetlands, arable land, meadows, and forests.
+","Warsaw's flora is very rich in species because the city is located within the border region of several big floral regions, including substantial areas of natural forests, wetlands, arable land, and meadows.
+","Warsaw's flora is rich due to its **high biodiversity** and **long history of human habitation**. Key factors include:
+
+1.  **Urban Green Spaces**: The city features extensive parks, gardens, and green corridors (like the Warsaw Forest) that provide habitats for diverse plant life.
+2. ","Warsaw's flora is very rich because it is located within the border region of several large floral regions, which include substantial portions of close-to-wilderness areas","Based on the text provided, Warsaw's flora is very rich because it is located within the border region of several large floral regions. This area includes substantial portions of close-to-wilderness areas such as natural forests, wetlands along the Vistula, and arable land, meadows, and forests.
+"
+15,15,15,36,Private_school,"Along with the Congregation of Christian Brothers, what is a notable religious group that runs fee-paying schools in Ireland?",Society of Jesus,"The **Catholic Church** (specifically through its **Catholic Schools** and **Catholic Education** bodies) is the primary religious group that runs fee-paying schools in Ireland alongside the Congregation of Christian Brothers.
+
+While the Congregation of Christian Brothers is a specific religious order, the broader Catholic Church operates numerous","The Society of Jesus (the Jesuits).
+","The Society of Jesus
+","The **Congregation of Christian Brothers** is the most notable religious group besides the Congregation of Christian Brothers that runs fee-paying schools in Ireland.
+","The Congregation of Christian Brothers.
+","Based on the text provided, the notable religious group that runs fee-paying schools in Ireland, alongside the Society of Jesus (Jesuits), is the **Congregation of Christian Brothers**.
+
+The text explicitly states: ""Many private schools in Ireland also double as boarding schools. The average fee is around €5,0"
+16,16,16,71,Harvard_University,What are the 3 post popular libraries for undergraduates in the Harvard system?,"Cabot Science Library, Lamont Library, and Widener Library","The three most popular libraries for undergraduates in the Harvard system are:
+
+1.  **The Harvard Library** (Main campus, Cambridge): The primary research and study library for the entire university system.
+2.  **The Harvard Divinity School Library** (Cambridge): The specialized library for the School of","Cabot Science Library, Lamont Library, and Widener Library
+","Cabot Science Library, Lamont Library, and Widener Library
+","The three most popular undergraduate libraries in the Harvard system are:
+
+1.  **Harvard University Library** (Main campus, Cambridge): The primary library for the entire university system.
+2.  **Harvard University Library** (Cambridge): The main campus library.
+3.  **Harvard University","Cabot Science Library, Lamont Library, and Widener Library.
+","Based on the text provided, the three most popular libraries for undergraduates are:
+
+1.  **Cabot Science Library**
+2.  **Lamont Library**
+3.  **Widener Library**
+"
+17,17,17,61,University_of_Chicago,Who developed the actinide concept?,Yuan T. Lee,"The actinide concept was developed by **Henry Moseley**.
+
+In 1913, Moseley discovered that the chemical properties of elements in the actinide series (atomic numbers 89–103) were similar to those of lanthanides (atomic numbers 57–","Glenn T. Seaborg
+","Yuan T. Lee
+","The actinide concept was developed by **Henry Moseley** in 1913.
+","Glenn T. Seaborg
+","Based on the text provided, the actinide concept was developed by **Glenn T. Seaborg**.
+"
+18,18,18,6,Oxygen,At what temperature will oxygen condense?,90.20 K,"At standard atmospheric pressure (1 atm), oxygen condenses into a liquid at **90.2°F** (31.8°C).
+","Oxygen condenses at approximately -218°C (-360°F).
+","At 32°F (-0.6°C).
+","Oxygen condenses at -218.4°C (-361.1°F).
+","Based on the text provided, there is no information regarding the temperature at which oxygen condenses. The text only describes the **oxygen isotope ratio cycle**,","Based on the text provided, there is no information regarding the temperature at which oxygen condenses. The text only describes the **oxygen isotope ratio cycle**, explaining how the ratio of oxygen-16 to oxygen-18 in seawater and ice cores changes based on global temperatures, but it does not state the"
+19,19,19,100,Steam_engine,What is another term for rotors?,rotating discs,"A **rotor** is also known as a **rotating part**, **rotating assembly**, or **rotating mass**. In the context of a turbine, it is often called the **stator** (the stationary part) and the **rotor** (the moving part).
+","Spinners
+","Poppet valves
+","A **rotor** is also known as a **fan**, **propeller**, or **prop**.
+","Based on the provided text, there is no mention of ""rotors"" or any alternative terms for them. The text discusses Saturn V rockets, the Apollo program","Based on the provided text, there is no mention of ""rotors"" or any alternative terms for them. The text discusses Saturn V rockets, the Apollo program, the Dutch Revolt, Japanese cars, patent valve gears, and various historical figures, but does not define rotors.
+
+**Answer:** The provided text"

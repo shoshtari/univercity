@@ -1,0 +1,28 @@
+# Requirements — RAG and Prompt Engineering Assignment
+# Install: pip install -r requirements.txt
+
+# Dataset
+datasets
+
+# Data processing
+pandas
+numpy
+
+# Model and tokenizer
+transformers
+torch
+accelerate
+
+# Embedding and vector store
+sentence-transformers
+lancedb
+
+# Fine-tuning
+peft
+torchao
+
+# Evaluation
+rouge-score
+
+# NLI (RoBERTa)
+scipy
