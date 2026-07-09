@@ -19,14 +19,14 @@ export function useAuth() {
   }, [accessKey]);
 
   useEffect(() => {
-    if (!accessKey) {
-      setUser(null);
-      return;
-    }
-
     let cancelled = false;
 
     (async () => {
+      if (!accessKey) {
+        setUser(null);
+        return;
+      }
+
       const result = await getMe(accessKey);
       if (cancelled) return;
 
@@ -36,7 +36,6 @@ export function useAuth() {
       } else {
         setUser(result.data.username);
       }
-
     })();
 
     return () => {

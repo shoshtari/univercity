@@ -17,7 +17,7 @@ function CourseTable({ courses, width }) {
         mr: "1%",
         mt: "5%",
         width: width,
-        border: "2px sold ",
+        border: "2px solid",
       }}
     >
       <Table size="small">

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useCallback } from "react";
 import {
   getCourses as getCoursesApi,
   toggleCourse as toggleCourseApi,
@@ -9,8 +9,8 @@ export function useSchedule(accessToken, courses) {
   const [selectedCourses, setSelectedCourses] = useState([]);
   const [pendingCourse, setPendingCourse] = useState(null);
 
-  async function syncUserCoursesWithBackend() {
-    if (accessToken === null || courses.length == 0) {
+  const syncUserCoursesWithBackend = useCallback(async () => {
+    if (accessToken === null || courses.length === 0) {
       return;
     }
     const result = await getUserCourses(accessToken);
@@ -20,44 +20,48 @@ export function useSchedule(accessToken, courses) {
 
     const userCourses = [];
     for (const course_id of result.data) {
-      const course = courses.find((i) => i.id == course_id);
+      const course = courses.find((i) => i.id === course_id);
       if (course != null) {
         userCourses.push(course);
       }
     }
     setSelectedCourses(userCourses);
-  }
+  }, [accessToken, courses]);
 
-  async function toggleCourse(course) {
-    let setChange;
-    let change = new Promise((resolve, _) => {
-      setChange = resolve;
-    });
+  const toggleCourse = useCallback(
+    async (course) => {
+      let setChange;
+      const change = new Promise((resolve) => {
+        setChange = resolve;
+      });
 
-    const toggleFunc = (prev) => {
-      if (prev.some((i) => i.id === course.id)) {
-        setChange("remove");
-        return prev.filter((c) => c.id !== course.id);
+      const toggleFunc = (prev) => {
+        if (prev.some((i) => i.id === course.id)) {
+          setChange("remove");
+          return prev.filter((c) => c.id !== course.id);
+        }
+        setChange("add");
+        return [...prev, course];
+      };
+
+      setSelectedCourses(toggleFunc);
+
+      const result = await toggleCourseApi({
+        course_id: course.id,
+        accessToken: accessToken,
+        change: await change,
+      });
+      if (!result.ok) {
+        setSelectedCourses(toggleFunc); // rollback
       }
-      setChange("add");
-      return [...prev, course];
-    };
+      return result;
+    },
+    [accessToken],
+  );
 
-    setSelectedCourses(toggleFunc);
-
-    const result = await toggleCourseApi({
-      course_id: course.id,
-      accessToken: accessToken,
-      change: await change,
-    });
-    if (!result.ok) {
-      setSelectedCourses(toggleFunc); // rollback
-    }
-    return result;
-  }
-  async function getCourses() {
-    return await getCoursesApi(accessToken);
-  }
+  const getCourses = useCallback(() => {
+    return getCoursesApi(accessToken);
+  }, [accessToken]);
 
   return {
     selectedCourses,

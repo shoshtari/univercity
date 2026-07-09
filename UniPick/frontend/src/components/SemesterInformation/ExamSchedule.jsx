@@ -2,7 +2,6 @@
 import { Box, Card, CardContent, Typography } from "@mui/material";
 import { useMemo } from "react";
 import ScheduleTableCell from "../ScheduleTable/ScheduleTableCell";
-import { ExamTableRowHeight } from "../../configs/sizes";
 
 import { toGregorian, toJalaali } from "jalaali-js";
 
@@ -107,12 +106,12 @@ function ExamSchedule({ courses, height }) {
                       course={course}
                       toggleCourse={null}
                       state="selected"
+                      variant1="caption"
+                      variant2="overline"
                       styleOverrides={{
                         m: "1%",
                         height: height,
                         clamp: clamp,
-                        variant1: "caption",
-                        variant2: "overline",
                       }}
                     />
                   );

@@ -3,17 +3,18 @@ import { AppBar, Box, Toolbar, Typography } from "@mui/material";
 import { IconButton, Link } from "@mui/material";
 import { useCallback } from "react";
 import ThemeIcon from "./ThemeIcon";
+import { VIEW } from "../configs/views";
 
 import LogoutIcon from "@mui/icons-material/Logout";
 
 function TopBar({ user, doLogout, darkMode, setDarkMode, setViewState }) {
 
   const scheduleOnClick = useCallback(() => {
-    setViewState("schedule");
+    setViewState(VIEW.SCHEDULE);
   }, [setViewState]);
 
   const examOnClick = useCallback(() => {
-    setViewState("exam");
+    setViewState(VIEW.EXAM);
   }, [setViewState]);
 
   const linkStyles = {

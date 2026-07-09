@@ -1,10 +1,11 @@
 import { MOCK_APIS } from "../configs/api";
 import { request } from "./client";
+import { mockDelay } from "./mock";
 import { ApiResultOk, ApiResultErr } from "./result";
 
 export async function login(username, password) {
   if (MOCK_APIS) {
-    await new Promise((r) => setTimeout(r, 300));
+    await mockDelay();
     return new ApiResultOk({ access_token: "dummyaccesstoken" });
   }
   try {
@@ -27,7 +28,7 @@ export async function login(username, password) {
 
 export async function signup(username, password) {
   if (MOCK_APIS) {
-    await new Promise((r) => setTimeout(r, 300));
+    await mockDelay();
     return new ApiResultOk(null);
   }
   try {
@@ -44,13 +45,11 @@ export async function signup(username, password) {
 
     return new ApiResultOk(result);
   } catch (err) {
-    if (
-      err.status === 400 &&
-      err.message === "validation_error" &&
-      err.details !== null &&
-      err.details.length >= 1
-    ) {
-      return new ApiResultErr(err.details[0].loc + " is not valid");
+    if (err.status === 400 && err.message === "validation_error") {
+      const detail = err.details?.[0];
+      return new ApiResultErr(
+        detail ? `${detail.loc} is not valid` : "validation error",
+      );
     }
     return new ApiResultErr(err);
   }
@@ -58,7 +57,7 @@ export async function signup(username, password) {
 
 export async function getMe(accessToken) {
   if (MOCK_APIS) {
-    await new Promise((r) => setTimeout(r, 300));
+    await mockDelay();
     return new ApiResultOk({ username: "mockuser" });
   }
 

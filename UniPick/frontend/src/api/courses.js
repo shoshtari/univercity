@@ -1,5 +1,6 @@
 import { MOCK_APIS } from "../configs/api";
 import { request } from "./client";
+import { mockDelay } from "./mock";
 import { ApiResultOk, ApiResultErr } from "./result";
 
 const MOCK_COURSES = [
@@ -14,7 +15,7 @@ const MOCK_COURSES = [
       { weekday: "Thursday", start: "10:00:00", end: "11:30:00" },
     ],
     units: 1,
-    examData: "1405-04-14",
+    exam_date: "1405-04-14",
   },
   {
     id: "2",
@@ -27,7 +28,7 @@ const MOCK_COURSES = [
       { weekday: "Wednesday", start: "09:00:00", end: "10:30:00" },
     ],
     units: 2,
-    examData: "1405-04-14",
+    exam_date: "1405-04-14",
   },
   {
     id: "3",
@@ -40,17 +41,14 @@ const MOCK_COURSES = [
       { weekday: "Wednesday", start: "11:00:00", end: "12:30:00" },
     ],
     units: 1,
-    examData: "1405-04-14",
+    exam_date: "1405-04-14",
   },
 ];
 
 export async function getCourses(accessToken) {
   if (MOCK_APIS) {
-    await new Promise((r) => setTimeout(r, 300));
-    const courses = MOCK_COURSES.map((c) => {
-      return c;
-    });
-    return new ApiResultOk(courses);
+    await mockDelay();
+    return new ApiResultOk(MOCK_COURSES);
   }
 
   try {
@@ -72,7 +70,7 @@ export async function getCourses(accessToken) {
 
 export async function toggleCourse({ accessToken, course_id, change }) {
   if (MOCK_APIS) {
-    await new Promise((r) => setTimeout(r, 300));
+    await mockDelay();
     return new ApiResultOk(null);
   }
 
@@ -100,7 +98,7 @@ export async function toggleCourse({ accessToken, course_id, change }) {
 
 export async function getUserCourses(accessToken) {
   if (MOCK_APIS) {
-    await new Promise((r) => setTimeout(r, 300));
+    await mockDelay();
     return new ApiResultOk([]);
   }
 

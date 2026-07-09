@@ -9,20 +9,20 @@ import SemesterInformation from "./components/SemesterInformation/SemesterInform
 import TopBar from "./components/TopBar";
 import { useAuth } from "./hooks/useAuth";
 import { useSchedule } from "./hooks/useSchedule";
-import { BASE_URL } from "./configs/api";
+import { VIEW } from "./configs/views";
 
 function App({ darkMode, setDarkMode }) {
-  // possible values are 'exam', 'schedule'
-  const [viewState, setViewState] = useState("schedule");
+  const [viewState, setViewState] = useState(VIEW.SCHEDULE);
   const auth = useAuth(setViewState);
   const { enqueueSnackbar } = useSnackbar();
 
   const [courses, setCourses] = useState([]);
   const schedule = useSchedule(auth.accessKey, courses);
+  const { getCourses, syncUserCoursesWithBackend } = schedule;
 
   useEffect(() => {
-    schedule.syncUserCoursesWithBackend();
-  }, [auth.accessKey, courses]);
+    syncUserCoursesWithBackend();
+  }, [syncUserCoursesWithBackend]);
 
   useEffect(() => {
     if (!auth.isAuthenticated) {
@@ -31,7 +31,7 @@ function App({ darkMode, setDarkMode }) {
     let cancelled = false;
 
     (async () => {
-      const result = await schedule.getCourses();
+      const result = await getCourses();
       if (!result.ok) {
         enqueueSnackbar("Failed to fetch courses: " + result.error.message, {
           variant: "error",
@@ -46,7 +46,7 @@ function App({ darkMode, setDarkMode }) {
     return () => {
       cancelled = true;
     };
-  }, [enqueueSnackbar, auth.isAuthenticated, auth.accessKey]);
+  }, [enqueueSnackbar, getCourses, auth.isAuthenticated]);
 
   async function doLogin(username, password) {
     const result = await auth.login(username, password);
@@ -68,7 +68,7 @@ function App({ darkMode, setDarkMode }) {
     }
   }
 
-  if (!auth.isAuthenticated && viewState != "login") {
+  if (!auth.isAuthenticated && viewState !== VIEW.LOGIN) {
     return (
       <Login
         doLogin={doLogin}
@@ -80,7 +80,7 @@ function App({ darkMode, setDarkMode }) {
   }
 
   switch (viewState) {
-    case "schedule":
+    case VIEW.SCHEDULE:
       return (
         <Box sx={{ height: "100vh", display: "flex", flexDirection: "column" }}>
           <TopBar
@@ -118,7 +118,7 @@ function App({ darkMode, setDarkMode }) {
           </Box>
         </Box>
       );
-    case "exam":
+    case VIEW.EXAM:
       return (
         <Box sx={{ height: "100vh", display: "flex", flexDirection: "column" }}>
           <TopBar

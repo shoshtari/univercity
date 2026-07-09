@@ -1,21 +1,22 @@
 import { Box } from "@mui/material";
 import { useMemo } from "react";
 import ScheduleTableCell from "./ScheduleTableCell";
-import { getOpacity, getLeftAndWidth } from "./helpers";
+import { getLeftAndWidth, timeToHour } from "./helpers";
 import {
   ScheduleTableHeaderColumnWidth,
   ScheduleTableRowHeight,
   ScheduleTableHeaderRowHeight,
+  ScheduleCellInset,
 } from "../../configs/sizes";
 import {
   DAYS,
-  TOTAL_HOURS,
-  timeToHour,
+  SCHEDULE_TOTAL_HOURS as TOTAL_HOURS,
   DAY_MAP,
   DAY_PERSIAN_MAP,
-  START_HOUR,
-  END_HOUR,
-} from "./helpers";
+  SCHEDULE_START_HOUR,
+  SCHEDULE_END_HOUR,
+  SCHEDULE_CELL_STATE,
+} from "../../configs/schedule";
 
 function ScheduleTable({ courses, pendingCourse, toggleCourse }) {
   const dayCourses = useMemo(() => {
@@ -54,13 +55,13 @@ function ScheduleTable({ courses, pendingCourse, toggleCourse }) {
             fontSize: 12,
           }}
         >
-          {END_HOUR - i - 1}:00
+          {SCHEDULE_END_HOUR - i - 1}:00
         </Box>
       ))}
 
       <Box />
       {/* Day rows */}
-      {DAYS.map((day, rowIndex) => (
+      {DAYS.map((day) => (
         <DayRow
           key={day}
           day={day}
@@ -74,6 +75,7 @@ function ScheduleTable({ courses, pendingCourse, toggleCourse }) {
 }
 
 export default ScheduleTable;
+
 function DayRow({ day, courses, pendingCourse, toggleCourse }) {
   return (
     <>
@@ -91,16 +93,16 @@ function DayRow({ day, courses, pendingCourse, toggleCourse }) {
               key={`${i.course.id}`}
               course={i.course}
               toggleCourse={toggleCourse}
+              state={SCHEDULE_CELL_STATE.SELECTED}
               start={i.start}
               end={i.end}
               styleOverrides={{
                 position: "absolute",
                 left: `${left}%`,
                 width: `${width}%`,
-                top: 6,
-                bottom: 6,
-                  clamp: 2,
-                opacity: 0.85,
+                top: ScheduleCellInset,
+                bottom: ScheduleCellInset,
+                clamp: 2,
                 cursor: "pointer",
                 "&:hover": {
                   opacity: 1,
@@ -125,15 +127,15 @@ function DayRow({ day, courses, pendingCourse, toggleCourse }) {
                 key={`${pendingCourse.id}-${idx}`}
                 course={pendingCourse}
                 toggleCourse={toggleCourse}
+                state={SCHEDULE_CELL_STATE.PENDING}
                 start={start}
                 end={end}
                 styleOverrides={{
                   position: "absolute",
                   left: `${left}%`,
                   width: `${width}%`,
-                  top: 6,
-                  bottom: 6,
-                  opacity: 0.5,
+                  top: ScheduleCellInset,
+                  bottom: ScheduleCellInset,
                   clamp: 2,
                 }}
               />
