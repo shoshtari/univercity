@@ -1,0 +1,77 @@
+
+\def \Subject {بهینه‌سازی}
+\def \Session { دو}
+% \setcounter{chapter}{\Session-1}
+\renewcommand{\chaptername}{سوال}
+\chapter{\Subject}
+
+\section{پیاده‌سازی تابع هدف و گرادیان}
+مطابق خواسته سوال تابع هدف و گرادیان پیاده‌سازی شد. نمودار این تابع در شکل 
+\ref{fig:rosenblot}
+آمده است. 
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{images/q2_rosenbrock.png}
+	\caption{نمودار تابع \lr{rosenbrock} بین یک تا منفی یک}
+	\label{fig:rosenbrock}
+\end{figure}
+
+\section{پیاده‌سازی بهینه‌سازها}
+مطابق خواست سوال برای توابع بهینه‌سازی هر سه تابع بهینه‌ساز پیاده شدند و مسیرهای آن‌ها در شکل 
+\ref{fig:rosenbrock_path}
+آمده است.  
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{images/q2_paths.png}
+	\caption{نمودار تابع \lr{rosenbrock} بین یک تا منفی یک}
+	\label{fig:rosenbrock_path}
+\end{figure}
+
+همچنین نمودارهای فاصله و خطا برای مقادیر خواسته شده حساب شد. جهت اینکه مقادیر قابل مشاهده باشند از آن‌ها لگاریتم گرفته شده است. 
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{images/q2_distance0.01.png}
+	\caption{نمودار فاصله برای ضریب یادگیری یک صدم.}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{images/q2_distance0.1.png}
+	\caption{نمودار فاصله برای ضریب یادگیری یک دهم.}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{images/q2_distance1.0.png}
+	\caption{نمودار فاصله برای ضریب یادگیری یک .}
+		\label{fig:dist_1}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{images/q2_loss0.01.png}
+	\caption{نمودار مقدار تابع برای ضریب یادگیری یک صدم.}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{images/q2_loss0.1.png}
+	\caption{نمودار مقدار تابع برای ضریب یادگیری یک دهم.}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{images/q2_loss1.0.png}
+	\caption{نمودار مقدار تابع برای ضریب یادگیری یک .}
+	\label{fig:loss_1}
+\end{figure}
+
+همانطور که در شکل 
+\ref{fig:loss_1}
+و 
+\ref{fig:dist_1}
+می‌توان دید، هنگامی که نرخ یادگیری زیاد می‌شود، مدل 
+\lr{converge}
+نمی‌کند. 
+
+همچنین در همه مدل‌ها 
+\lr{SGD}
+عملکرد خیلی بدی دارد زیرا تابع محدب نیست.

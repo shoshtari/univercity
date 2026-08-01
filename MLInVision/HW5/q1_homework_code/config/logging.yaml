@@ -1,0 +1,2 @@
+logging:
+  disable_hf_progress_bars: true

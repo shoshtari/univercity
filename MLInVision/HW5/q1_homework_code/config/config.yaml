@@ -1,0 +1,30 @@
+dataset:
+  sample_rate: 16000
+  voice_length_seconds: 3
+  emotions:
+  - NEU
+  - HAP
+  - ANG
+  - SAD
+  seed: 42
+  split_ratios:
+    train: 0.8
+    val: 0.1
+    test: 0.1
+  speakers:
+    count: 20
+feature:
+  # extractor: "mel_spectrogram"
+  extractor: "hubert"
+  n_mels: 64
+training:
+  batch_size: 128
+  epochs: 20
+  learning_rate: 0.01
+  optimizer: Adam
+  loss_function: CrossEntropy
+  cnn_layers: 3
+  mlp_layers: 1
+  dropout: 0.1
+environment:
+  hf_offline: true

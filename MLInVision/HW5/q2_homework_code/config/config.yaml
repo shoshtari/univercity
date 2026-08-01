@@ -1,0 +1,21 @@
+gradient_threshold: 0.001
+learning_rate: 0.1
+max_iterations: 10000
+optimizers:
+  - SGD
+  - RMSProp
+  - Adam
+learning_rates_to_test:
+  - 0.01
+  - 0.1
+  - 1.0
+initial_point:
+  x: 0.5
+  y: 0.5
+optimal_point:
+  x: 1.0
+  y: 1.0
+plot:
+  x_range: [-2, 2]
+  y_range: [-2, 2]
+  resolution: 200
