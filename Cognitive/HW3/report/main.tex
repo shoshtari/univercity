@@ -1,0 +1,79 @@
+\documentclass[12pt]{article}
+
+\usepackage[a4paper, margin=0.5in]{geometry}
+\usepackage{anyfontsize}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{setspace}
+\usepackage{hyperref}
+\usepackage[backend=biber]{biblatex}
+\usepackage{float}
+\usepackage{svg}
+\usepackage{xepersian}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{enumitem}
+\usepackage{bigints}
+\hypersetup{colorlinks,urlcolor=blue}
+%\settextfont[Scale=1.1]{Far.Mitra}
+
+\settextfont[Scale=1.0, Size=14pt]{B Nazanin}
+\defpersianfont\persiantitlefont[Scale=1.0, Size=18pt]{B Titr}
+\setlatintextfont[Scale=1.0, Size=12pt]{Times New Roman}
+\deflatinfont\englishtitlefont[Scale=1.0, Size=16pt]{Times New Roman Bold}
+
+\usepackage[backend=biber]{biblatex}
+\addbibresource{references.bib}
+
+
+\def\labelitemi{$\diamond$}
+\def\labelitemii{$\ast$}
+
+
+\begin{document}
+	\linespread{3}
+	\setstretch{1.5}
+	
+	% --- HEADER ROW ---
+	\begin{minipage}[t]{0.7\textwidth}
+		
+		{\huge\textcolor{teal!70!black}{\title\textbf{{مبانی علوم شناختی }}}}\\[4pt]
+		
+	\end{minipage}
+	\hfil
+	\begin{minipage}[t]{0.15\textwidth}
+		\centering
+		\includegraphics[width=0.9\linewidth]{pics/logo.png}\\[6pt]
+		{\small تابستان ۱۴۰۵}
+	\end{minipage}
+	
+	
+	
+	{
+		
+		\Large{تمرین سوم}
+		
+		\large مرتضی ملکی‌نژاد شوشتری - ۸۱۰۱۰۴۲۵۶ 
+		
+		
+	}
+	
+	\vspace{1.2cm}
+	
+	
+	
+	\vspace{0.3cm}
+	\hrule 
+	\vspace{0.6cm}
+	
+
+\input{section1}
+\include{section2}
+
+%\section*{منابع خارج از درس}
+%	\begin{latin}
+%			\printbibliography[heading=none]
+%		
+%	\end{latin}
+
+\end{document}
