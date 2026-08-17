@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+data/dataset/DIV2K/
+data/dataset/_archives/
+models/saved_models/**/*.pt
+outputs/
+!models/saved_models/.gitkeep
+!outputs/.gitkeep
+project_code.zip
+final/
+paper.pdf
+
