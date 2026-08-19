@@ -20,8 +20,8 @@ function hourToPercent(hour) {
 }
 
 export function getLeftAndWidth(start, end) {
-  const left = 100 - hourToPercent(end) + ScheduleCellMarginX;
-  const width = 100 - hourToPercent(start) - left - ScheduleCellMarginX;
+  const left = hourToPercent(start) + ScheduleCellMarginX;
+  const width = hourToPercent(end) - left - ScheduleCellMarginX;
   return { left, width };
 }
 

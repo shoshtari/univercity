@@ -92,6 +92,7 @@ class ScheduleReader:
         if (
             not date_str
             or date_str == "امتحان کتبی ندارد"
+            or date_str == "امتحان کتبی پایان ترم ندارد"
             or not isinstance(date_str, str)
         ):
             return None
@@ -102,6 +103,21 @@ class ScheduleReader:
         parsed_date = parsed_date.replace("عصر", "")
         parsed_date = parsed_date.replace("ﻋصر", "")
         parsed_date = parsed_date.strip()
+
+        # Try new format: DD / MM / YY or DD / MM / YYYY (e.g., "26 / 10 / 05" or "26 / 10 / 1405")
+        if re.match(r"^\d{1,2}\s*/\s*\d{1,2}\s*/\s*\d{2,4}$", parsed_date):
+            parts = [p.strip() for p in parsed_date.split("/")]
+            if len(parts) == 3:
+                day, month, year = parts
+                if len(year) == 2:
+                    year = "14" + year  # Assume 14xx for Persian calendar
+                try:
+                    parsed_date = jdatetime.datetime(int(year), int(month), int(day)).date()
+                    return cast(str, parsed_date.isoformat())
+                except ValueError:
+                    pass
+
+        # Try old format with Persian month names
         month_map = {
             "فروردين": "01",
             "ارديبهشت": "02",
@@ -192,7 +208,8 @@ class ScheduleReader:
             return [], []
 
         data = []
-        header = []
+        header: list[str | None] = []
+        header_row_offset = 3  # default: title, header, start-end row
 
         for table_num, table in enumerate(tables):
             if not table:
@@ -207,6 +224,26 @@ class ScheduleReader:
                 title = table[0]
                 header = table[1]
 
+                # Check if this is new format with sub-header row (contains "ناياپ عورش")
+                if len(table) > 2 and any(
+                    cell and "ناياپ عورش" in str(cell) for cell in table[2]
+                ):
+                    logger.debug("detected new PDF format with sub-header row")
+                    # Combine header row 1 and sub-header row 2
+                    sub_header = table[2]
+                    combined_header: list[str | None] = []
+                    for i, (main, sub) in enumerate(zip(header, sub_header)):
+                        if main and sub and "ناياپ عورش" in str(sub):
+                            combined_header.append(main)
+                        elif main:
+                            combined_header.append(main)
+                        elif sub:
+                            combined_header.append(sub)
+                        else:
+                            combined_header.append(None)
+                    header = combined_header
+                    header_row_offset = 4  # title, header, sub-header, start-end row
+
             if title != table[0]:
                 logger.critical("title mismatch", table_num=table_num)
                 raise ValueError("title mismatch")
@@ -215,7 +252,7 @@ class ScheduleReader:
                 logger.critical("header mismatch", table_num=table_num)
                 raise ValueError("header mismatch")
 
-            table = table[3:]  # title, header, start - end
+            table = table[header_row_offset:]
             for row in table:
                 if len(row) != len(header):
                     logger.critical("Row length mismatch on page", table_num=table_num)
@@ -258,6 +295,22 @@ class ScheduleReader:
         this code converts it
         """
 
+        def is_valid_time(time_str: str) -> bool:
+            """Validate time format HH:MM"""
+            if not isinstance(time_str, str):
+                return False
+            time_str = time_str.strip()
+            if not time_str:
+                return False
+            # Must match HH:MM format
+            if not re.match(r"^\d{1,2}:\d{2}$", time_str):
+                return False
+            try:
+                hour, minute = map(int, time_str.split(":"))
+                return 0 <= hour <= 23 and 0 <= minute <= 59
+            except ValueError:
+                return False
+
         class_times = []
         for weekday in WEEKDAYS:
             start_index = headers.index(weekday + START_SUFFIX)
@@ -268,6 +321,16 @@ class ScheduleReader:
             if (not start_time or not isinstance(start_time, str)) and (
                 not end_time or not isinstance(end_time, str)
             ):
+                continue
+
+            # Validate time formats before adding
+            if not is_valid_time(start_time) or not is_valid_time(end_time):
+                logger.warning(
+                    "Skipping invalid time format",
+                    weekday=weekday,
+                    start_time=start_time,
+                    end_time=end_time,
+                )
                 continue
 
             class_times.append(

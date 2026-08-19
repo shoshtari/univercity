@@ -33,7 +33,7 @@ function Login({ doLogin, darkMode, setDarkMode, enqueueSnackbar }) {
           enqueueSnackbar("Signup successful! You can now log in.", {
             variant: "success",
           });
-        	await doLogin(username, password);
+          await doLogin(username, password);
         } else {
           enqueueSnackbar(result.error.message, {
             variant: "error",
@@ -57,12 +57,14 @@ function Login({ doLogin, darkMode, setDarkMode, enqueueSnackbar }) {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        p: { xs: 2, sm: 3, md: 4 },
+        boxSizing: "border-box",
       }}
     >
-      <Card sx={{ width: LoginCardWidth }}>
+      <Card sx={{ width: LoginCardWidth, maxWidth: "100%", p: { xs: 2, sm: 3 } }}>
         <CardContent>
-          <Box display="flex" >
-            <Typography variant="h5">UniPick</Typography>
+          <Box display="flex" justifyContent="space-between" alignItems="center">
+            <Typography variant="h5" sx={{ mb: 0 }}>UniPick</Typography>
             <ThemeIcon darkMode={darkMode} setDarkMode={setDarkMode} />
           </Box>
 
@@ -77,6 +79,7 @@ function Login({ doLogin, darkMode, setDarkMode, enqueueSnackbar }) {
               margin="normal"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
+              sx={{ mb: 2 }}
             />
             <TextField
               label="Password"
@@ -85,24 +88,27 @@ function Login({ doLogin, darkMode, setDarkMode, enqueueSnackbar }) {
               margin="normal"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              sx={{ mb: 2 }}
             />
 
-            <Button
-              type="submit"
-              variant="contained"
-              name="signup"
-              sx={{ mt: 2, mr: 1, width: "46%" }}
-            >
-              Sign up
-            </Button>
-            <Button
-              type="submit"
-              variant="contained"
-              name="login"
-              sx={{ mt: 2, ml: 1, width: "46%" }}
-            >
-              Login
-            </Button>
+            <Box sx={{ display: "flex", flexDirection: { xs: "column", sm: "row" }, gap: 2 }}>
+              <Button
+                type="submit"
+                variant="contained"
+                name="signup"
+                sx={{ mt: { xs: 0, sm: 2 }, flex: 1, width: "100%" }}
+              >
+                Sign up
+              </Button>
+              <Button
+                type="submit"
+                variant="contained"
+                name="login"
+                sx={{ mt: { xs: 0, sm: 2 }, flex: 1, width: "100%" }}
+              >
+                Login
+              </Button>
+            </Box>
           </form>
         </CardContent>
       </Card>

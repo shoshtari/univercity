@@ -15,7 +15,7 @@ const MOCK_COURSES = [
       { weekday: "Thursday", start: "10:00:00", end: "11:30:00" },
     ],
     units: 1,
-    exam_date: "1405-04-14",
+    exam_date: "1403-04-14",
   },
   {
     id: "2",
@@ -28,7 +28,7 @@ const MOCK_COURSES = [
       { weekday: "Wednesday", start: "09:00:00", end: "10:30:00" },
     ],
     units: 2,
-    exam_date: "1405-04-14",
+    exam_date: "1403-05-20",
   },
   {
     id: "3",
@@ -41,7 +41,7 @@ const MOCK_COURSES = [
       { weekday: "Wednesday", start: "11:00:00", end: "12:30:00" },
     ],
     units: 1,
-    exam_date: "1405-04-14",
+    exam_date: "1403-06-10",
   },
 ];
 

@@ -55,7 +55,7 @@ body {
 }
 
 #root {
-  width: 1126px;
+  width: 100%;
   max-width: 100%;
   margin: 0 auto;
   text-align: center;
@@ -108,4 +108,27 @@ code {
   line-height: 135%;
   padding: 4px 8px;
   background: var(--code-bg);
+}
+
+/* Mobile-specific improvements */
+@media (max-width: 768px) {
+  #root {
+    border-inline: none;
+  }
+  
+  /* Prevent horizontal scroll on body */
+  body {
+    overflow-x: hidden;
+  }
+  
+  /* Better touch targets */
+  button, [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Improve text readability on mobile */
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
 }
