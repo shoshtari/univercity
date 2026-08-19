@@ -8,7 +8,7 @@ import {
   Paper,
 } from "@mui/material";
 
-function CourseTable({ courses, width }) {
+function CourseTable({ courses }) {
   return (
     <TableContainer
       component={Paper}
@@ -16,7 +16,7 @@ function CourseTable({ courses, width }) {
         ml: "auto",
         mr: "1%",
         mt: "5%",
-        width: width,
+        width: "fit-content",
         border: "2px solid",
       }}
     >
@@ -43,7 +43,7 @@ function CourseTable({ courses, width }) {
             }}
           >
             <TableCell align="right">
-              {courses.reduce((i, j) => (i.units || i) + j.units, 0)}
+              {courses.reduce((sum, course) => sum + course.units, 0)}
             </TableCell>
             <TableCell align="right">جمع واحدها</TableCell>
           </TableRow>

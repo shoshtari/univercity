@@ -18,6 +18,7 @@ function App({ darkMode, setDarkMode }) {
 
   const [courses, setCourses] = useState([]);
   const schedule = useSchedule(auth.accessKey, courses);
+
   const { getCourses, syncUserCoursesWithBackend } = schedule;
 
   useEffect(() => {

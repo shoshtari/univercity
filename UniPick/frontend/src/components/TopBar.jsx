@@ -24,7 +24,7 @@ function TopBar({ user, doLogout, darkMode, setDarkMode, setViewState }) {
     fontWeight: "bold",
     fontSize: "1rem",
     textDecorationThickness: "2px",
-	  mx: "0.5%",
+    mx: "0.5%",
 
     cursor: "pointer",
   };

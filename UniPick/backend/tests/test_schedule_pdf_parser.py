@@ -4,8 +4,8 @@ import pytest
 import structlog
 from flask.testing import FlaskClient
 
-from utils import ScheduleReader
 from db.course_dto import Course
+from utils import ScheduleReader
 
 logger = structlog.getLogger()
 

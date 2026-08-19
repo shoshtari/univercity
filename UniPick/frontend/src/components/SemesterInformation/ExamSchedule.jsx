@@ -23,11 +23,10 @@ function intToJdate(dayNumber) {
   return `${jy}-${String(jm).padStart(2, "0")}-${String(jd).padStart(2, "0")}`;
 }
 
-function ExamSchedule({ courses, height }) {
-  const { maxDay, minDay,  dayToCourse } = useMemo(() => {
+function ExamSchedule({ courses }) {
+  const { maxDay, minDay, dayToCourse } = useMemo(() => {
     let minDay = Number.MAX_SAFE_INTEGER,
       maxDay = 0,
-      maxSameDay = 0,
       dayToCourse = {};
 
     for (const course of courses) {
@@ -40,9 +39,8 @@ function ExamSchedule({ courses, height }) {
 
       minDay = Math.min(minDay, day);
       maxDay = Math.max(maxDay, day);
-      maxSameDay = Math.max(maxSameDay, dayToCourse[day].length);
     }
-    return { minDay, maxDay,  dayToCourse };
+    return { minDay, maxDay, dayToCourse };
   }, [courses]);
 
   const colCount = maxDay - minDay + 1;
@@ -55,72 +53,81 @@ function ExamSchedule({ courses, height }) {
     return [];
   };
 
+  if (colCount <= 0) {
+    return null;
+  }
+
   return (
-	  <>
-        <Typography variant="h6" gutterBottom align="center">
-          برنامه امتحانی
-        </Typography>
-        <Box
-          sx={{
-            display: "grid",
-            gridTemplateRows: `20% 80%`,
-            gridTemplateColumns: `repeat(${colCount}, 1fr)`,
-            border: "1px solid #ddd",
-            m: "1%",
-            height:{height},
-          }}
-        >
-          {Array.from({ length: colCount }).map((_, i) => (
+    <>
+      <Typography variant="h6" gutterBottom align="center">
+        برنامه امتحانی
+      </Typography>
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateRows: "auto 1fr",
+          gridTemplateColumns: `repeat(${colCount}, 1fr)`,
+          border: "1px solid #ddd",
+          m: "1%",
+          flex: 1,
+          minHeight: 0,
+        }}
+      >
+        {Array.from({ length: colCount }).map((_, i) => (
+          <Box
+            key={i}
+            sx={{
+              borderRight: "1px solid #eee",
+              borderBottom: "1px solid #eee",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              fontSize: 12,
+            }}
+          >
+            <Typography variant="body2" gutterBottom align="center">
+              {intToJdate(maxDay - i)}
+            </Typography>
+          </Box>
+        ))}
+
+        {Array.from({ length: colCount }).map((_, i) => {
+          const coursesInCell = getCourses(i);
+          const clamp = coursesInCell.length > 1 ? 2 : 5;
+
+          return (
             <Box
               key={i}
               sx={{
                 borderRight: "1px solid #eee",
                 borderBottom: "1px solid #eee",
                 display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                fontSize: 12,
+                flexDirection: "column",
+                alignItems: "stretch",
+                overflow: "hidden",
               }}
             >
-              <Typography variant="body2" gutterBottom align="center">
-                {intToJdate(maxDay - i)}
-              </Typography>
+              {coursesInCell.map((course) => (
+                <ScheduleTableCell
+                  key={course.id}
+                  course={course}
+                  toggleCourse={null}
+                  state="selected"
+                  variant1="caption"
+                  variant2="overline"
+                  styleOverrides={{
+                    m: "1%",
+                    flex: 1,
+                    minHeight: 0,
+                    clamp: clamp,
+                  }}
+                />
+              ))}
             </Box>
-          ))}
-
-          {Array.from({ length: colCount }).map((_, i) => {
-            const courses = getCourses(i);
-            let height = 100 / courses.length - 1;
-            if (courses.length == 1) {
-              height--;
-            }
-            height += "%";
-				const clamp = courses.length > 1 ? 2 : 5;
-
-            return (
-              <Box key={`${i}`}>
-                {courses.map((course, i) => {
-                  return (
-                    <ScheduleTableCell
-                      key={`${i}`}
-                      course={course}
-                      toggleCourse={null}
-                      state="selected"
-                      variant1="caption"
-                      variant2="overline"
-                      styleOverrides={{
-                        m: "1%",
-                        height: height,
-                        clamp: clamp,
-                      }}
-                    />
-                  );
-                })}
-              </Box>
-            );
-          })}
-        </Box>
-	  </>
+          );
+        })}
+      </Box>
+    </>
   );
 }
 
