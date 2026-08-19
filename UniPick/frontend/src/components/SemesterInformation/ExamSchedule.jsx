@@ -1,7 +1,7 @@
-
-import { Box, Card, CardContent, Typography } from "@mui/material";
+import { Box, Card, CardContent, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { useMemo } from "react";
 import ScheduleTableCell from "../ScheduleTable/ScheduleTableCell";
+import { ExamTableRowHeight } from "../../configs/sizes";
 
 import { toGregorian, toJalaali } from "jalaali-js";
 
@@ -24,6 +24,9 @@ function intToJdate(dayNumber) {
 }
 
 function ExamSchedule({ courses }) {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
   const { maxDay, minDay, dayToCourse } = useMemo(() => {
     let minDay = Number.MAX_SAFE_INTEGER,
       maxDay = 0,
@@ -64,68 +67,79 @@ function ExamSchedule({ courses }) {
       </Typography>
       <Box
         sx={{
-          display: "grid",
-          gridTemplateRows: "auto 1fr",
-          gridTemplateColumns: `repeat(${colCount}, 1fr)`,
-          border: "1px solid #ddd",
-          m: "1%",
-          flex: 1,
-          minHeight: 0,
+          overflowX: isMobile ? "auto" : "hidden",
+          width: "100%",
+          "-webkit-overflow-scrolling": "touch",
         }}
       >
-        {Array.from({ length: colCount }).map((_, i) => (
-          <Box
-            key={i}
-            sx={{
-              borderRight: "1px solid #eee",
-              borderBottom: "1px solid #eee",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              fontSize: 12,
-            }}
-          >
-            <Typography variant="body2" gutterBottom align="center">
-              {intToJdate(maxDay - i)}
-            </Typography>
-          </Box>
-        ))}
-
-        {Array.from({ length: colCount }).map((_, i) => {
-          const coursesInCell = getCourses(i);
-          const clamp = coursesInCell.length > 1 ? 2 : 5;
-
-          return (
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateRows: `auto 1fr`,
+            gridTemplateColumns: `repeat(${colCount}, minmax(120px, 1fr))`,
+            border: "1px solid #ddd",
+            m: "1%",
+            flex: 1,
+            minHeight: 0,
+            minWidth: isMobile ? "max-content" : "100%",
+          }}
+        >
+          {Array.from({ length: colCount }).map((_, i) => (
             <Box
               key={i}
               sx={{
                 borderRight: "1px solid #eee",
                 borderBottom: "1px solid #eee",
                 display: "flex",
-                flexDirection: "column",
-                alignItems: "stretch",
-                overflow: "hidden",
+                justifyContent: "center",
+                alignItems: "center",
+                fontSize: { xs: 10, sm: 11, md: 12 },
+                whiteSpace: "nowrap",
               }}
             >
-              {coursesInCell.map((course) => (
-                <ScheduleTableCell
-                  key={course.id}
-                  course={course}
-                  toggleCourse={null}
-                  state="selected"
-                  variant1="caption"
-                  variant2="overline"
-                  styleOverrides={{
-                    m: "1%",
-                    flex: 1,
-                    minHeight: 0,
-                    clamp: clamp,
-                  }}
-                />
-              ))}
+              <Typography variant="body2" gutterBottom align="center">
+                {intToJdate(maxDay - i)}
+              </Typography>
             </Box>
-          );
-        })}
+          ))}
+
+          {Array.from({ length: colCount }).map((_, i) => {
+            const coursesInCell = getCourses(i);
+            const clamp = coursesInCell.length > 1 ? 2 : 5;
+
+            return (
+              <Box
+                key={i}
+                sx={{
+                  borderRight: "1px solid #eee",
+                  borderBottom: "1px solid #eee",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "stretch",
+                  overflow: "hidden",
+                  minHeight: ExamTableRowHeight,
+                }}
+              >
+                {coursesInCell.map((course) => (
+                  <ScheduleTableCell
+                    key={course.id}
+                    course={course}
+                    toggleCourse={null}
+                    state="selected"
+                    variant1="caption"
+                    variant2="overline"
+                    styleOverrides={{
+                      m: "1%",
+                      flex: 1,
+                      minHeight: 0,
+                      clamp: clamp,
+                    }}
+                  />
+                ))}
+              </Box>
+            );
+          })}
+        </Box>
       </Box>
     </>
   );

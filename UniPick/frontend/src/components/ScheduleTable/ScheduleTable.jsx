@@ -1,5 +1,6 @@
 import { Box } from "@mui/material";
 import { useMemo } from "react";
+import { useMediaQuery, useTheme } from "@mui/material";
 import ScheduleTableCell from "./ScheduleTableCell";
 import { getLeftAndWidth, timeToHour } from "./helpers";
 import {
@@ -19,6 +20,9 @@ import {
 } from "../../configs/schedule";
 
 function ScheduleTable({ courses, pendingCourse, toggleCourse }) {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
   const dayCourses = useMemo(() => {
     const ans = {};
     for (const course of courses) {
@@ -34,49 +38,62 @@ function ScheduleTable({ courses, pendingCourse, toggleCourse }) {
     return ans;
   }, [courses]);
 
+  const gridTemplateColumns = `repeat(${TOTAL_HOURS}, 1fr) ${ScheduleTableHeaderColumnWidth}`;
+
   return (
     <Box
       sx={{
-        display: "grid",
-        gridTemplateRows: `${ScheduleTableHeaderRowHeight} repeat(${DAYS.length}, ${ScheduleTableRowHeight})`,
-        gridTemplateColumns: `repeat(${TOTAL_HOURS}, 1fr) ${ScheduleTableHeaderColumnWidth}`,
-        border: "1px solid #ddd",
+        overflowX: isMobile ? "auto" : "hidden",
+        width: "100%",
+        "-webkit-overflow-scrolling": "touch",
       }}
     >
-      {/* Hour headers */}
-      {Array.from({ length: TOTAL_HOURS }).map((_, i) => (
-        <Box
-          key={i}
-          sx={{
-            borderRight: "1px solid #eee",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            fontSize: 12,
-          }}
-        >
-          {SCHEDULE_END_HOUR - i - 1}:00
-        </Box>
-      ))}
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateRows: `${ScheduleTableHeaderRowHeight} repeat(${DAYS.length}, ${ScheduleTableRowHeight})`,
+          gridTemplateColumns: gridTemplateColumns,
+          border: "1px solid #ddd",
+          minWidth: isMobile ? "max-content" : "100%",
+        }}
+      >
+        {/* Hour headers */}
+        {Array.from({ length: TOTAL_HOURS }).map((_, i) => (
+          <Box
+            key={i}
+            sx={{
+              borderRight: "1px solid #eee",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              fontSize: { xs: 10, sm: 11, md: 12 },
+              whiteSpace: "nowrap",
+            }}
+          >
+            {SCHEDULE_END_HOUR - i - 1}:00
+          </Box>
+        ))}
 
-      <Box />
-      {/* Day rows */}
-      {DAYS.map((day) => (
-        <DayRow
-          key={day}
-          day={day}
-          courses={dayCourses[DAY_MAP[day]] || []}
-          pendingCourse={pendingCourse}
-          toggleCourse={toggleCourse}
-        />
-      ))}
+        <Box />
+        {/* Day rows */}
+        {DAYS.map((day) => (
+          <DayRow
+            key={day}
+            day={day}
+            courses={dayCourses[DAY_MAP[day]] || []}
+            pendingCourse={pendingCourse}
+            toggleCourse={toggleCourse}
+            isMobile={isMobile}
+          />
+        ))}
+      </Box>
     </Box>
   );
 }
 
 export default ScheduleTable;
 
-function DayRow({ day, courses, pendingCourse, toggleCourse }) {
+function DayRow({ day, courses, pendingCourse, toggleCourse, isMobile }) {
   return (
     <>
       <Box
@@ -84,6 +101,7 @@ function DayRow({ day, courses, pendingCourse, toggleCourse }) {
           gridColumn: `1 / span ${TOTAL_HOURS}`,
           position: "relative",
           borderTop: "1px solid #eee",
+          minHeight: ScheduleTableRowHeight,
         }}
       >
         {courses.map((i) => {
@@ -151,6 +169,7 @@ function DayRow({ day, courses, pendingCourse, toggleCourse }) {
           alignItems: "center",
           justifyContent: "center",
           fontWeight: 500,
+          fontSize: { xs: 12, sm: 13, md: 14 },
         }}
       >
         {DAY_PERSIAN_MAP[day]}

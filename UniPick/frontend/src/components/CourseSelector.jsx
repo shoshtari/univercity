@@ -25,7 +25,7 @@ function CourseSelector({ courses, selectedCourses,setPendingCourse, onSelect })
   return (
     <Card
       sx={{
-        m: 2,
+        m: { xs: 1, sm: 2 },
         display: "flex",
         flex: 1,
         minHeight: 0,
