@@ -24,8 +24,10 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
 
-  @media (max-width: 1024px) {
+@media (max-width: 1024px) {
+  :root {
     font-size: 16px;
   }
 }
@@ -55,7 +57,7 @@ body {
 }
 
 #root {
-  width: 1126px;
+  width: 100%;
   max-width: 100%;
   margin: 0 auto;
   text-align: center;
@@ -77,7 +79,9 @@ h1 {
   font-size: 56px;
   letter-spacing: -1.68px;
   margin: 32px 0;
-  @media (max-width: 1024px) {
+}
+@media (max-width: 1024px) {
+  h1 {
     font-size: 36px;
     margin: 20px 0;
   }
@@ -87,7 +91,9 @@ h2 {
   line-height: 118%;
   letter-spacing: -0.24px;
   margin: 0 0 8px;
-  @media (max-width: 1024px) {
+}
+@media (max-width: 1024px) {
+  h2 {
     font-size: 20px;
   }
 }
@@ -108,4 +114,130 @@ code {
   line-height: 135%;
   padding: 4px 8px;
   background: var(--code-bg);
+}
+
+/* Mobile-specific improvements */
+@media (max-width: 768px) {
+  #root {
+    border-inline: none;
+  }
+  
+  /* Prevent horizontal scroll on body */
+  body {
+    overflow-x: hidden;
+  }
+  
+  /* Better touch targets - scoped to interactive UI components */
+  .MuiButton-root,
+  .MuiIconButton-root,
+  .MuiTab-root,
+  .MuiMenuItem-root,
+  .MuiListItemButton-root,
+  .MuiChip-root,
+  [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Improve text readability on mobile */
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  
+  /* Better form inputs on mobile */
+  input, textarea, select {
+    font-size: 16px !important; /* Prevents zoom on iOS */
+  }
+  
+  /* Scrollbar styling for horizontal scroll areas */
+  ::-webkit-scrollbar {
+    height: 8px;
+    width: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: var(--border);
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: var(--accent);
+    border-radius: 4px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-border);
+  }
+}
+
+/* Additional mobile improvements */
+@media (max-width: 480px) {
+  /* Extra small phones */
+  .MuiCard-root {
+    border-radius: 8px !important;
+  }
+  
+  .MuiTextField-root input {
+    padding: 12px 14px !important;
+  }
+  
+  .MuiButton-root {
+    padding: 10px 16px !important;
+  }
+  
+  /* Ensure accordion summaries are tall enough */
+  .MuiAccordionSummary-root {
+    min-height: 48px !important;
+  }
+}
+
+/* RTL support for Persian content */
+[dir="rtl"] {
+  direction: rtl;
+}
+
+/* Focus visible styles for accessibility */
+*:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Selection color */
+::selection {
+  background: var(--accent-bg);
+  color: var(--accent);
+}
+
+/* Better tap highlight color for mobile */
+@media (max-width: 768px) {
+  * {
+    -webkit-tap-highlight-color: var(--accent-bg);
+  }
+}
+
+/* Prevent text selection on UI elements that shouldn't be selected */
+.MuiButton-root, .MuiIconButton-root, .MuiTab-root, .MuiChip-root, [role="button"] {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Improve scrolling momentum on iOS - scoped to scrollable containers */
+.MuiBox-root[style*="overflow"], 
+.MuiPaper-root[style*="overflow"],
+div[style*="overflow: auto"],
+div[style*="overflow: scroll"] {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Ensure proper font rendering on mobile */
+@media (max-width: 768px) {
+  html {
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
 }

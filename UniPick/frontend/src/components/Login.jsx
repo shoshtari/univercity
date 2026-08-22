@@ -6,6 +6,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { useMediaQuery, useTheme } from "@mui/material";
 
 import { useState } from "react";
 import { LoginCardWidth } from "../configs/sizes";
@@ -15,7 +16,8 @@ import { signup } from "../api/auth";
 function Login({ doLogin, darkMode, setDarkMode, enqueueSnackbar }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -33,7 +35,7 @@ function Login({ doLogin, darkMode, setDarkMode, enqueueSnackbar }) {
           enqueueSnackbar("Signup successful! You can now log in.", {
             variant: "success",
           });
-        	await doLogin(username, password);
+          await doLogin(username, password);
         } else {
           enqueueSnackbar(result.error.message, {
             variant: "error",
@@ -57,12 +59,21 @@ function Login({ doLogin, darkMode, setDarkMode, enqueueSnackbar }) {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        p: { xs: 1.5, sm: 2, md: 3 },
+        boxSizing: "border-box",
       }}
     >
-      <Card sx={{ width: LoginCardWidth }}>
+      <Card sx={{ width: LoginCardWidth, maxWidth: "100%", p: { xs: 2, sm: 3 } }}>
         <CardContent>
-          <Box display="flex" >
-            <Typography variant="h5">UniPick</Typography>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              mb: 2,
+            }}
+          >
+            <Typography variant={isMobile ? "h6" : "h5"} sx={{ mb: 0 }}>UniPick</Typography>
             <ThemeIcon darkMode={darkMode} setDarkMode={setDarkMode} />
           </Box>
 
@@ -77,6 +88,11 @@ function Login({ doLogin, darkMode, setDarkMode, enqueueSnackbar }) {
               margin="normal"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
+              sx={{ mb: 2 }}
+              size={isMobile ? "small" : "medium"}
+              InputProps={{
+                inputProps: { autoComplete: "username" },
+              }}
             />
             <TextField
               label="Password"
@@ -85,24 +101,33 @@ function Login({ doLogin, darkMode, setDarkMode, enqueueSnackbar }) {
               margin="normal"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              sx={{ mb: 2 }}
+              size={isMobile ? "small" : "medium"}
+              InputProps={{
+                inputProps: { autoComplete: "current-password" },
+              }}
             />
 
-            <Button
-              type="submit"
-              variant="contained"
-              name="signup"
-              sx={{ mt: 2, mr: 1, width: "46%" }}
-            >
-              Sign up
-            </Button>
-            <Button
-              type="submit"
-              variant="contained"
-              name="login"
-              sx={{ mt: 2, ml: 1, width: "46%" }}
-            >
-              Login
-            </Button>
+            <Box sx={{ display: "flex", flexDirection: { xs: "column", sm: "row" }, gap: 2 }}>
+              <Button
+                type="submit"
+                variant="contained"
+                name="signup"
+                size={isMobile ? "large" : "medium"}
+                sx={{ mt: { xs: 0, sm: 2 }, flex: 1, width: "100%", minHeight: isMobile ? 48 : "auto" }}
+              >
+                Sign up
+              </Button>
+              <Button
+                type="submit"
+                variant="contained"
+                name="login"
+                size={isMobile ? "large" : "medium"}
+                sx={{ mt: { xs: 0, sm: 2 }, flex: 1, width: "100%", minHeight: isMobile ? 48 : "auto" }}
+              >
+                Login
+              </Button>
+            </Box>
           </form>
         </CardContent>
       </Card>

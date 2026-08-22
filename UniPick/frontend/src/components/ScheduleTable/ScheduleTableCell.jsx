@@ -8,11 +8,14 @@ function ScheduleTableCell({
   variant1 = "body1",
   variant2 = "body2",
   styleOverrides = {},
+  isMobile = false,
+  clamp = 2,
 }) {
   const sx = {
     p: 1,
     backgroundColor: "secondary.main",
     borderRadius: 1,
+    minHeight: isMobile ? 48 : "auto",
 
     display: "flex",
     flexDirection: "column",
@@ -25,13 +28,25 @@ function ScheduleTableCell({
     ...styleOverrides,
   };
 
+  const handleClick = () => {
+    if (toggleCourse != null) {
+      toggleCourse(course);
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      handleClick();
+    }
+  };
+
   return (
     <Box
-      onClick={() => {
-        if (toggleCourse != null) {
-          toggleCourse(course);
-        }
-      }}
+      role="button"
+      tabIndex={0}
+      onClick={handleClick}
+      onKeyDown={handleKeyDown}
       sx={sx}
     >
       <Typography
@@ -43,8 +58,8 @@ function ScheduleTableCell({
           color: "text.primary",
 
           display: "-webkit-box",
-          WebkitLineClamp: sx.clamp,
-          WebkitBoxOrient: "vertical",
+          "-webkit-line-clamp": clamp,
+          "-webkit-box-orient": "vertical",
           overflow: "hidden",
         }}
         align="center"
@@ -58,7 +73,7 @@ function ScheduleTableCell({
         sx={{ lineHeight: 1.2, color: "text.secondary", direction: "rtl" }}
         align="center"
       >
-        {course.instructor}
+        {course.instructor || "—"}
       </Typography>
     </Box>
   );

@@ -130,12 +130,20 @@ function App({ darkMode, setDarkMode }) {
             setViewState={setViewState}
           />
 
-              <SemesterInformation
-                courses={schedule.selectedCourses}
-                pendingCourse={schedule.pendingCourse}
-                toggleCourse={toggleCourse}
-              />
+          <Box
+            sx={{
+              flex: 1,
+              minHeight: 0,
+              display: "flex",
+            }}
+          >
+            <SemesterInformation
+              courses={schedule.selectedCourses}
+              pendingCourse={schedule.pendingCourse}
+              toggleCourse={toggleCourse}
+            />
           </Box>
+        </Box>
       );
 
     default:
