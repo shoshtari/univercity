@@ -96,14 +96,14 @@ function CourseSelector({ courses, selectedCourses, setPendingCourse, onSelect }
                   <Typography
                     variant={isMobile ? "body1" : "body2"}
                     fontWeight={500}
-                    sx={{ direction: "rtl", fontSize: { xs: 15, sm: 14 }, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}
+                    sx={{ direction: "rtl", textAlign: "right", fontSize: { xs: 15, sm: 14 }, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}
                   >
                     {`${course.name} - ${course.code}`}
                   </Typography>
                   <Typography
                     variant={isMobile ? "body2" : "caption"}
                     color="text.secondary"
-                    sx={{ direction: "rtl", fontSize: { xs: 13, sm: 12 }, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}
+                    sx={{ direction: "rtl", textAlign: "right", fontSize: { xs: 13, sm: 12 }, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}
                   >
                     {secondRow}
                   </Typography>

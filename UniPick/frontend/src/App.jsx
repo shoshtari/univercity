@@ -13,7 +13,8 @@ import { VIEW } from "./configs/views";
 
 function App({ darkMode, setDarkMode }) {
   const [viewState, setViewState] = useState(VIEW.SCHEDULE);
-  const auth = useAuth(setViewState);
+  const auth = { isAuthenticated: true, user: "debug", accessKey: null, logout: () => {} }; // TEMP-DIAGNOSTIC
+  void setViewState;
   const { enqueueSnackbar } = useSnackbar();
 
   const [courses, setCourses] = useState([]);
@@ -24,6 +25,27 @@ function App({ darkMode, setDarkMode }) {
   useEffect(() => {
     syncUserCoursesWithBackend();
   }, [syncUserCoursesWithBackend]);
+
+  // TEMP-DIAGNOSTIC
+  useEffect(() => {
+    const t = setTimeout(() => {
+      const cards = [...document.querySelectorAll(".MuiCard-root")].map((c) => {
+        const r = c.getBoundingClientRect();
+        return { x: Math.round(r.x), w: Math.round(r.width), r: Math.round(r.right) };
+      });
+      fetch("http://localhost:9911/diag", {
+        method: "POST",
+        body: JSON.stringify({
+          vw: window.innerWidth,
+          vh: window.innerHeight,
+          docScrollW: document.documentElement.scrollWidth,
+          docClientW: document.documentElement.clientWidth,
+          cards,
+        }),
+      }).catch(() => {});
+    }, 1500);
+    return () => clearTimeout(t);
+  }, []);
 
   useEffect(() => {
     if (!auth.isAuthenticated) {
