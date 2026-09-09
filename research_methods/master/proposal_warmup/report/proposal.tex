@@ -1,0 +1,162 @@
+% !TeX program = xelatex
+% University of Tehran - College of Engineering proposal template
+% Compile twice with: latexmk -xelatex proposal.tex
+
+\documentclass{ut-proposal}
+\usepackage{amsmath}
+
+\newcommand{\ProposalSubheading}[1]{\textcolor{UTBlue}{\textbf{#1}}}
+
+% -----------------------------------------------------------------------------
+% مشخصات فردی؛ این موارد پس از دریافت اطلاعات دانشجو تکمیل می‌شوند.
+% -----------------------------------------------------------------------------
+\newcommand{\ProposalStudentName}{مرتضی ملکی‌نژاد شوشتری}
+\newcommand{\ProposalStudentNumber}{\UTPlaceholder{۸۱۰۱۰۴۲۵۶}}
+\newcommand{\ProposalSupervisor}{محمدرضا ابوالقاسمی دهاقانی}
+\newcommand{\ProposalApprovalDate}{\UTPlaceholder{تاریخ}}
+\newcommand{\ProposalDepartmentSignature}{\UTPlaceholder{امضا}}
+\newcommand{\ProposalEntryDate}{\UTPlaceholder{تاریخ ورود}}
+\newcommand{\ProposalReferencePartA}{}
+\newcommand{\ProposalReferencePartB}{}
+\newcommand{\ProposalReferencePartC}{}
+\newcommand{\ProposalReferencePartD}{}
+
+\newcommand{\ProposalTitleFa}{هم‌ترازی ناحیه‌ـ‌لایه‌ای بازنمایی‌های چندمدلی با مغز برای بهبود رمزگشایی \lr{zero shot}‌ی محرک‌های دیداری}
+\newcommand{\ProposalTitleEn}{Region- and Layer-wise Brain Alignment of Multi-model Representations for Improved Zero-shot Neural Decoding of Visual Stimuli}
+\newcommand{\ProposalTypeFundamental}{\UTBox}
+\newcommand{\ProposalTypeApplied}{\UTBox}
+\newcommand{\ProposalTypeDevelopmental}{\UTCheckedBox}
+
+\newcommand{\ProposalSupervisorSignature}{\UTPlaceholder{امضا و تاریخ}}
+\newcommand{\ProposalSupervisorAffiliation}{\UTPlaceholder{محل خدمت}}
+\newcommand{\ProposalSupervisorShare}{\UTPlaceholder{درصد}}
+\newcommand{\ProposalSupervisorRank}{\UTPlaceholder{مرتبه علمی}}
+
+\newcommand{\ProposalPhone}{\UTPlaceholder{شماره تماس}}
+\newcommand{\ProposalEmail}{\UTPlaceholder{ایمیل}}
+\newcommand{\ProposalDegreeAndAdmission}{کارشناسی ارشد ـ روزانه}
+\newcommand{\ProposalMajor}{\UTPlaceholder{مهندسی و علم کامپیوتر - گرایش هوش مصنوعی}}
+\newcommand{\ProposalStudentSignature}{\UTPlaceholder{امضا و تاریخ}}
+
+\begin{document}
+	
+	\UTCoverPage{}
+	\UTSummaryPage
+	
+	\UTSectionHeading{۴- مشخصات موضوعی پایان‌نامه}
+	
+	\begin{UTProposalSection}{۴-۱ تعریف مسئله، هدف و ضرورت انجام (حداکثر سه صفحه)}
+		\ProposalSubheading{تعریف مسئله}
+
+		در رمزگشایی مغزی، یک مدل از الگوی فعالیت مغز هنگام دیدن یا تصور یک تصویر، بردار ویژگی آن را پیش‌بینی می‌کند. سپس تصویر یا رده‌ای انتخاب می‌شود که ویژگی‌هایش به خروجی مدل نزدیک‌تر باشد. هماهنگی فضای ویژگی مدل بینایی با بازنمایی مغز می‌تواند این پیش‌بینی را بهبود دهد؛ به‌ویژه در حالت \lr{zero-shot} که رده‌های آزمون در آموزش رمزگشا حضور ندارند.
+
+		مقاله‌ی مبنا \lr{[1]} با استفاده از یک \lr{autoencoder}، بردارهای نهایی \lr{CLIP} و \lr{GloVe} را بازسازی و ساختار شباهت آن‌ها را با داده‌ی \lr{fMRI} هم‌تراز کرد. مسئله‌ی پژوهش حاضر این است که آیا انتخاب مدل، لایه و روش \lr{alignment} متناسب با هر ناحیه‌ی بینایی، و سپس ترکیب خروجی نواحی، می‌تواند عملکرد این رویکرد را بهتر کند.
+
+		\ProposalSubheading{هدف اصلی و اهداف اختصاصی}
+
+		هدف اصلی، بهبود دقت و پایداری رمزگشایی \lr{zero-shot} با استفاده از اطلاعات مکمل مدل‌ها و نواحی مغزی است. اهداف اختصاصی عبارت‌اند از:
+		\begin{enumerate}[label=\arabic*.]
+			\item بازتولید مقاله‌ی مبنا روی \lr{GOD} و مقایسه‌ی \lr{RSM} با \lr{CCA/DCCA}، \lr{contrastive loss} و \lr{CKA}؛
+			\item مقایسه‌ی لایه‌های \lr{CLIP}، \lr{DINOv2}، \lr{SigLIP}، \lr{MAE} و \lr{ResNet-50} در نواحی \lr{V1--V4}، \lr{LOC}، \lr{FFA} و \lr{PPA} و بررسی ارتباط آن‌ها با سلسله‌مراتب بینایی؛
+			\item انتخاب یک \lr{expert} برای هر ناحیه و ترکیب خروجی آن‌ها برای شناسایی محرک؛
+			\item ارزیابی تعمیم بین افراد و بین دیدن و تصورکردن، و در صورت دسترسی به داده، انتقال به \lr{MEG/ECoG}.
+		\end{enumerate}
+
+		\ProposalSubheading{پرسش‌ها و فرضیه‌های پژوهش}
+
+		\textbf{پرسش ۱:} کدام ترکیب مدل و لایه برای هر ناحیه مناسب‌تر است؟ 
+		
+		\textbf{فرضیه:} لایه‌های کم‌عمق‌تر و مدل‌های \lr{DINOv2/MAE} در نواحی اولیه، و لایه‌های عمیق‌تر و مدل‌های \lr{CLIP/SigLIP} در نواحی بالاتر عملکرد بهتری خواهند داشت.
+
+		\textbf{پرسش ۲:} آیا روش‌های جایگزین \lr{alignment} از \lr{RSM} مؤثرترند؟ 
+		
+		\textbf{فرضیه:} روش مناسب به مدل و ناحیه وابسته است، اما دست‌کم یکی از روش‌های پیشنهادی رتبه‌ی شناسایی را نسبت به \lr{RSM} بهبود می‌دهد.
+
+		\textbf{پرسش ۳:} آیا ترکیب نواحی به بهبود رمزگشایی کمک می‌کند؟ 
+		
+		\textbf{فرضیه:} ترکیب خروجی‌ها با وزن‌های آموخته‌شده از \lr{validation}، از بهترین \lr{single expert} و میانگین ساده بهتر عمل می‌کند.
+
+		\ProposalSubheading{نوآوری و ضرورت انجام}
+
+		نوآوری پیشنهادی، پیوند انتخاب مدل و لایه برای هر ناحیه با ترکیب چندناحیه‌ای است. این کار علاوه بر سنجش بهبود رمزگشایی، نشان می‌دهد هر بخش از مسیر بینایی با کدام بازنمایی مدل‌ها سازگارتر است و چه اطلاعات مکملی در اختیار تصمیم نهایی قرار می‌دهد. این شناخت برای مطالعه‌ی پردازش دیداری و توسعه‌ی رابط مغز–رایانه اهمیت دارد، زیرا جمع‌آوری داده‌ی عصبی برای همه‌ی رده‌های ممکن عملی نیست.
+
+		\ProposalSubheading{چالش‌ها و راهکارها}
+
+		تعداد کم آزمودنی‌ها و ابعاد بالای ویژگی‌ها خطر \lr{overfitting} را افزایش می‌دهد؛ استفاده از مدل‌های ثابت، نگاشت‌های کم‌پارامتر و \lr{regularization} برای کنترل آن در نظر گرفته می‌شود. تفاوت ابعاد و مقیاس ویژگی‌ها نیز با استانداردسازی و کاهش بعد کنترل خواهد شد. مقایسه‌ی روش‌ها با داده و ظرفیت قابل‌مقایسه انجام می‌شود؛ جزئیات تفکیک داده و ارزیابی در بخش روش آمده است.
+
+		تعداد زیاد ترکیب‌های مدل، لایه، ناحیه و روش \lr{alignment} نیز بررسی همه‌ی حالت‌ها را پرهزینه می‌کند. برای کنترل حجم آزمایش‌ها، با نمونه‌برداری هدفمند، زیرمجموعه‌ای نماینده از این ترکیب‌ها انتخاب می‌شود که تنوع هر چهار عامل را پوشش دهد.
+	\end{UTProposalSection}
+
+	\begin{UTProposalSection}{۴-۲ روش و فنون اجرایی}
+		\ProposalSubheading{طرح پژوهش و داده‌ها}
+
+		پژوهش از نوع توسعه‌ای–آزمایشی و مبتنی بر داده‌های عمومی است. ابتدا نتیجه‌ی مقاله‌ی مبنا مطابق کد و تنظیمات آن بازتولید می‌شود؛ سپس آزمایش‌های چندمدلی، انتخاب ناحیه‌ای و ترکیب خروجی‌ها اجرا می‌شوند. واحد تحلیل، جفت پاسخ عصبی–محرک و متغیر پاسخ، کیفیت شناسایی رده‌ی محرک است.
+
+		داده‌ی اصلی \lr{Generic Object Decoding (GOD)} است \lr{[4]}: پاسخ \lr{fMRI} پنج آزمودنی به ۱۲۰۰ تصویر آموزشی از ۱۵۰ رده، با ۵۰ رده‌ی آزمون جداگانه و نواحی بینایی ذکرشده. پاسخ تکرارها برای ارزیابی در سطح رده میانگین‌گیری می‌شود و در صورت امکان، عملکرد هر تکرار نیز گزارش خواهد شد. آزمایش‌های دیدن و تصورکردن جداگانه تحلیل می‌شوند تا تفاوت این دو وضعیت در میانگین کلی پنهان نماند.
+
+		\ProposalSubheading{استخراج ویژگی و \lr{alignment}}
+
+		مدل‌های اصلی \lr{CLIP ViT-B/32}، \lr{DINOv2 ViT-B/14} و \lr{SigLIP ViT-B/16} هستند \lr{[5--7]}. \lr{MAE ViT-B/16} و \lr{ResNet-50} آموزش‌دیده روی \lr{ImageNet} به‌عنوان مدل‌های کنترل استفاده می‌شوند و \lr{GloVe} برای بازتولید \lr{baseline} حفظ می‌شود. ویژگی‌ها از حداکثر پنج عمق هر شبکه استخراج و با \lr{PCA} به ابعاد مشترک تبدیل می‌شوند؛ وزن‌های مدل‌های اصلی ثابت می‌مانند.
+
+		برای هر ترکیب منتخب از مدل، لایه و ناحیه، یک \lr{autoencoder} سبک با هدف بازسازی ویژگی‌ها و \lr{alignment} با پاسخ مغزی آموزش داده می‌شود. چهار گزینه‌ی \lr{RSM}، \lr{CCA/DCCA}، \lr{contrastive loss (InfoNCE)} و \lr{CKA} با ساختار و تنظیمات قابل‌مقایسه ارزیابی خواهند شد. ویژگی‌های اصلی و \lr{autoencoder} بدون \lr{alignment} نیز به‌عنوان کنترل استفاده می‌شوند تا اثر اطلاعات مغزی از اثر کاهش بعد و بازسازی جدا شود.
+
+		\ProposalSubheading{انتخاب و ترکیب \lr{expert}های ناحیه‌ای}
+
+		بهترین ترکیب مدل، لایه و روش برای هر ناحیه بر اساس رتبه‌ی شناسایی در \lr{validation} انتخاب می‌شود. سپس یک \lr{Ridge regression} پاسخ مغزی آن ناحیه را به فضای ویژگی \lr{expert} نگاشت می‌کند. امتیاز شباهت هر \lr{expert} به گزینه‌های شناسایی، پس از هم‌مقیاس‌سازی، با وزن‌های آموخته‌شده ترکیب می‌شود. وزن‌ها نامنفی‌اند و مجموع آن‌ها برابر یک است. ترکیب در سطح امتیاز انجام می‌شود، چون فضای ویژگی \lr{expert}ها لزوماً یکسان نیست.
+
+		این روش با بهترین \lr{single expert}، میانگین ساده، \lr{rank voting} و اتصال مستقیم \lr{voxel}های نواحی مقایسه می‌شود. انتخاب لایه برای نواحی از پیش تحمیل نمی‌شود؛ رابطه‌ی عمق لایه‌ی منتخب با ترتیب \lr{V1} تا \lr{V4} تحلیل و نتیجه‌ی \lr{LOC}، \lr{FFA} و \lr{PPA} نیز جداگانه گزارش خواهد شد.
+
+		\ProposalSubheading{پروتکل آموزش و جلوگیری از \lr{data leakage}}
+
+		پروتکل اصلی \lr{leave-one-subject-out} است: برای هر آزمودنی، \lr{alignment} با داده‌ی چهار فرد دیگر ساخته می‌شود و رمزگشا فقط رده‌های آموزشی همان آزمودنی را می‌بیند. انتخاب مدل، لایه، ابرپارامترها و وزن‌های ترکیب با \lr{nested validation} در ۱۵۰ رده‌ی آموزشی انجام می‌شود و ۵۰ رده‌ی آزمون تا ارزیابی نهایی کنار گذاشته می‌شوند.
+
+		استانداردسازی، \lr{PCA} و انتخاب \lr{voxel} فقط روی بخش آموزشی هر \lr{split} برازش می‌شوند. تفکیک رده‌ها، تنظیمات و گزینه‌های شناسایی پیش از ارزیابی نهایی مشخص می‌شوند و برای بررسی پایداری، آزمایش‌ها با حداقل پنج \lr{seed} تکرار خواهند شد.
+
+		\ProposalSubheading{ارزیابی و معیار موفقیت}
+
+		معیار اصلی، \lr{ranking percentile} رده‌ی صحیح، مشابه مقاله‌ی مبنا است؛ \lr{Top-1/Top-5}، \lr{MRR} و همبستگی \lr{Pearson} نیز گزارش می‌شوند. اختلاف روش‌ها با \lr{hierarchical bootstrap} روی فرد و رده و \lr{paired permutation test} بررسی می‌شود. بازه‌ی اطمینان ۹۵٪ و \lr{effect size} گزارش و مقایسه‌های متعدد با \lr{FDR} اصلاح خواهند شد. عملکرد با برچسب‌های تصادفی نیز سطح شانس را مشخص می‌کند.
+
+		در \lr{ablation study}، اثر حذف \lr{alignment}، انتخاب لایه، هر خانواده‌ی مدل و هر ناحیه، و جایگزینی وزن‌های آموخته‌شده با وزن‌های برابر بررسی می‌شود. معیار موفقیت، بهبود معنادار نسبت به \lr{baseline RSM} و بهترین \lr{single expert} در آزمون نهایی، با جهت اثر یکسان در بیشتر آزمودنی‌ها است. مقایسه‌ی روش‌ها و نقشه‌ی ارتباط مدل–لایه–ناحیه، حتی در نبود بهبود معنادار نیز گزارش خواهند شد. کد، تنظیمات آزمایش‌ها و جدول نتایج برای بازتولید پژوهش ارائه می‌شوند.
+
+		\ProposalSubheading{زمان‌بندی پیشنهادی}
+
+		ماه‌های ۱–۲: آماده‌سازی داده و بازتولید \lr{baseline}؛ ماه ۳: استخراج ویژگی؛ ماه‌های ۴–۵: آموزش و تنظیم \lr{alignment}؛ ماه ۶: انتخاب و ترکیب \lr{expert}ها؛ ماه ۷: تحلیل آماری و \lr{ablation}؛ ماه ۸: نگارش پایان‌نامه و انتشار کد و نتایج.
+	\end{UTProposalSection}
+
+	\begin{UTProposalSection}{۴-۳ پیشینه پژوهش (همراه با ذکر منابع اصلی)}
+\lr{Representational Similarity Analysis (RSA)} چارچوبی برای مقایسه‌ی ساختار بازنمایی مغز و مدل فراهم می‌کند \lr{[2]}. همچنین، نشان داده شده است که ویژگی‌های لایه‌های شبکه‌های عمیق می‌توانند برای رمزگشایی اشیای دیده‌شده و تصورشده و نیز تعمیم به رده‌های جدید مورد استفاده قرار گیرند \lr{[4]}. این نتایج مبنای استفاده از ویژگی‌های مدل‌های بینایی به‌عنوان مقصد رمزگشا در پژوهش حاضر هستند.
+
+مدل‌های جدید، ویژگی‌هایی با روش‌های آموزش متفاوت ارائه می‌کنند: \lr{CLIP} و \lr{SigLIP} از جفت‌های تصویر–متن، \lr{DINOv2} از یادگیری \lr{self-supervised} و \lr{MAE} از بازسازی بخش‌های پوشانده‌شده‌ی تصویر استفاده می‌کنند \lr{[5--8]}. این تنوع امکان مقایسه‌ی نقش نظارت زبانی و یادگیری صرفاً دیداری را در تطابق با نواحی مغز فراهم می‌کند.
+
+برای مقایسه و \lr{alignment} بازنمایی‌ها، \lr{DCCA} بر یادگیری روابط مشترک میان دو فضا \lr{[9]}، \lr{CKA} بر شباهت ساختار بازنمایی‌ها \lr{[10]} و روش‌های \lr{contrastive} مانند \lr{SimCLR} بر تشخیص جفت‌های متناظر تمرکز دارند \lr{[11]}. این روش‌ها مبنای گزینه‌های جایگزین \lr{RSM} در پژوهش حاضرند.
+
+نشان داده شده است که \lr{alignment} بردارهای \lr{CLIP/GloVe} با \lr{RSM} پاسخ‌های مغزی، می‌تواند رمزگشایی \lr{zero-shot} را در \lr{fMRI} و نیز هنگام انتقال به \lr{MEG/ECoG} بهبود دهد \lr{[1]}. این بهبود به فضای ویژگی و ضریب \lr{alignment} وابسته بوده و بردارهای ساخته‌شده با داده‌ی \lr{V4} نیز در بسیاری از موارد عملکرد بهتری داشته‌اند \lr{[1]}. با این حال، مقایسه‌ی لایه‌های میانی، مدل‌های بیشتر و روش‌های جایگزین \lr{alignment} در این چارچوب بررسی نشده است.
+
+همچنین، نشان داده شده است که قضاوت‌های شباهت انسانی \lr{[12]} و \lr{hyperalignment} بین افراد \lr{[13]} می‌توانند اهمیت ساختار ادراکی و بازنمایی‌های مشترک را در تحلیل ارتباط میان مغز و مدل‌های محاسباتی آشکار کنند. بر این اساس، تمرکز این پیشنهاد بر گسترش مقاله‌ی مبنا از طریق انتخاب ناحیه‌ای مدل و لایه و سنجش سهم آن‌ها در ترکیب نهایی است.
+
+	\end{UTProposalSection}
+
+	\begin{UTProposalSection}{منابع}
+		\begin{LTR}\scriptsize
+			\begin{enumerate}[label={[\arabic*]}]
+				\item \lr{Vafaei, S., Fukuma, R., Yanagisawa, T., et al., `Brain-aligning of semantic vectors improves neural decoding of visual stimuli,'' Communications Biology, vol. 9, art. 206, 2026. doi: 10.1038/s42003-025-09482-x.}
+				\item \lr{Kriegeskorte, N., Mur, M., and Bandettini, P. A., `Representational similarity analysis---connecting the branches of systems neuroscience,'' Frontiers in Systems Neuroscience, vol. 2, art. 4, 2008.}
+				\item \lr{Gifford, A. T., Jastrz\k{e}bowska, M. A., Singer, J. J. D., and Cichy, R. M., `In silico discovery of representational relationships across visual cortex,'' Nature Human Behaviour, 2025. doi: 10.1038/s41562-025-02252-z.}
+				\item \lr{Horikawa, T. and Kamitani, Y., `Generic decoding of seen and imagined objects using hierarchical visual features,'' Nature Communications, vol. 8, art. 15037, 2017.}
+				\item \lr{Radford, A., Kim, J. W., Hallacy, C., et al., `Learning transferable visual models from natural language supervision,'' Proc. ICML, PMLR 139, pp. 8748--8763, 2021.}
+				\item \lr{Oquab, M., Darcet, T., Moutakanni, T., et al., `DINOv2: Learning robust visual features without supervision,'' arXiv:2304.07193, 2023.}
+				\item \lr{Zhai, X., Mustafa, B., Kolesnikov, A., and Beyer, L., `Sigmoid loss for language image pre-training,'' Proc. ICCV, pp. 11975--11986, 2023.}
+				\item \lr{He, K., Chen, X., Xie, S., Li, Y., Doll\'ar, P., and Girshick, R., `Masked autoencoders are scalable vision learners,'' Proc. CVPR, pp. 16000--16009, 2022.}
+				\item \lr{Andrew, G., Arora, R., Bilmes, J., and Livescu, K., `Deep canonical correlation analysis,'' Proc. ICML, PMLR 28(3), pp. 1247--1255, 2013.}
+				\item \lr{Kornblith, S., Norouzi, M., Lee, H., and Hinton, G., `Similarity of neural network representations revisited,'' Proc. ICML, PMLR 97, pp. 3519--3529, 2019.}
+				\item \lr{Chen, T., Kornblith, S., Norouzi, M., and Hinton, G., `A simple framework for contrastive learning of visual representations,'' Proc. ICML, PMLR 119, pp. 1597--1607, 2020.}
+				\item \lr{Muttenthaler, L., Dippel, J., Linhardt, L., Vandermeulen, R. A., and Kornblith, S., `Improving neural network representations using human similarity judgments,'' Advances in Neural Information Processing Systems, vol. 36, pp. 50978--51007, 2023.}
+				\item \lr{Haxby, J. V., Guntupalli, J. S., Connolly, A. C., et al., ``A common, high-dimensional model of the representational space in human ventral temporal cortex,'' Neuron, vol. 72, no. 2, pp. 404--416, 2011.}
+			\end{enumerate}
+		\end{LTR}
+	\end{UTProposalSection}
+	
+	\clearpage
+	\UTApprovalPage
+	
+\end{document}
